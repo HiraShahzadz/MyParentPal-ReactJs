@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import '../styles/styles.css';
 import {
   Card,
@@ -16,8 +16,15 @@ import { FeatureCard, TeamCard } from "@/widgets/cards";
 import { featuresData, teamData, contactData } from "@/data";
 
 export function Home() {
+  const [showMoreText, setShowMoreText] = useState(false);
+
+  const toggleText = () => {
+    setShowMoreText(!showMoreText);
+  };
+
   return (
     <>
+    
       <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
         <div className="absolute top-0 h-full w-full bg-[url('/img/cover.png')] bg-cover bg-center "></div>
         <div className="max-w-8xl container relative mx-auto ">
@@ -81,20 +88,25 @@ export function Home() {
             </Typography>
 
             <Typography className="mb-9 text-left text-justify font-normal text-[#808080]" style={{ fontSize: '18px' }}>
-              Welcome to MyParentPal, your partner in parenting. Our webapp is
-              designed to simplify parenting while fostering responsibility in
-              children. With MyParentPal, you can effortlessly track your
-              child's progress, ensuring they grow up well-rounded and
-              responsible. Assign tasks and reward your children for their
-              accomplishments, instilling positive habits from a young age.
+      Welcome to MyParentPal, your partner in parenting. Our webapp is
+      designed to simplify parenting while fostering responsibility in
+      children. With MyParentPal, you can effortlessly track your
+      child's progress, ensuring they grow up well-rounded and
+      responsible. Assign tasks and reward your children for their
+      accomplishments, instilling positive habits from a young age.
+      {showMoreText && (
+        <>
+          MyParentPal makes it easy to set goals and tasks for your child, ensuring they learn essential life skills while having fun. With our platform, you can build a supportive and responsible family environment.
+        </>
+      )}
+    </Typography>
 
-              MyParentPal makes it easy to set goals and tasks for your child, ensuring they learn essential life skills while having fun. With our platform, you can build a supportive and responsible family environment.
-            </Typography>
-            <br></br>
-            <br></br>
-            <Button style={{ backgroundColor: "#b089bf", color: "#ffffff", padding: "20px 30px", fontSize: "15px" }}>
-              read more
-            </Button>
+    <Button
+      style={{ backgroundColor: "#b089bf", color: "#ffffff", padding: "20px 30px", fontSize: "15px" }}
+      onClick={toggleText}
+    >
+      {showMoreText ? 'Show less' : 'Show more'}
+    </Button>
           </div>
           <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
             <img src="/img/canva3.3.png" />
