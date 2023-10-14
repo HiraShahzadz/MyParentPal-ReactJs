@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from 'react';
+import '../styles/styles.css';
 import {
   Card,
   CardBody,
@@ -15,170 +16,197 @@ import { FeatureCard, TeamCard } from "@/widgets/cards";
 import { featuresData, teamData, contactData } from "@/data";
 
 export function Home() {
+  const [showMoreText, setShowMoreText] = useState(false);
+
+  const toggleText = () => {
+    setShowMoreText(!showMoreText);
+  };
+
   return (
     <>
-      <div className="relative flex h-screen content-center items-center justify-center pt-16 pb-32">
-        <div className="absolute top-0 h-full w-full bg-[url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80')] bg-cover bg-center" />
-        <div className="absolute top-0 h-full w-full bg-black/75 bg-cover bg-center" />
-        <div className="max-w-8xl container relative mx-auto">
+    
+      <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
+        <div className="absolute top-0 h-full w-full bg-[url('/img/cover.png')] bg-cover bg-center "></div>
+        <div className="max-w-8xl container relative mx-auto ">
           <div className="flex flex-wrap items-center">
             <div className="ml-auto mr-auto w-full px-4 text-center lg:w-8/12">
               <Typography
-                variant="h1"
+                variant="h2"
                 color="white"
-                className="mb-6 font-black"
+                className="mb-6 font-black text-[#0284c7]"
               >
-                Your story starts with us.
+                Your Digital Co-Parent in Child Upbringing
               </Typography>
-              <Typography variant="lead" color="white" className="opacity-80">
-                This is a simple example of a Landing Page you can build using
-                Material Tailwind. It features multiple components based on the
-                Tailwind CSS and Material Design by Google.
+              <Typography variant="lead" className="text-[#0284c7]">
+                Empower your parenting journey with MyParentPal - where
+                technology meets the art of raising happy, responsible, and
+                confident children. Together, we empower you to raise not just
+                children, but the architects of their own remarkable futures.
               </Typography>
             </div>
           </div>
         </div>
       </div>
-      <section className="-mt-32 bg-gray-50 px-4 pb-20 pt-4">
+      <section className="mb-10 -mt-32 bg-gray-50 px-4 pb-20 pt-4">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 ">
             {featuresData.map(({ color, title, icon, description }) => (
               <FeatureCard
                 key={title}
                 color={color}
-                title={title}
+                title={
+                  <div style={{ color: "#0284c7" }}>{title}</div> // Apply style to change text color
+                } // Apply style to change text color
+                description={
+                  <div style={{ color: "#0284c7" }}>{description}</div> // Apply style to change text color
+                } // Apply style to change text color
                 icon={React.createElement(icon, {
-                  className: "w-5 h-5 text-white",
+                  className: "w-5 h-5 text-white ",
                 })}
-                description={description}
               />
             ))}
           </div>
-          <div className="mt-32 flex flex-wrap items-center">
-            <div className="mx-auto -mt-8 w-full px-4 md:w-5/12">
-              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white p-3 text-center shadow-lg">
-                <UsersIcon className="h-6 w-6 text-blue-gray-900" />
+        </div>
+        <div className="mt-12 flex flex-wrap items-center"> {/* Reduced top margin to mt-16 */}
+          <div className="mx-auto -mt-2 w-full px-4 md:w-6/12">
+            <div className="mb-0 inline-flex h-16 w-16 items-center justify-center rounded-full  p-3 text-center shadow-lg bg-[#b089bf]">
+              <img
+                src="/img/fam-icon.png"
+
+                className="h-9 w-9 text-blue-gray-900"
+              />
+            </div>
+            <br>
+            </br><br>
+            </br>
+            <Typography
+              variant="h1"
+
+              className="mb-5 font-bold text-[#B089BE]"
+            >
+              Digital Co-Parent: MyParentPal
+            </Typography>
+
+            <Typography className="mb-9 text-left text-justify font-normal text-[#808080]" style={{ fontSize: '18px' }}>
+      Welcome to MyParentPal, your partner in parenting. Our webapp is
+      designed to simplify parenting while fostering responsibility in
+      children. With MyParentPal, you can effortlessly track your
+      child's progress, ensuring they grow up well-rounded and
+      responsible. Assign tasks and reward your children for their
+      accomplishments, instilling positive habits from a young age.
+      {showMoreText && (
+        <>
+          MyParentPal makes it easy to set goals and tasks for your child, ensuring they learn essential life skills while having fun. With our platform, you can build a supportive and responsible family environment.
+        </>
+      )}
+    </Typography>
+
+    <Button
+      style={{ backgroundColor: "#b089bf", color: "#ffffff", padding: "20px 30px", fontSize: "15px" }}
+      onClick={toggleText}
+    >
+      {showMoreText ? 'Show less' : 'Show more'}
+    </Button>
+          </div>
+          <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
+            <img src="/img/canva3.3.png" />
+          </div>
+        </div>
+
+
+      </section>
+      <section className="pb-45 pt-20">
+        <div className="container mx-auto ttext-[#808080]">
+          <PageTitle className="text-Custom" heading="Why Digital Co-Parent?">
+            <p style={{fontSize: '25px'}}className="mb-8 font-normal text-[#808080]">
+              Help parents to shape their child's future, instill civility, and
+              foster responsibility effectively through streamlined task
+              management and improved communication
+            </p>
+
+          </PageTitle>
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+
+            {teamData.map(({ img, name }) => (
+              <div key={name} className="mt-7 mb-8 text-center font-normal text-[#808080]" style={{ border: '4px solid #B089BE', padding: '10px' }}>
+                <img
+                  src={img}
+                  alt="Team Member"
+                  className="team-member-img img-equal-size hover:scale-90 hover:opacity-70 transition-transform duration-300 ease-in-out"
+                />
+                <div className="mt-7 mb-1 text-center font-normal text-[#808080]" style={{ fontSize: '23px'}}>
+                  {name}
+                </div>
               </div>
-              <Typography
-                variant="h3"
-                className="mb-3 font-bold"
-                color="blue-gray"
-              >
-                Working with us is a pleasure
-              </Typography>
-              <Typography className="mb-8 font-normal text-blue-gray-500">
-                Don't let your uses guess by attaching tooltips and popoves to
-                any element. Just make sure you enable them first via
-                JavaScript.
-                <br />
-                <br />
-                The kit comes with three pre-built pages to help you get started
-                faster. You can change the text and images and you're good to
-                go. Just make sure you enable them first via JavaScript.
-              </Typography>
-              <Button variant="outlined">read more</Button>
-            </div>
-            <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
-              <Card className="shadow-lg shadow-gray-500/10">
-                <CardHeader className="relative h-56">
-                  <img
-                    alt="Card Image"
-                    src="/img/teamwork.jpeg"
-                    className="h-full w-full"
-                  />
-                </CardHeader>
-                <CardBody>
-                  <Typography
-                    variant="h5"
-                    color="blue-gray"
-                    className="mb-3 font-bold"
-                  >
-                    Top Notch Services
-                  </Typography>
-                  <Typography className="font-normal text-blue-gray-500">
-                    The Arctic Ocean freezes every winter and much of the
-                    sea-ice then thaws every summer, and that process will
-                    continue whatever happens.
-                  </Typography>
-                </CardBody>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="px-4 pt-20 pb-48">
-        <div className="container mx-auto">
-          <PageTitle heading="Here are our heroes">
-            According to the National Oceanic and Atmospheric Administration,
-            Ted, Scambos, NSIDClead scentist, puts the potentially record
-            maximum.
-          </PageTitle>
-          <div className="mt-24 grid grid-cols-1 gap-12 gap-x-24 md:grid-cols-2 xl:grid-cols-4">
-            {teamData.map(({ img, name, position, socials }) => (
-              <TeamCard
-                key={name}
-                img={img}
-                name={name}
-                position={position}
-                socials={
-                  <div className="flex items-center gap-2">
-                    {socials.map(({ color, name }) => (
-                      <IconButton key={name} color={color} variant="text">
-                        <i className={`fa-brands text-lg fa-${name}`} />
-                      </IconButton>
-                    ))}
-                  </div>
-                }
-              />
             ))}
+
           </div>
         </div>
       </section>
-      <section className="relative bg-blue-gray-50/50 py-24 px-4">
+      <section className="bg-blue-red-50/50 absolute relative top-0 h-full w-full bg-[url('/img/contactBg.png')] bg-cover bg-center px-4 py-24">
         <div className="container mx-auto">
-          <PageTitle heading="Build something">
-            Put the potentially record low maximum sea ice extent tihs year down
-            to low ice. According to the National Oceanic and Atmospheric
-            Administration, Ted, Scambos.
+          <PageTitle heading="Parents Reviews">
+            What parents say about us?
           </PageTitle>
-          <div className="mx-auto mt-20 mb-48 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
-            {contactData.map(({ title, icon, description }) => (
+          <div className="mx-auto mb-48 mt-20 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
+            {contactData.map(({ title, image, description }) => (
               <Card
                 key={title}
-                color="transparent"
                 shadow={false}
-                className="text-center text-blue-gray-900"
+                className="bg-[#fff] text-center text-blue-gray-900 shadow-lg shadow-gray-700/20"
               >
-                <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-full bg-white shadow-lg shadow-gray-500/20">
-                  {React.createElement(icon, {
-                    className: "w-5 h-5",
-                  })}
+                <div className="mx-auto mb-6 mt-6 grid h-14 w-14 place-items-center rounded-full bg-white shadow-lg shadow-gray-500/20">
+                  <img src={image} alt="" className="rounded-full" />
                 </div>
-                <Typography variant="h5" color="blue-gray" className="mb-2">
+                <Typography
+                  variant="h5"
+                  color="blue-gray"
+                  className="mb-2 text-[#0284c7]"
+                >
                   {title}
                 </Typography>
-                <Typography className="font-normal text-blue-gray-500">
+                <Typography className="px-8 py-4 text-justify font-normal text-[#0284c7]">
                   {description}
                 </Typography>
               </Card>
             ))}
           </div>
-          <PageTitle heading="Want to work with us?">
-            Complete this form and we will get back to you in 24 hours.
+
+          <PageTitle heading="Contact Us">
+            Feel free to contact us.We will get back to you soon.
           </PageTitle>
           <form className="mx-auto mt-12 max-w-3xl text-center">
             <div className="mb-8 flex gap-8">
-              <Input variant="standard" size="lg" label="Full Name" />
-              <Input variant="standard" size="lg" label="Email Address" />
+              <Input
+                size="lg"
+                label="Full Name"
+                style={{ background: "white" }}
+                className=" w-full rounded-lg border border-gray-400 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              />
+              <Input
+                size="lg"
+                label="Email Address"
+                style={{ background: "white" }}
+              />
             </div>
-            <Textarea variant="standard" size="lg" label="Message" rows={8} />
-            <Button variant="gradient" size="lg" className="mt-8">
+            <Textarea
+              size="lg"
+              label="Message"
+              rows={8}
+              style={{ background: "white" }}
+            />
+            <Button
+              variant="gradient"
+              size="lg"
+              style={{ background: "#ee97c0" }}
+              class="rounded-lg bg-customColor px-4 py-2 text-white"
+            >
               Send Message
             </Button>
           </form>
         </div>
       </section>
-      <div className="bg-blue-gray-50/50">
+      <div className="bg-blue-gray-50/50" style={{ background: "#fef4e4" }}>
         <Footer />
       </div>
     </>

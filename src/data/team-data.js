@@ -1,80 +1,25 @@
 export const teamData = [
   {
-    img: "/img/team-1.jpg",
-    name: "Ryan Tompson",
-    position: "Web Developer",
-    socials: [
-      {
-        color: "light-blue",
-        name: "twitter",
-      },
-      {
-        color: "blue",
-        name: "facebook",
-      },
-      {
-        color: "pink",
-        name: "dribbble",
-      },
-    ],
+    img: "/img/01.png",
+    name: "Engaging child in activities",
+    //  position: "Web Developer",
+    
+    nameColorClass: "custom-pink", // Add this property for specifying the text color
   },
   {
-    img: "/img/team-2.jpg",
-    name: "Romina Hadid",
-    position: "Marketing Specialist",
-    socials: [
-      {
-        color: "light-blue",
-        name: "twitter",
-      },
-      {
-        color: "blue",
-        name: "facebook",
-      },
-      {
-        color: "pink",
-        name: "dribbble",
-      },
-    ],
+    img: "/img/02.png",
+    name: "Motivates children to complete task",
+    
+   
+    nameColorClass: "#f442b6",
   },
   {
-    img: "/img/team-3.jpg",
-    name: "Alexa Smith",
-    position: "UI/UX Designer",
-    socials: [
-      {
-        color: "light-blue",
-        name: "twitter",
-      },
-      {
-        color: "blue",
-        name: "facebook",
-      },
-      {
-        color: "pink",
-        name: "dribbble",
-      },
-    ],
+    img: "/img/03.png",
+    name: "Earned reward by completing task",
+    
+    nameColorClass: "#f442b6",
   },
-  {
-    img: "/img/team-4.png",
-    name: "Jenna Kardi",
-    position: "Founder and CEO",
-    socials: [
-      {
-        color: "light-blue",
-        name: "twitter",
-      },
-      {
-        color: "blue",
-        name: "facebook",
-      },
-      {
-        color: "pink",
-        name: "dribbble",
-      },
-    ],
-  },
+  
 ];
 
 export default teamData;

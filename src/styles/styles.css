@@ -1,0 +1,9 @@
+/* styles.css (or your CSS file) */
+
+/* Apply the effect when hovering over the team member image */
+.team-member-img:hover {
+    transform: scale(0.9); /* Slightly shrink the image */
+    opacity: 0.7; /* Reduce the opacity to make it appear faded */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Add a smooth transition effect */
+  }
+  
