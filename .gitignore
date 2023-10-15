@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 public/img/Man5.jpg
-public/imag/
+public/img/
 node_modules
 dist
 dist-ssr
