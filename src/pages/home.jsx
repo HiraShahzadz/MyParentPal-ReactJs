@@ -84,7 +84,7 @@ export function Home() {
           <div className="mx-auto -mt-2 w-full px-4 md:w-6/12">
             <div className="mb-0 inline-flex h-16 w-16 items-center justify-center rounded-full  bg-[#b089bf] p-3 text-center shadow-lg">
               <img
-                src="/img/fam-icon.png"
+                src="/img/famicon.png"
                 className="h-9 w-9 text-blue-gray-900"
               />
             </div>
