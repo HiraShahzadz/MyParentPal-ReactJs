@@ -95,7 +95,7 @@ export function Home() {
             </Typography>
 
             <Typography
-              className="mb-9 text-left text-justify font-normal text-[#808080]"
+              className="mb-6 text-left text-justify font-normal text-[#808080]"
               style={{ fontSize: "18px" }}
             >
               Welcome to MyParentPal, your partner in parenting. Our webapp is
