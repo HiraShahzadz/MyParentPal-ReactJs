@@ -90,7 +90,7 @@ export function Home() {
             </div>
             <br></br>
             <br></br>
-            <Typography variant="h1" className="mb-5 font-bold text-[#B089BE]">
+            <Typography variant="h2" className="mb-5 font-bold text-[#B089BE]">
               Digital Co-Parent: MyParentPal
             </Typography>
 
@@ -118,8 +118,8 @@ export function Home() {
               style={{
                 backgroundColor: "#b089bf",
                 color: "#ffffff",
-                padding: "20px 30px",
-                fontSize: "15px",
+                padding: "18px 27px",
+                fontSize: "12px",
               }}
               onClick={toggleText}
             >
@@ -135,8 +135,7 @@ export function Home() {
         <div className="ttext-[#808080] container mx-auto">
           <PageTitle className="text-Custom" heading="Why Digital Co-Parent?">
             <p
-              style={{ fontSize: "25px" }}
-              className="mb-8 font-normal text-[#808080]"
+             className="mb-8 font-normal text-[#808080]"
             >
               Help parents to shape their child's future, instill civility, and
               foster responsibility effectively through streamlined task
@@ -157,7 +156,7 @@ export function Home() {
                 />
                 <div
                   className="mb-1 mt-7 text-center font-normal text-[#808080]"
-                  style={{ fontSize: "23px" }}
+                  style={{ fontSize: "19px" }}
                 >
                   {name}
                 </div>
