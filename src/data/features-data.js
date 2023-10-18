@@ -1,31 +1,34 @@
 import {
-  StarIcon,
-  ArrowPathIcon,
-  FingerPrintIcon,
+ 
+  ListBulletIcon,
+  GiftIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/solid";
 
 export const featuresData = [
   {
-    color: "blue",
-    title: "Awarded Agency",
-    icon: StarIcon,
+    color: "purple",
+    title: "Task Management",
+    icon: ListBulletIcon,
     description:
-      "Divide details about your product or agency work into parts. A paragraph describing a feature will be enough.",
+      "Efficiently manage tasks with MyParentPal. Empower your children with responsibility and a sense of accomplishment.",
   },
   {
-    color: "red",
-    title: "Free Revisions",
-    icon: ArrowPathIcon,
+    color: "purple",
+    title: "Milestone Marvels",
+    icon: TrophyIcon,
     description:
-      "Keep you user engaged by providing meaningful information. Remember that by this time, the user is curious.",
+      "Embark on a journey of personalized skill development. Foster a sense of accomplishment and growth together.",
   },
   {
-    color: "teal",
-    title: "Verified Company",
-    icon: FingerPrintIcon,
+    color: "purple",
+    title: "Reward Wishlist",
+    icon: GiftIcon,
     description:
-      "Write a few lines about each one. A paragraph describing a feature will be enough. Keep you user engaged!",
+      "Encourage open communication by giving your child the power to choose and work towards the incentives they desire.",
+
   },
+
 ];
 
 export default featuresData;

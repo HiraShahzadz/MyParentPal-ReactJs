@@ -54,6 +54,7 @@ FeatureCard.propTypes = {
     "purple",
     "pink",
     "red",
+    "DEFAULT",
   ]),
   icon: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,

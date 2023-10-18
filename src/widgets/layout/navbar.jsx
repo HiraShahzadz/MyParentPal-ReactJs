@@ -21,7 +21,7 @@ export function Navbar({ brandName, routes, action }) {
   }, []);
 
   const navList = (
-    <ul className="mb-4 mt-2 flex flex-col gap-2 text-inherit lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <ul className="mb-4 mt-2 flex flex-col gap-2 text-inherit lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 text-[#B089BE]">
       {routes.map(({ name, path, icon, href, target }) => (
         <Typography
           key={name}
@@ -62,11 +62,15 @@ export function Navbar({ brandName, routes, action }) {
 
   return (
     <MTNavbar color="transparent" className="p-3">
-      <div className="container mx-auto flex items-center justify-between text-white">
+      <div className="container mx-auto flex items-center justify-between text-black">
         <Link to="/">
-          <Typography className="mr-4 ml-2 cursor-pointer py-1.5 font-bold">
-            {brandName}
-          </Typography>
+        <Typography
+  className="mr-4 ml-2 cursor-pointer py-1.5 font-bold text-[#B089BE]"
+  style={{ fontSize: '24px'  }} // Adjust the font size as needed
+>
+  My Parent Pal
+</Typography>
+
         </Link>
         <div className="hidden lg:block">{navList}</div>
         <div className="hidden gap-2 lg:flex">
@@ -74,8 +78,8 @@ export function Navbar({ brandName, routes, action }) {
             href="https://www.material-tailwind.com/blocks?ref=mtkr"
             target="_blank"
           >
-            <Button variant="text" size="sm" color="white" fullWidth>
-              pro version
+            <Button variant="text" size="sm" style={{color: '#b089bf'}} fullWidth>
+              Sign In
             </Button>
           </a>
           {React.cloneElement(action, {
@@ -107,8 +111,8 @@ export function Navbar({ brandName, routes, action }) {
             target="_blank"
             className="mb-2 block"
           >
-            <Button variant="text" size="sm" fullWidth>
-              pro version
+            <Button variant="text" size="sm" fullWidth color="purple"> 
+              Sign In
             </Button>
           </a>
           {React.cloneElement(action, {
@@ -127,9 +131,8 @@ Navbar.defaultProps = {
       href="https://www.creative-tim.com/product/material-tailwind-kit-react"
       target="_blank"
     >
-      <Button variant="gradient" size="sm" fullWidth>
-        free download
-      </Button>
+      <button class="bg-customColor text-white py-2 px-4 rounded-lg">Sign Up</button>
+
     </a>
   ),
 };
