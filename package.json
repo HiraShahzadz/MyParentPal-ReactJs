@@ -7,16 +7,24 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "vite"
+    "start": "vite --host 0.0.0.0"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.12",
     "@material-tailwind/react": "^1.2.4",
+    "ant": "^0.2.0",
     "node_module": "^0.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.2"
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.4.2",
+    "styled-components": "^6.1.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.22",
