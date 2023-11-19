@@ -6,6 +6,8 @@ import {
   UserPlusIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/solid";
+import { MaterialTailwindControllerProvider } from "@/parent/context";
+import App from "@/parent/App";
 
 export const routes = [
   {
@@ -17,8 +19,12 @@ export const routes = [
   {
     icon: UserCircleIcon,
     name: "profile",
-    path: "/profile",
-    element: <Profile />,
+    path: "/*",
+    element: (
+      <MaterialTailwindControllerProvider>
+        <App />
+      </MaterialTailwindControllerProvider>
+    ),
   },
   {
     icon: ArrowRightOnRectangleIcon,

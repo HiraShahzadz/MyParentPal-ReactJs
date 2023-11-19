@@ -1,12 +1,13 @@
 import React from "react";
 
-function Header({ text, bg, count }) {
+function Header({ text, count }) {
   return (
     <div
-      className={`${bg} flex h-12 items-center rounded-md pl-4 text-sm uppercase text-white`}
+      style={{ background: "#B089BE" }}
+      className="flex h-12 items-center rounded-md p-4 pl-4 text-sm uppercase text-white"
     >
       {text}
-      <div className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-white px-3 py-3  text-black">
+      <div className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-white p-4 px-3 py-3  text-black">
         {count}
       </div>
     </div>

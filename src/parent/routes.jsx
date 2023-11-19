@@ -5,7 +5,10 @@ import {
   BellIcon,
   ArrowRightOnRectangleIcon,
   UserPlusIcon,
+  RectangleGroupIcon,
+  RectangleStackIcon,
 } from "@heroicons/react/24/solid";
+
 import {
   ParentHome,
   Profile,
@@ -13,6 +16,7 @@ import {
   Notifications,
 } from "@/parent/pages/dashboard";
 import { SignIn, SignUp } from "@/parent/pages/auth";
+import TaskCreation from "./dragDrop/TaskCreation";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -28,6 +32,13 @@ export const routes = [
         path: "/home",
         element: <ParentHome />,
       },
+      {
+        icon: <RectangleGroupIcon {...icon} />,
+        name: "create tasks",
+        path: "/tasks",
+        element: <TaskCreation />,
+      },
+
       {
         icon: <UserCircleIcon {...icon} />,
         name: "profile",

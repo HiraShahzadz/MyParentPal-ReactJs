@@ -5,8 +5,8 @@ import {
   UserPlusIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
-import { Navbar, Footer } from "@/widgets/layout";
-import routes from "@/routes";
+import { Navbar, Footer } from "@/parent/widgets/layout";
+import routes from "@/parent/routes";
 
 export function Auth() {
   const navbarRoutes = [
@@ -53,6 +53,6 @@ export function Auth() {
   );
 }
 
-Auth.displayName = "/src/layout/Auth.jsx";
+Auth.displayName = "/src/parent/layout/Auth.jsx";
 
 export default Auth;

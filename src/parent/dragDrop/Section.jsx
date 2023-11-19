@@ -3,8 +3,24 @@ import toast from "react-hot-toast";
 import { useDrop } from "react-dnd";
 import Task from "@/parent/dragDrop/Task";
 import Header from "@/parent/dragDrop/Header";
+import { StatisticsCard } from "@/parent/widgets/cards";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Typography,
+} from "@material-tailwind/react";
 
-function Section({ status, tasks, setTasks, todos, inProgress, closed }) {
+function Section({
+  status,
+  tasks,
+  setTasks,
+  todos,
+  inProgress,
+  closed,
+  rewarded,
+}) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "task",
     drop: (item) => addItemToSection(item.id),
@@ -13,19 +29,21 @@ function Section({ status, tasks, setTasks, todos, inProgress, closed }) {
     }),
   }));
   let text = "Todo";
-  let bg = "bg-red-300";
   let tasksToMap = todos;
 
   if (status === "inprogress") {
     text = "In Progress";
-    bg = "bg-purple-500";
     tasksToMap = inProgress;
   }
 
   if (status === "closed") {
     text = "Closed";
-    bg = "bg-green-500";
     tasksToMap = closed;
+  }
+
+  if (status === "rewarded") {
+    text = "Rewarded";
+    tasksToMap = rewarded;
   }
 
   const addItemToSection = (id) => {
@@ -46,16 +64,18 @@ function Section({ status, tasks, setTasks, todos, inProgress, closed }) {
   };
 
   return (
-    <div
+    <Card
       ref={drop}
-      className={`w-64 rounded-md p-2 ${isOver ? "bg-blue-gray-200" : ""}`}
+      className={`rounded-md p-2 ${isOver ? "bg-blue-gray-200" : ""}`}
     >
-      <Header text={text} bg={bg} count={tasksToMap?.length} />
-      {tasksToMap?.length > 0 &&
-        tasksToMap.map((task) => (
-          <Task key={task.id} task={task} tasks={tasks} setTasks={setTasks} />
-        ))}
-    </div>
+      <CardBody className="p-4">
+        <Header text={text} count={tasksToMap?.length} />
+        {tasksToMap?.length > 0 &&
+          tasksToMap.map((task) => (
+            <Task key={task.id} task={task} tasks={tasks} setTasks={setTasks} />
+          ))}
+      </CardBody>
+    </Card>
   );
 }
 

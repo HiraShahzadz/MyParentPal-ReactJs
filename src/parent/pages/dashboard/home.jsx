@@ -3,30 +3,13 @@ import {
   Typography,
   Card,
   CardHeader,
-  CardBody,
   IconButton,
   Menu,
   MenuHandler,
   MenuList,
   MenuItem,
-  Avatar,
-  Tooltip,
-  Progress,
 } from "@material-tailwind/react";
-import {
-  ClockIcon,
-  CheckIcon,
-  EllipsisVerticalIcon,
-  ArrowUpIcon,
-} from "@heroicons/react/24/outline";
-import { StatisticsCard } from "@/parent/widgets/cards";
-import { StatisticsChart } from "@/parent/widgets/charts";
-import {
-  statisticsCardsData,
-  statisticsChartsData,
-  projectsTableData,
-  ordersOverviewData,
-} from "@/parent/data";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import CreateTask from "@/parent/dragDrop/CreateTask";
 import ListTasks from "@/parent/dragDrop/ListTasks";
 import { Toaster } from "react-hot-toast";
@@ -44,20 +27,13 @@ export function ParentHome() {
 
   return (
     <div className="mt-12">
-      <div className="mb-12 grid gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-4">
-        {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
-          <StatisticsCard key={title} {...rest} />
-        ))}
-      </div>
-
       <DndProvider backend={HTML5Backend}>
         <Toaster />
-        <div className="flex h-screen w-screen flex-col items-center justify-center gap-16 bg-white p-3 pt-32">
+        <div className="mb-10">
           <CreateTask tasks={tasks} setTasks={setTasks} />
-          <ListTasks tasks={tasks} setTasks={setTasks} />
         </div>
+        <ListTasks tasks={tasks} setTasks={setTasks} />
       </DndProvider>
-
       <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <Card className="overflow-hidden xl:col-span-2">
           <CardHeader

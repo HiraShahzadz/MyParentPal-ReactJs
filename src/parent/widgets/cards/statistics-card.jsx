@@ -53,6 +53,6 @@ StatisticsCard.propTypes = {
   footer: PropTypes.node,
 };
 
-StatisticsCard.displayName = "/src/widgets/cards/statistics-card.jsx";
+StatisticsCard.displayName = "/src/parent/widgets/cards/statistics-card.jsx";
 
 export default StatisticsCard;
