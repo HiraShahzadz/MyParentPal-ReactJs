@@ -58,6 +58,7 @@ StatisticsChart.propTypes = {
     "purple",
     "pink",
     "red",
+     
   ]),
   chart: PropTypes.object.isRequired,
   title: PropTypes.node.isRequired,

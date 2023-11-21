@@ -6,4 +6,7 @@
     opacity: 0.7; /* Reduce the opacity to make it appear faded */
     transition: transform 0.3s ease, opacity 0.3s ease; /* Add a smooth transition effect */
   }
+  .custom-responded {
+    background-color: #B089BE !important;
+  }
   

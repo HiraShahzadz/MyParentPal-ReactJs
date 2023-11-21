@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -5,34 +6,44 @@ import {
   Typography,
   Avatar,
   Chip,
-  Tooltip,
+Tooltip,
   Progress,
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { authorsTableData, projectsTableData } from "@/admin/data";
 
 export function Tables() {
+  const [responses, setResponses] = useState({});
+
+  const handleResponseChange = (authorName, event) => {
+    const newText = event.target.value;
+    setResponses((prevResponses) => ({
+      ...prevResponses,
+      [`${authorName}-${event.target.dataset.index}`]: newText,
+    }));
+  };
+
+  const handleResponseSubmit = (authorName) => {
+    const responseText = responses[authorName];
+    console.log(`Response for ${authorName}: ${responseText}`);
+  };
+
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
       <Card>
-        <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
-          <Typography variant="h6" color="white">
-            Authors Table
+        <CardHeader variant="gradient" style={{ background: "white"}} className="mb-8 p-6">
+          <Typography variant="h6" style={{ color: '#B089BE' }}>
+            Feedback and Queries
           </Typography>
         </CardHeader>
+
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
-                {["author", "function", "status", "employed", ""].map((el) => (
-                  <th
-                    key={el}
-                    className="border-b border-blue-gray-50 py-3 px-5 text-left"
-                  >
-                    <Typography
-                      variant="small"
-                      className="text-[11px] font-bold uppercase text-blue-gray-400"
-                    >
+                {["name", "query", "status", "date", "Response"].map((el) => (
+                  <th key={el} className="border-b border-blue-gray-50 py-3 px-5 text-left">
+                    <Typography variant="small" className="text-[11px] font-bold uppercase text-blue-gray-400">
                       {el}
                     </Typography>
                   </th>
@@ -40,176 +51,66 @@ export function Tables() {
               </tr>
             </thead>
             <tbody>
-              {authorsTableData.map(
-                ({ img, name, email, job, online, date }, key) => {
-                  const className = `py-3 px-5 ${
-                    key === authorsTableData.length - 1
-                      ? ""
-                      : "border-b border-blue-gray-50"
-                  }`;
+              {authorsTableData.map(({ img, name, online, date }, key) => {
+                const query = "Sample query text"; // Sample query text
+                const className = `py-3 px-5 ${
+                  key === authorsTableData.length - 1 ? "" : "border-b border-blue-gray-50"
+                }`;
 
-                  return (
-                    <tr key={name}>
-                      <td className={className}>
-                        <div className="flex items-center gap-4">
-                          <Avatar src={img} alt={name} size="sm" />
-                          <div>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-semibold"
-                            >
-                              {name}
-                            </Typography>
-                            <Typography className="text-xs font-normal text-blue-gray-500">
-                              {email}
-                            </Typography>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {job[0]}
-                        </Typography>
-                        <Typography className="text-xs font-normal text-blue-gray-500">
-                          {job[1]}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Chip
-                          variant="gradient"
-                          color={online ? "green" : "blue-gray"}
-                          value={online ? "online" : "offline"}
-                          className="py-0.5 px-2 text-[11px] font-medium"
-                        />
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {date}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          as="a"
-                          href="#"
-                          className="text-xs font-semibold text-blue-gray-600"
-                        >
-                          Edit
-                        </Typography>
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
-            </tbody>
-          </table>
-        </CardBody>
-      </Card>
-      <Card>
-        <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
-          <Typography variant="h6" color="white">
-            Projects Table
-          </Typography>
-        </CardHeader>
-        <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
-          <table className="w-full min-w-[640px] table-auto">
-            <thead>
-              <tr>
-                {["companies", "members", "budget", "completion", ""].map(
-                  (el) => (
-                    <th
-                      key={el}
-                      className="border-b border-blue-gray-50 py-3 px-5 text-left"
-                    >
-                      <Typography
-                        variant="small"
-                        className="text-[11px] font-bold uppercase text-blue-gray-400"
-                      >
-                        {el}
-                      </Typography>
-                    </th>
-                  )
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {projectsTableData.map(
-                ({ img, name, members, budget, completion }, key) => {
-                  const className = `py-3 px-5 ${
-                    key === projectsTableData.length - 1
-                      ? ""
-                      : "border-b border-blue-gray-50"
-                  }`;
-
-                  return (
-                    <tr key={name}>
-                      <td className={className}>
-                        <div className="flex items-center gap-4">
-                          <Avatar src={img} alt={name} size="sm" />
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-bold"
-                          >
+                return (
+                  <tr key={name}>
+                    <td className={className}>
+                      <div className="flex items-center gap-4">
+                        <Avatar src={img} alt={name} size="sm" />
+                        <div>
+                          <Typography variant="small" color="blue-gray" className="font-semibold">
                             {name}
                           </Typography>
-                        </div>
-                      </td>
-                      <td className={className}>
-                        {members.map(({ img, name }, key) => (
-                          <Tooltip key={name} content={name}>
-                            <Avatar
-                              src={img}
-                              alt={name}
-                              size="xs"
-                              variant="circular"
-                              className={`cursor-pointer border-2 border-white ${
-                                key === 0 ? "" : "-ml-2.5"
-                              }`}
-                            />
-                          </Tooltip>
-                        ))}
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          variant="small"
-                          className="text-xs font-medium text-blue-gray-600"
-                        >
-                          {budget}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <div className="w-10/12">
-                          <Typography
-                            variant="small"
-                            className="mb-1 block text-xs font-medium text-blue-gray-600"
-                          >
-                            {completion}%
+                          <Typography className="text-xs font-normal text-blue-gray-500">
+                            {query}
                           </Typography>
-                          <Progress
-                            value={completion}
-                            variant="gradient"
-                            color={completion === 100 ? "green" : "blue"}
-                            className="h-1"
-                          />
                         </div>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          as="a"
-                          href="#"
-                          className="text-xs font-semibold text-blue-gray-600"
+                      </div>
+                    </td>
+                    <td className={className}>
+                      <Typography className="text-xs font-normal text-blue-gray-500">
+                        {query}
+                      </Typography>
+                    </td>
+                    <td className={className}>
+                      <Chip
+                        variant="gradient"
+                        color={online ? "purple" : "blue-gray"}
+                        value={online ? "responded" : "pending"}
+                        style={{ backgroundColor: online ? '#B089BE' : 'inherit' }}
+                        className={`py-0.5 px-2 text-[11px] font-medium`}
+                      />
+                    </td>
+                    <td className={className} style={{ fontSize: '12px' }}>
+                      {date}
+                    </td>
+                    <td className={className}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <input
+                          type="text"
+                          value={responses[`${name}-${key}`] || ''}
+                          onChange={(e) => handleResponseChange(name, e)}
+                          placeholder="Type your response here..."
+                          className="text-xs flex-1"
+                          data-index={key}
+                        />
+                        <button
+                          onClick={() => handleResponseSubmit(name)}
+                          style={{ background: '#B089BE', color: 'white' }}
+                          className="py-1 px-3 rounded-md ml-2"
                         >
-                          <EllipsisVerticalIcon
-                            strokeWidth={2}
-                            className="h-5 w-5 text-inherit"
-                          />
-                        </Typography>
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
+                          Submit
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </CardBody>

@@ -2,16 +2,19 @@ import { chartsConfig } from "@/admin/configs";
 
 const websiteViewsChart = {
   type: "bar",
-  height: 220,
+  height: 300,
   series: [
     {
-      name: "Views",
-      data: [50, 20, 10, 22, 50, 10, 40],
+      name: "Users",
+      data: [90, 40, 50, 22, 60, 70, 40 , 30],
     },
   ],
   options: {
     ...chartsConfig,
     colors: "#fff",
+    chart: {
+      background: "#B089BE", // Add this line to set the background color
+    },
     plotOptions: {
       bar: {
         columnWidth: "16%",
@@ -20,78 +23,53 @@ const websiteViewsChart = {
     },
     xaxis: {
       ...chartsConfig.xaxis,
-      categories: ["M", "T", "W", "T", "F", "S", "S"],
+      categories: ["Pakistan", "America", "India", "Canada", "Japan", "Nigeria", "Australia" , "Malaysia"],
     },
   },
 };
 
 const dailySalesChart = {
-  type: "line",
-  height: 220,
+  type: "bar",
+  height: 300,
   series: [
     {
-      name: "Sales",
-      data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+      name: "Users",
+      data: [90, 50, 20, 22, 50, 20, 40, 70 , 20],
     },
   ],
   options: {
     ...chartsConfig,
-    colors: ["#fff"],
-    stroke: {
-      lineCap: "round",
+    colors: "#fff",
+    chart: {
+      background: "#B089BE", // Add this line to set the background color
     },
-    markers: {
-      size: 5,
+    plotOptions: {
+      bar: {
+        columnWidth: "16%",
+        borderRadius: 5,
+      },
     },
     xaxis: {
       ...chartsConfig.xaxis,
-      categories: [
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: ["1-10", "12-20", "21-30", "31-40", "41-50", "51-60", "61-70","71-80","81-90"],
     },
   },
-};
-
-const completedTasksChart = {
-  ...dailySalesChart,
-  series: [
-    {
-      name: "Tasks",
-      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-    },
-  ],
 };
 
 export const statisticsChartsData = [
   {
-    color: "blue",
-    title: "Website View",
-    description: "Last Campaign Performance",
-    footer: "campaign sent 2 days ago",
+    color: "#B089BE",
+    title: "User Age Group",
+    footer: "Updates in real time",
     chart: websiteViewsChart,
   },
   {
-    color: "pink",
-    title: "Daily Sales",
-    description: "15% increase in today sales",
-    footer: "updated 4 min ago",
+    color: "black",
+    title: "Geographic Usage",
+    footer: "Updates in real time",
     chart: dailySalesChart,
   },
-  {
-    color: "green",
-    title: "Completed Tasks",
-    description: "Last Campaign Performance",
-    footer: "just updated",
-    chart: completedTasksChart,
-  },
+ 
 ];
 
 export default statisticsChartsData;
