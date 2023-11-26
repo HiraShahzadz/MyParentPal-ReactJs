@@ -11,10 +11,10 @@ import Chart from "react-apexcharts";
 export function StatisticsChart({ color, chart, title, description, footer }) {
   return (
     <Card>
-      <CardHeader variant="gradient" color={color}>
+      <CardHeader className="bg-MyPurple-400" variant="gradient" color={color}>
         <Chart {...chart} />
       </CardHeader>
-      <CardBody className="p-6">
+      <CardBody className="p-6 ">
         <Typography variant="h6" color="blue-gray">
           {title}
         </Typography>
@@ -23,7 +23,7 @@ export function StatisticsChart({ color, chart, title, description, footer }) {
         </Typography>
       </CardBody>
       {footer && (
-        <CardFooter className="border-t border-blue-gray-50 px-6 py-5">
+        <CardFooter className=" border-t border-blue-gray-50 px-6 py-5">
           {footer}
         </CardFooter>
       )}
@@ -47,8 +47,8 @@ StatisticsChart.propTypes = {
     "amber",
     "yellow",
     "lime",
-    "light-green",
-    "green",
+    "light-",
+    "MyPurple",
     "teal",
     "cyan",
     "light-blue",
@@ -58,7 +58,6 @@ StatisticsChart.propTypes = {
     "purple",
     "pink",
     "red",
-     
   ]),
   chart: PropTypes.object.isRequired,
   title: PropTypes.node.isRequired,

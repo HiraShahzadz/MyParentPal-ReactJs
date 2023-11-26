@@ -1,11 +1,8 @@
-import {
-  
-  UserIcon,
-} from "@heroicons/react/24/solid";
+import { UserIcon } from "@heroicons/react/24/solid";
 
 export const statisticsCardsData = [
   {
-    color: 'purple', // Updated color with hexadecimal value
+    color: "MyPurple", // Updated color with hexadecimal value
     icon: UserIcon,
     title: "Total Users",
     value: "25,000",
@@ -16,7 +13,7 @@ export const statisticsCardsData = [
     },
   },
   {
-    color: "purple", // Updated color with hexadecimal value
+    color: "MyPurple", // Updated color with hexadecimal value
     icon: UserIcon,
     title: "Parent User",
     value: "8,000",
@@ -27,7 +24,7 @@ export const statisticsCardsData = [
     },
   },
   {
-    color: "purple", // Updated color with hexadecimal value
+    color: "MyPurple", // Updated color with hexadecimal value
     icon: UserIcon,
     title: "Child User",
     value: "17,000",

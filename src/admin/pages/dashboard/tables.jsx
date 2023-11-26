@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -6,7 +6,7 @@ import {
   Typography,
   Avatar,
   Chip,
-Tooltip,
+  Tooltip,
   Progress,
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
@@ -29,21 +29,31 @@ export function Tables() {
   };
 
   return (
-    <div className="mt-12 mb-8 flex flex-col gap-12">
+    <div className="mb-8 mt-12 flex flex-col gap-12">
       <Card>
-        <CardHeader variant="gradient" style={{ background: "white"}} className="mb-8 p-6">
-          <Typography variant="h6" style={{ color: '#B089BE' }}>
+        <CardHeader
+          variant="gradient"
+          style={{ background: "white" }}
+          className="mb-8 p-6"
+        >
+          <Typography variant="h6" style={{ color: "#B089BE" }}>
             Feedback and Queries
           </Typography>
         </CardHeader>
 
-        <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+        <CardBody className="overflow-x-scroll px-0 pb-2 pt-0">
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
                 {["name", "query", "status", "date", "Response"].map((el) => (
-                  <th key={el} className="border-b border-blue-gray-50 py-3 px-5 text-left">
-                    <Typography variant="small" className="text-[11px] font-bold uppercase text-blue-gray-400">
+                  <th
+                    key={el}
+                    className="border-b border-blue-gray-50 px-5 py-3 text-left"
+                  >
+                    <Typography
+                      variant="small"
+                      className="text-[11px] font-bold uppercase text-blue-gray-400"
+                    >
                       {el}
                     </Typography>
                   </th>
@@ -54,7 +64,9 @@ export function Tables() {
               {authorsTableData.map(({ img, name, online, date }, key) => {
                 const query = "Sample query text"; // Sample query text
                 const className = `py-3 px-5 ${
-                  key === authorsTableData.length - 1 ? "" : "border-b border-blue-gray-50"
+                  key === authorsTableData.length - 1
+                    ? ""
+                    : "border-b border-blue-gray-50"
                 }`;
 
                 return (
@@ -63,7 +75,11 @@ export function Tables() {
                       <div className="flex items-center gap-4">
                         <Avatar src={img} alt={name} size="sm" />
                         <div>
-                          <Typography variant="small" color="blue-gray" className="font-semibold">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-semibold"
+                          >
                             {name}
                           </Typography>
                           <Typography className="text-xs font-normal text-blue-gray-500">
@@ -78,31 +94,35 @@ export function Tables() {
                       </Typography>
                     </td>
                     <td className={className}>
-                      <Chip
+                      <div
                         variant="gradient"
                         color={online ? "purple" : "blue-gray"}
                         value={online ? "responded" : "pending"}
-                        style={{ backgroundColor: online ? '#B089BE' : 'inherit' }}
-                        className={`py-0.5 px-2 text-[11px] font-medium`}
-                      />
+                        className={`rounded-lg py-1 text-center text-[11px] font-medium ${
+                          online
+                            ? "bg-[#B089BE] text-[#ffffff]"
+                            : "bg-gray-400 text-[#fff]"
+                        }`}
+                      >
+                        {online ? "Responded" : "Pending"}
+                      </div>
                     </td>
-                    <td className={className} style={{ fontSize: '12px' }}>
+                    <td className={className} style={{ fontSize: "12px" }}>
                       {date}
                     </td>
                     <td className={className}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ display: "flex", alignItems: "center" }}>
                         <input
                           type="text"
-                          value={responses[`${name}-${key}`] || ''}
+                          value={responses[`${name}-${key}`] || ""}
                           onChange={(e) => handleResponseChange(name, e)}
                           placeholder="Type your response here..."
-                          className="text-xs flex-1"
+                          className="flex-1 text-xs"
                           data-index={key}
                         />
                         <button
                           onClick={() => handleResponseSubmit(name)}
-                          style={{ background: '#B089BE', color: 'white' }}
-                          className="py-1 px-3 rounded-md ml-2"
+                          className="ml-2 rounded-md bg-[#B089BE] px-3 py-1 text-white shadow-lg hover:bg-purple-400"
                         >
                           Submit
                         </button>

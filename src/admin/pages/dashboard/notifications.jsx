@@ -11,17 +11,19 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 export function Notifications() {
   const [showAlerts, setShowAlerts] = React.useState({
     blue: true,
-    green: true,
+    green : true,
+    MyPurple:true,
     orange: true,
     red: true,
   });
   const [showAlertsWithIcon, setShowAlertsWithIcon] = React.useState({
     blue: true,
     green: true,
+    MyPurple: true,
     orange: true,
     red: true,
   });
-  const alerts = ["blue", "green", "orange", "red"];
+  const alerts = ["blue", "MyPurple","green", "orange", "red"];
 
   return (
     <div className="mx-auto my-20 flex max-w-screen-lg flex-col gap-8">

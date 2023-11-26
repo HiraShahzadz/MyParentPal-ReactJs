@@ -13,12 +13,12 @@ export function StatisticsCard({ color, icon, title, value, footer }) {
       <CardHeader
         variant="gradient"
         color={color}
-        className="absolute -mt-4 grid h-16 w-16 place-items-center"
+        className="absolute -mt-4 grid h-16 w-16 place-items-center bg-MyPurple-400"
       >
         {icon}
       </CardHeader>
       <CardBody className="p-4 text-right">
-        <Typography variant="small" className="font-normal text-blue-gray-600">
+        <Typography variant="small" className="font-normal text-blue-gray-600 ">
           {title}
         </Typography>
         <Typography variant="h4" color="blue-gray">
@@ -50,8 +50,10 @@ StatisticsCard.propTypes = {
     "amber",
     "yellow",
     "lime",
+    "custom-responded",
     "light-green",
-    "green",
+    "MyPurple",
+    "purple-400",
     "teal",
     "cyan",
     "light-blue",

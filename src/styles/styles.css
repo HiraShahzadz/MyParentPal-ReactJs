@@ -7,6 +7,6 @@
     transition: transform 0.3s ease, opacity 0.3s ease; /* Add a smooth transition effect */
   }
   .custom-responded {
-    background-color: #B089BE !important;
+    color: #B089BE !important;
   }
   

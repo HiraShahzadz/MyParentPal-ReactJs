@@ -1,4 +1,5 @@
 import { chartsConfig } from "@/admin/configs";
+import defaultColors from "tailwindcss/colors";
 
 const websiteViewsChart = {
   type: "bar",
@@ -6,7 +7,7 @@ const websiteViewsChart = {
   series: [
     {
       name: "Users",
-      data: [90, 40, 50, 22, 60, 70, 40 , 30],
+      data: [90, 40, 50, 22, 60, 70, 40, 30],
     },
   ],
   options: {
@@ -23,7 +24,16 @@ const websiteViewsChart = {
     },
     xaxis: {
       ...chartsConfig.xaxis,
-      categories: ["Pakistan", "America", "India", "Canada", "Japan", "Nigeria", "Australia" , "Malaysia"],
+      categories: [
+        "Pakistan",
+        "America",
+        "India",
+        "Canada",
+        "Japan",
+        "Nigeria",
+        "Australia",
+        "Malaysia",
+      ],
     },
   },
 };
@@ -34,7 +44,7 @@ const dailySalesChart = {
   series: [
     {
       name: "Users",
-      data: [90, 50, 20, 22, 50, 20, 40, 70 , 20],
+      data: [90, 50, 20, 22, 50, 20, 40, 70, 20],
     },
   ],
   options: {
@@ -51,25 +61,34 @@ const dailySalesChart = {
     },
     xaxis: {
       ...chartsConfig.xaxis,
-      categories: ["1-10", "12-20", "21-30", "31-40", "41-50", "51-60", "61-70","71-80","81-90"],
+      categories: [
+        "1-10",
+        "12-20",
+        "21-30",
+        "31-40",
+        "41-50",
+        "51-60",
+        "61-70",
+        "71-80",
+        "81-90",
+      ],
     },
   },
 };
 
 export const statisticsChartsData = [
   {
-    color: "#B089BE",
+    color: "MuPurple",
     title: "User Age Group",
     footer: "Updates in real time",
     chart: websiteViewsChart,
   },
   {
-    color: "black",
+    color: "MyPurple",
     title: "Geographic Usage",
     footer: "Updates in real time",
     chart: dailySalesChart,
   },
- 
 ];
 
 export default statisticsChartsData;

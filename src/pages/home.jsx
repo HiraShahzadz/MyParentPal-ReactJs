@@ -36,35 +36,37 @@ export function Home() {
 
   return (
     <>
-   
-      <div className="relative flex h-screen content-center items-center justify-center pt-16 pb-32 ">
-        <div
-         
-        >
-     <img src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg" className="absolute top-0 h-full w-full" alt="Cover Image" />
-
-
-
+      <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
+        <div>
+          <img
+            src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg"
+            className="absolute top-0 h-full w-full"
+            alt="Cover Image"
+          />
         </div>
 
         <div className="max-w-8xl container relative mx-auto ">
           <div className="flex flex-wrap items-center">
-          <div className="mr-auto w-3/4 px-4 text-left">
-  <Typography
-    variant="h2"
-    color="white"
-    className="mb-6 font-black text-[#B089BE]"
-  >
-    Your Digital Co-Parent in Child Upbringing
-  </Typography>
- 
-
-</div>
- <div className="mr-auto w-1/2 px-4 text-left">
- <Typography variant="lead" className="text-black opacity-60 text-justify">
-  Empower your parenting journey with MyParentPal - where technology meets the art of raising happy, responsible, and confident children. Together, we empower you to raise not just children, but the architects of their own remarkable futures.
-</Typography>
-</div>
+            <div className="mr-auto w-3/4 px-4 text-left">
+              <Typography
+                variant="h2"
+                color="white"
+                className="mb-6 font-black text-[#B089BE]"
+              >
+                Your Digital Co-Parent in Child Upbringing
+              </Typography>
+            </div>
+            <div className="mr-auto w-1/2 px-4 text-left">
+              <Typography
+                variant="lead"
+                className="text-justify text-black opacity-60"
+              >
+                Empower your parenting journey with MyParentPal - where
+                technology meets the art of raising happy, responsible, and
+                confident children. Together, we empower you to raise not just
+                children, but the architects of their own remarkable futures.
+              </Typography>
+            </div>
           </div>
         </div>
       </div>
@@ -76,10 +78,10 @@ export function Home() {
                 key={title}
                 color={color}
                 title={
-                  <div style={{ color: '#B089BE' }}>{title}</div> // Apply style to change text color
+                  <div style={{ color: "#B089BE" }}>{title}</div> // Apply style to change text color
                 } // Apply style to change text color
                 description={
-                  <div style={{ color: 'black' }}>{description}</div> // Apply style to change text color
+                  <div style={{ color: "black" }}>{description}</div> // Apply style to change text color
                 } // Apply style to change text color
                 icon={React.createElement(icon, {
                   className: "w-5 h-5 text-white ",
@@ -144,9 +146,7 @@ export function Home() {
       <section className="pb-45 pt-20">
         <div className="ttext-[#808080] container mx-auto">
           <PageTitle className="text-Custom" heading="Why Digital Co-Parent?">
-            <p
-             className="mb-8 font-normal text-[#808080]"
-            >
+            <p className="mb-8 font-normal text-[#808080]">
               Help parents to shape their child's future, instill civility, and
               foster responsibility effectively through streamlined task
               management and improved communication

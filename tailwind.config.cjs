@@ -7,13 +7,11 @@ module.exports = withMT({
     extend: {
 
       colors: {
-        // ... other colors ...
-        customPurple: '#B089BE',
-        customColor: {
-          DEFAULT: '#B089BE', // Set your custom color here
-          
+        MyPurple: {
+          400: "#B089BE",
+          600: "#B089BE",
         },
-      }
+      },
 
     },
   },
