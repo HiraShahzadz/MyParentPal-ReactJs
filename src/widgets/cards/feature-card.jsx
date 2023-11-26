@@ -51,6 +51,7 @@ FeatureCard.propTypes = {
     "blue",
     "indigo",
     "deep-purple",
+    "MyPurple",
     "purple",
     "pink",
     "red",

@@ -14,14 +14,16 @@ export function Notifications() {
     green: true,
     orange: true,
     red: true,
+    MyPurple: true,
   });
   const [showAlertsWithIcon, setShowAlertsWithIcon] = React.useState({
     blue: true,
     green: true,
     orange: true,
     red: true,
+    MyPurple: true,
   });
-  const alerts = ["blue", "green", "orange", "red"];
+  const alerts = ["blue", "green", "orange", "red", "MyPurple"];
 
   return (
     <div className="mx-auto my-20 flex max-w-screen-lg flex-col gap-8">

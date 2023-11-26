@@ -53,6 +53,7 @@ export function Configurator() {
     orange: "from-orange-400 to-orange-600",
     red: "from-red-400 to-red-600",
     pink: "from-pink-400 to-pink-600",
+    MyPurple: "from-MyPurple-400 to-MyPurple-600",
   };
 
   React.useEffect(() => {

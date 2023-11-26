@@ -16,7 +16,7 @@ import {
   Notifications,
 } from "@/parent/pages/dashboard";
 import { SignIn, SignUp } from "@/parent/pages/auth";
-import TaskCreation from "./dragDrop/TaskCreation";
+import TaskCreation from "./dragDrop/TaskCreationForum/TaskCreation";
 
 const icon = {
   className: "w-5 h-5 text-inherit",

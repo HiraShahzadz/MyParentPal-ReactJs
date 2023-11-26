@@ -15,7 +15,7 @@ export function Tables() {
   return (
     <div className="mb-8 mt-12 flex flex-col gap-12">
       <Card>
-        <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
+        <CardHeader variant="gradient" className="mb-8 bg-MyPurple-400 p-6">
           <Typography variant="h6" color="white">
             Authors Table
           </Typography>
