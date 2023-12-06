@@ -1,0 +1,35 @@
+/* Checkbox.css */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.custom-checkbox input {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid grey; /* Set the border color to grey */
+  border-radius: 0.25rem;
+  margin-right: 0.5rem;
+  position: relative; /* Added relative positioning */
+}
+
+.custom-checkbox input:checked {
+  background-color: #b089be; /* Replace with your color code */
+}
+
+.custom-checkbox input:checked::before {
+  content: "\2713"; /* Unicode character for checkmark */
+  font-size: 1.25rem; /* Adjust size as needed */
+  color: white; /* Set the color to white */
+  position: absolute; /* Position absolutely within the checkbox */
+  top: 50%; /* Move to the vertical center */
+  left: 50%; /* Move to the horizontal center */
+  transform: translate(-50%, -50%); /* Center the tick */
+}
+
+.custom-checkbox label {
+  font-size: 0.85rem;
+  color: #657780; /* Replace with your color code */
+  cursor: pointer;
+}
