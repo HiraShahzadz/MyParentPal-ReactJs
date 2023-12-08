@@ -7,16 +7,15 @@ import {
   UserPlusIcon,
   RectangleGroupIcon,
   RectangleStackIcon,
+  UserIcon,
 } from "@heroicons/react/24/solid";
 
-import {
-  ParentHome,
-  Profile,
-  Tables,
-  Notifications,
-} from "@/parent/pages/dashboard";
+import { ParentHome, Tables, Notifications } from "@/parent/pages/dashboard";
 import { SignIn, SignUp } from "@/parent/pages/auth";
 import TaskCreation from "./dragDrop/TaskCreationForum/TaskCreation";
+import MyChild from "./ChildProfiles/MyChild";
+import { ParentProfile } from "./ParentProfile/parentProfile";
+import { MyProfile } from "./Profile/profile";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -43,7 +42,7 @@ export const routes = [
         icon: <UserCircleIcon {...icon} />,
         name: "profile",
         path: "/profile",
-        element: <Profile />,
+        element: <ParentProfile />,
       },
       {
         icon: <TableCellsIcon {...icon} />,
@@ -56,6 +55,12 @@ export const routes = [
         name: "notifactions",
         path: "/notifactions",
         element: <Notifications />,
+      },
+      {
+        icon: <UserIcon {...icon} />,
+        name: "My Child",
+        path: "/child",
+        element: <MyChild />,
       },
     ],
   },
