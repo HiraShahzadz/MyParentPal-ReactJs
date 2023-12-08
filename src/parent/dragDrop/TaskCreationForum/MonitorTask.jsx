@@ -18,7 +18,7 @@ function MonitorTask() {
     setSelectedOption(event.target.value); // Update the selected option when a radio button is clicked
   };
   return (
-    <div className="mt-10 space-y-10 border-b border-gray-900/10 pb-6">
+    <div className="mt-10 space-y-10 ">
       <fieldset>
         <legend className="flex text-sm font-semibold leading-6 text-gray-900">
           {/* Your SVG and text here */}

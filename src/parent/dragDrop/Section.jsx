@@ -17,8 +17,8 @@ function Section({
   tasks,
   setTasks,
   todos,
-  inProgress,
-  closed,
+  completed,
+  reviewed,
   rewarded,
 }) {
   const [{ isOver }, drop] = useDrop(() => ({
@@ -31,14 +31,14 @@ function Section({
   let text = "Todo";
   let tasksToMap = todos;
 
-  if (status === "inprogress") {
-    text = "In Progress";
-    tasksToMap = inProgress;
+  if (status === "completed") {
+    text = "Completed";
+    tasksToMap = completed;
   }
 
-  if (status === "closed") {
-    text = "Closed";
-    tasksToMap = closed;
+  if (status === "reviewed") {
+    text = "Reviewed";
+    tasksToMap = reviewed;
   }
 
   if (status === "rewarded") {
@@ -70,6 +70,7 @@ function Section({
     >
       <CardBody className="p-4">
         <Header text={text} count={tasksToMap?.length} />
+
         {tasksToMap?.length > 0 &&
           tasksToMap.map((task) => (
             <Task key={task.id} task={task} tasks={tasks} setTasks={setTasks} />

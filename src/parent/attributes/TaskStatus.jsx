@@ -8,8 +8,8 @@ function classNames(...classes) {
 
 const status = [
   { label: "Todo", image: "/img/purple.png", color: "purple-50" },
-  { label: "In Progress", image: "/img/green.png", color: "green-50" },
-  { label: "Closed", image: "/img/orange.png", color: "deep-orange-50" },
+  { label: "Completed", image: "/img/green.png", color: "green-50" },
+  { label: "Reviewed", image: "/img/orange.png", color: "deep-orange-50" },
   { label: "Rewarded", image: "/img/blue.png", color: "blue-50" },
 ];
 
