@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import ChildProfileData from "../data/child-profile-data";
-import { MyProfile } from "../Profile/profile";
+import { MyProfile } from "./Profile/profile";
 
 function MyChild() {
   const [showProfiles, setShowProfiles] = useState(true);

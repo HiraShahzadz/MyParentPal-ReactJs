@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import TaskDetailsModal from "./TaskDetailsModal";
 
-import { tasksData } from "../data/tasksData";
+import { tasksData } from "../../data/tasksData";
 
 import bgImage from "/img/bgcover.jpeg";
 export function MyProfile() {

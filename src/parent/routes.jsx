@@ -15,7 +15,7 @@ import { SignIn, SignUp } from "@/parent/pages/auth";
 import TaskCreation from "./dragDrop/TaskCreationForum/TaskCreation";
 import MyChild from "./ChildProfiles/MyChild";
 import { ParentProfile } from "./ParentProfile/parentProfile";
-import { MyProfile } from "./Profile/profile";
+import { MyProfile } from "./ChildProfiles/Profile/profile";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
