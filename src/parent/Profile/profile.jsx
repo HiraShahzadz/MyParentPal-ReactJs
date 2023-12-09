@@ -151,7 +151,7 @@ export function MyProfile() {
             </label>
           </div>
 
-          <div className=" mb-8 mt-10 flex flex-col rounded-lg bg-white md:flex-row">
+          <div className="mb-4 mt-10 flex flex-col rounded-lg bg-white md:flex-row">
             {/* Left side div */}
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
               <ProfileSection />

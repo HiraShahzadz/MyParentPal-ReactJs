@@ -7,6 +7,7 @@ import {
   faVenusMars,
   faEnvelope,
   faLock,
+  faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@material-tailwind/react";
 
@@ -154,17 +155,17 @@ class AboutSection extends Component {
           </div>
 
           <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
-            <FontAwesomeIcon icon={faCalendarAlt} className="mr-7" />
+            <FontAwesomeIcon icon={faUser} className="mr-7" />
             {this.renderField("lastName", "")}
           </div>
 
           <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
-            <FontAwesomeIcon icon={faVenusMars} className="mr-6" />
+            <FontAwesomeIcon icon={faPhone} className="mr-6" />
             {this.renderField("phoneNumber", "")}
           </div>
 
           <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
-            <FontAwesomeIcon icon={faEnvelope} className="mr-7" />
+            <img className="mr-6 h-4 w-4" src="/img/id-card.png" alt="" />
             {this.renderField("CNIC", "")}
           </div>
         </form>

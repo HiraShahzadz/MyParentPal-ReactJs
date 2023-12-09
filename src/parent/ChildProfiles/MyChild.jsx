@@ -52,10 +52,10 @@ function MyChild() {
                     src={img}
                     alt=""
                   />
-                  <Typography className="mt-3 text-center text-black">
+                  <Typography className="mt-3 block text-center text-sm font-medium leading-6 text-gray-900">
                     {name}
                   </Typography>
-                  <Typography className="text-center text-sm text-gray-700">
+                  <Typography className="ml-1 text-center text-xs text-black  hover:underline">
                     {username}
                   </Typography>
                   <div className="flex items-center justify-center">
