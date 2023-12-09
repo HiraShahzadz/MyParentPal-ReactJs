@@ -77,14 +77,7 @@ export function TaskCreation() {
   };
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mt-12">
-        <DndProvider backend={HTML5Backend}>
-          <Toaster />
-          <div className="mb-10">
-            <CreateTask tasks={tasks} setTasks={setTasks} />
-          </div>
-        </DndProvider>
-
+      <div className="mt-9">
         <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
           <Card className="overflow-hidden xl:col-span-2">
             <CardHeader
@@ -128,7 +121,7 @@ export function TaskCreation() {
                         Task
                       </label>
                       <div className="mt-2">
-                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE] sm:max-w-md">
+                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                           <input
                             type="text"
                             value={task.name}

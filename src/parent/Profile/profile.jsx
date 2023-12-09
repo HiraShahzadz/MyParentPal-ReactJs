@@ -151,14 +151,14 @@ export function MyProfile() {
             </label>
           </div>
 
-          <div className="mb-4 mb-8 mt-10 flex flex-col rounded-lg bg-white md:flex-row">
+          <div className=" mb-8 mt-10 flex flex-col rounded-lg bg-white md:flex-row">
             {/* Left side div */}
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
               <ProfileSection />
             </div>
 
             {/* Right side div covering remaining space */}
-            <div className="mb-5 ml-5 mr-5 mt-2 mt-5 rounded-lg border border-gray-200 p-2 shadow-lg md:flex-1">
+            <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-2 shadow-lg md:flex-1">
               <div className="mb-1 mt-6 flex w-full items-center justify-between pl-3 pr-10">
                 <div className="text-left text-lg font-bold text-black">
                   Task Summary
@@ -166,7 +166,7 @@ export function MyProfile() {
                 <div className="text-right">
                   <a
                     href="child/pages/dashboard/home"
-                    className="text-blue-500 hover:underline"
+                    className="text-black hover:underline"
                   >
                     View All
                   </a>
@@ -189,7 +189,7 @@ export function MyProfile() {
                     <div
                       key={id}
                       href=""
-                      className="mb-2 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                      className="mb-2 flex items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50"
                     >
                       <div className="flex">
                         <img
@@ -265,7 +265,7 @@ export function MyProfile() {
                         <div
                           key={id}
                           href=""
-                          className="mb-2 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                          className="mb-2 flex items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50"
                         >
                           <div className="flex">
                             <img
@@ -344,7 +344,7 @@ export function MyProfile() {
                         <div
                           key={id}
                           href=""
-                          className="mb-2 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                          className="mb-2 flex items-center rounded-md border  p-3 text-sm hover:bg-blue-gray-50"
                         >
                           <div className="flex">
                             <img
