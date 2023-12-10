@@ -1,4 +1,5 @@
 import { Home, Profile, SignIn, SignUp } from "@/pages";
+import { MaterialTailwindControllerProvider } from "@/child/context";
 import {
   HomeIcon,
   UserCircleIcon,
@@ -6,6 +7,8 @@ import {
   UserPlusIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/solid";
+
+import App from "@/child/App"
 
 export const routes = [
   {
@@ -17,9 +20,12 @@ export const routes = [
   {
     icon: UserCircleIcon,
     name: "profile",
-    path: "/profile",
-    element: <Profile />,
-  },
+    path: "/*",
+    element:  (
+    <MaterialTailwindControllerProvider>
+    <App />
+  </MaterialTailwindControllerProvider>
+  ),},
   {
     icon: ArrowRightOnRectangleIcon,
     name: "Sign In",
