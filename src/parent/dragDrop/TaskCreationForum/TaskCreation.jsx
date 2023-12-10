@@ -6,15 +6,8 @@ import {
   Typography,
   Card,
   CardHeader,
-  IconButton,
   CardBody,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
 } from "@material-tailwind/react";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
-import CreateTask from "@/parent/dragDrop/CreateTask";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -78,6 +71,10 @@ export function TaskCreation() {
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-9">
+        <DndProvider backend={HTML5Backend}>
+          <Toaster />
+        </DndProvider>
+
         <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
           <Card className="overflow-hidden xl:col-span-2">
             <CardHeader
@@ -91,22 +88,6 @@ export function TaskCreation() {
                   Create Task
                 </Typography>
               </div>
-              <Menu placement="left-start">
-                <MenuHandler>
-                  <IconButton size="sm" variant="text" color="blue-gray">
-                    <EllipsisVerticalIcon
-                      strokeWidth={3}
-                      fill="currenColor"
-                      className="h-6 w-6"
-                    />
-                  </IconButton>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Action</MenuItem>
-                  <MenuItem>Another Action</MenuItem>
-                  <MenuItem>Something else here</MenuItem>
-                </MenuList>
-              </Menu>
             </CardHeader>
 
             <div className="px-6 pb-6">

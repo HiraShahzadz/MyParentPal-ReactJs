@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import React from "react";
 
 function FilterChildTask() {
   const options = [
     { label: "Nida", image: "/img/Woman6.jpg" },
     { label: "Hira", image: "/img/women2.jpg" },
   ];
-  const [selectedOption, setSelectedOption] = useState(options[0]); // Default to the first option
 
   return (
     <div className="col-span-full ml-2 mt-2 flex items-center gap-x-1">

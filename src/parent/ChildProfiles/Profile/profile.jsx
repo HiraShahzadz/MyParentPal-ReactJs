@@ -6,9 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import TaskDetailsModal from "./TaskDetailsModal";
 
-import { tasksData } from "../../data/tasksData";
-
 import bgImage from "/img/bgcover.jpeg";
+import tasksData from "@/parent/data/tasksData";
 export function MyProfile() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {

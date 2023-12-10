@@ -60,7 +60,9 @@ function Task({ task, tasks, setTasks }) {
           </Menu>
         </div>
 
-        {showModal && <EditTask task={task} onClose={setShowModal} />}
+        {showModal && (
+          <EditTask task={task} tasks={tasks} onClose={setShowModal} />
+        )}
       </div>
       <div className="flex">
         <p className="ml-0 mt-7 text-xs text-black ">5-2-2023</p>
