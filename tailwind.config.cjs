@@ -5,17 +5,13 @@ module.exports = withMT({
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-
       colors: {
-        // ... other colors ...
-        customPurple: '#B089BE',
-        customColor: {
-          DEFAULT: '#B089BE', // Set your custom color here
-          
+        MyPurple: {
+          400: "#B089BE",
+          600: "#B089BE",
         },
-      }
-
+      },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 });

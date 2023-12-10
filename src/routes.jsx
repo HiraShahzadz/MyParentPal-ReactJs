@@ -8,6 +8,8 @@ import {
   EnvelopeIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/solid";
+import { MaterialTailwindControllerProvider } from "@/parent/context";
+import ParentApp from "@/parent/App";
 
 import App from "@/child/App";
 
@@ -41,11 +43,14 @@ export const routes = [
     element: <SignUp />,
   },
   {
-    icon: EnvelopeIcon,
-    name: "contact us",
-    href: "https://www.material-tailwind.com/docs/react/installation",
-    target: "_blank",
-    element: "",
+    icon: DocumentTextIcon,
+    name: "Docs",
+    path: "/*",
+    element: (
+      <MaterialTailwindControllerProvider>
+        <ParentApp />
+      </MaterialTailwindControllerProvider>
+    ),
   },
 ];
 
