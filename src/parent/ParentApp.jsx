@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Dashboard, Auth } from "@/parent/layouts";
 
-function App() {
+function ParentApp() {
   return (
     <Routes>
       <Route path="/dashboard/*" element={<Dashboard />} />
@@ -11,4 +11,4 @@ function App() {
   );
 }
 
-export default App;
+export default ParentApp;

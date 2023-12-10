@@ -1,16 +1,14 @@
 import { Home, Profile, SignIn, SignUp } from "@/pages";
-import { MaterialTailwindControllerProvider } from "@/child/context";
+import { MaterialTailwindControllerProvider as ChildControllerProvider } from "@/child/context";
+import { MaterialTailwindControllerProvider as ParentControllerProvider } from "@/parent/context";
 import {
   HomeIcon,
-  ListBulletIcon,
   InformationCircleIcon,
   StarIcon,
-  EnvelopeIcon,
   UserCircleIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/solid";
-import { MaterialTailwindControllerProvider } from "@/parent/context";
-import ParentApp from "@/parent/App";
-
+import ParentApp from "./parent/ParentApp";
 import App from "@/child/App";
 
 export const routes = [
@@ -25,9 +23,9 @@ export const routes = [
     name: "profile",
     path: "/*",
     element: (
-      <MaterialTailwindControllerProvider>
+      <ChildControllerProvider>
         <App />
-      </MaterialTailwindControllerProvider>
+      </ChildControllerProvider>
     ),
   },
   {
@@ -47,9 +45,9 @@ export const routes = [
     name: "Docs",
     path: "/*",
     element: (
-      <MaterialTailwindControllerProvider>
+      <ParentControllerProvider>
         <ParentApp />
-      </MaterialTailwindControllerProvider>
+      </ParentControllerProvider>
     ),
   },
 ];
