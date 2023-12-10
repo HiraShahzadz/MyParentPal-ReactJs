@@ -1,0 +1,444 @@
+/* ChildHome.css */
+.custom-calendar {
+    border: 1px solid #b089be;
+    padding: 10px;
+  }
+  
+  .custom-calendar .react-calendar__view__title {
+    font-weight: bold;
+    color: #b089be;
+    text-align: center;
+  }
+  
+  .custom-calendar-nav {
+    font-size: 24px; /* Adjust the font size as needed */
+    color: #b089be;
+    cursor: pointer;
+  }
+  
+  /* ChildHome.css */
+/* Custom styles for the calendar */
+
+/* Align day names and dates center */
+.react-calendar__month-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style day names */
+.react-calendar__month-view__weekdays {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  color:#82349F;
+  font-weight: bold; /* Make day names bold */
+}
+.additional-div {
+  width: 200px; /* Set the width of the additional div as needed */
+}
+
+/* Style individual day name */
+.react-calendar__month-view__weekdays__weekday {
+  width: 14.28%; /* Adjust the width to evenly distribute day names */
+}
+
+/* Style dates */
+.react-calendar__month-view__days {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Style individual date */
+.react-calendar__month-view__days__day {
+  width: 14.28%; /* Adjust the width to evenly distribute dates */
+}
+
+/* ChildHome.css */
+/* Custom styles for the calendar */
+
+/* Center and style the calendar container */
+.custom-calendar-container {
+  text-align: center;
+}
+
+/* Style the day names */
+.react-calendar__month-view__weekdays {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: bold;
+}
+
+/* Style individual day name */
+.react-calendar__month-view__weekdays__weekday {
+  width: 14.28%; /* Adjust the width to evenly distribute day names */
+}
+
+/* Style dates */
+.react-calendar__month-view__days {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Style individual date */
+.react-calendar__month-view__days__day {
+  width: 14%; /* Adjust the width to evenly distribute dates */
+}
+
+/* Center and style the calendar container */
+.custom-calendar-container {
+  text-align: center;
+}
+
+/* Style the month name */
+.react-calendar__navigation__label {
+  padding: 20px 20px; /* Add space before and after the month name */
+}
+
+/* Style the day names */
+.react-calendar__month-view__weekdays {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: bold;
+}
+
+/* Style individual day name */
+.react-calendar__month-view__weekdays__weekday {
+  width: 14.28%; /* Adjust the width to evenly distribute day names */
+}
+
+/* Style dates */
+.react-calendar__month-view__days {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Style individual date */
+.react-calendar__month-view__days__day {
+  width: 14.28%; /* Adjust the width to evenly distribute dates */
+}
+
+/* ChildHome.css */
+.custom-container-calender {
+  text-align: center;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding-bottom: 76px;
+  padding-top: 45px;
+  padding-left: 30px;
+  padding-right: 20px;
+  border-radius: 10px;
+  margin-right: 20px;
+  margin-left: 30px;
+  flex: 50%;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+.custom-container-task {
+  text-align: left;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding-bottom: 50px;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  flex: 3;
+  box-sizing: border-box;
+}
+.container {
+  display: flex;
+  width: 100%; 
+  margin: 0;
+  padding: 0;
+}
+
+.first-div {
+  flex: 1;
+  background-color: #66ccff; /* Change the background color as needed */
+}
+
+.second-div {
+  flex: 1;
+  background-color: #ff99cc; /* Change the background color as needed */
+}
+.custom-container {
+  text-align: center;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding-bottom: 50px;
+  padding-top: 40px;
+  flex: 4;
+  background-color: #ffffff;
+  padding-left: 2%;
+  padding-right: 2%;
+  border-radius: 10px;
+}
+
+.custom-container-series {
+  text-align: center;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding-bottom: 50px;
+  padding-top: 40px;
+  flex: 4;
+  background-color: #ffffff;
+  padding-left: 2%;
+  padding-right: 2%;
+  border-radius: 10px;
+}
+/* Style for the h2 element */
+.custom-container h2 {
+  font-weight: bold;
+  text-align: left;
+  margin-left: 10px;
+  color: black;
+  font-size: 20px;
+}
+.custom-container-series h2 {
+  font-weight: bold;
+  text-align: left;
+  margin-left: 10px;
+  color: black;
+  font-size: 20px;
+}
+.custom-container-calender h2 {
+  font-weight: bold;
+  text-align: left;
+  margin-left: 10px;
+  color: #b089be;
+  font-size: 20px;
+  
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: rgb(168, 168, 168);
+}
+
+.custom-container-points {
+  text-align: center;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding-bottom: 50px;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 20px;
+  border-radius: 10px;
+}
+
+/* Style for the calendar navigation icons */
+.custom-calendar-nav {
+  font-size: 24px;
+  color: #b089be;
+  cursor: pointer;
+}
+
+.task-titles .active:hover {
+  font-weight: bold;
+  cursor: pointer;
+  color: #82349F; /* Change the color as desired */
+}
+.task-titles  {
+  display: flex;
+  color: #82349F;
+}
+
+.task-nav-item {
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: normal; /* Set the default font weight */
+}
+
+.req-nav-item {
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: normal; /* Set the default font weight */
+}
+.task-nav-item.active {
+  font-weight: bold; 
+  padding: 6px;
+  background-color: #d8d3d9;
+  padding: 6px;
+  border-radius: 8px;/* Set the font weight for active tasks */
+}
+
+.req-nav-item.active {
+  font-weight: bold; 
+  padding: 6px;
+  background-color: #f5d3fc;
+  padding: 6px;
+  border-radius: 8px;/* Set the font weight for active tasks */
+  box-shadow: 0 4px 6px -3px rgba(0, 0, 0, 0.2); /* Add shadow below */
+}
+.task-titles {
+  display: flex;
+  border: 2px solid #e9dfeecf;
+  padding: 10px; /* Add border to the bottom of the titles */
+  transition: background-color 0.3s;
+  border-radius: 10px;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+
+.task-titles .task-nav-item {
+  margin-right: 10px; /* Add spacing between individual titles */
+}
+
+.task-titles .task-nav-item.active {
+ 
+  font-weight: bold;
+  /* You can add other styles for active task title here */
+}
+
+.task-nav-item {
+  display: all; /* Hide individual task titles by default */
+}
+
+/* Media query for screens with a max width of 768px */
+@media (max-width: 768px) {
+  .task-nav-item {
+    display: inline; /* Display individual task titles on small screens */
+  }
+  
+  .next-arrow {
+    display: block; /* Display the next arrow on small screens */
+  }
+}
+.progressBar{
+  height: 12px;
+  width: 450%;
+  margin-left: 9%;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: row;
+  background-color: #bcbcbc;
+  box-shadow: #b089be;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 50px;
+  background: linear-gradient(
+    180deg,
+    #a862c2 0%,
+    #a862c2  32%,
+    #a862c2  100%
+  );
+}
+
+@media (max-width: 768px) {
+  .progressBar {
+    width: 190%; /* Adjust the width for smaller screens */
+  }
+}
+
+@media (max-width: 400px) and (max-height: 700px) {
+  .progressBar {
+    width: 60%; /* Adjust the width for tablet screens */
+  }
+}
+
+.progressLabel {
+  position: absolute;
+  top: 71%;
+  left: 64%;
+  right: 0;
+  text-align: center;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .progressLabel {
+    top: 120px; 
+    left: 56%;/* Adjust the position for smaller screens */
+  }
+}
+
+/* Media query for smaller screens */
+@media (max-width: 400px) and (max-height: 700px) {
+  .progressLabel {
+    top: 120px; 
+    left: 47%;/* Adjust the position for smaller screens */
+  }
+}
+
+
+
+.textB089BE {
+  color: #B089BE;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  background: white;
+  width: 50%; /* Set the desired width for your popup */
+  max-width: 600px; /* Set a max width if needed */
+  height: 80%; /* Set the desired height for your popup */
+  max-height: 80vh; /* Set a max height in viewport height units if needed */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.popup {
+  position: relative;
+  background: #ffffff;
+  padding: 20px;
+  max-width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 30px;
+  cursor: pointer;
+}
+/* ChildHome.css */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  z-index: 1; /* Ensure it's above other content */
+}
+.hidden-content {
+  display: none;
+}
+/* ChildHome.css */
+
+
+
+@media (max-width: 400px) and (max-height: 700px) {
+  .custom-container-calender,
+  .custom-container-task {
+    flex-direction: column;
+  }
+  .custom-container-calender,
+  .custom-container-task {
+    margin: 0; 
+  }
+}
+
+

@@ -1,12 +1,14 @@
 import { Home, Profile, SignIn, SignUp } from "@/pages";
+import { MaterialTailwindControllerProvider } from "@/child/context";
 import {
   HomeIcon,
   ListBulletIcon,
   InformationCircleIcon,
   StarIcon,
   EnvelopeIcon,
-  
 } from "@heroicons/react/24/solid";
+
+import App from "@/child/App";
 
 export const routes = [
   {
@@ -16,10 +18,14 @@ export const routes = [
     element: <Home />,
   },
   {
-    icon: ListBulletIcon,
-    name: "features",
-    path: "/profile",
-    element: <Profile />,
+    icon: UserCircleIcon,
+    name: "profile",
+    path: "/*",
+    element: (
+      <MaterialTailwindControllerProvider>
+        <App />
+      </MaterialTailwindControllerProvider>
+    ),
   },
   {
     icon: InformationCircleIcon,
