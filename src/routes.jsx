@@ -6,6 +6,7 @@ import {
   InformationCircleIcon,
   StarIcon,
   EnvelopeIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/solid";
 
 import App from "@/child/App";
