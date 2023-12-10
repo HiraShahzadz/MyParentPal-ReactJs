@@ -7,7 +7,7 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/24/solid";
 import { MaterialTailwindControllerProvider } from "@/parent/context";
-import App from "@/parent/App";
+import ParentApp from "@/parent/App";
 
 export const routes = [
   {
@@ -19,12 +19,6 @@ export const routes = [
   {
     icon: UserCircleIcon,
     name: "profile",
-    path: "/*",
-    element: (
-      <MaterialTailwindControllerProvider>
-        <App />
-      </MaterialTailwindControllerProvider>
-    ),
   },
   {
     icon: ArrowRightOnRectangleIcon,
@@ -41,9 +35,12 @@ export const routes = [
   {
     icon: DocumentTextIcon,
     name: "Docs",
-    href: "https://www.material-tailwind.com/docs/react/installation",
-    target: "_blank",
-    element: "",
+    path: "/*",
+    element: (
+      <MaterialTailwindControllerProvider>
+        <ParentApp />
+      </MaterialTailwindControllerProvider>
+    ),
   },
 ];
 
