@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.12",
     "@material-tailwind/react": "^1.2.4",
+    "axios": "^1.6.2",
     "chart.js": "^4.4.0",
     "html2pdf.js": "^0.10.1",
     "node_module": "^0.0.0",
