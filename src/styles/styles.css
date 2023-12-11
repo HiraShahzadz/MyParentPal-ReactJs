@@ -9,3 +9,8 @@
 .custom-responded {
   color: #b089be !important;
 }
+.purple-progress-bar .Toastify__progress-bar {
+  background: #b089be;
+
+}
+/* custom-toast.css */

@@ -29,21 +29,34 @@ export function SignIn() {
             </Typography>
           </CardHeader>
           <CardBody className="flex flex-col gap-4 ">
-            <Input
-              variant="standard"
-              type="email"
-              label="Email or Username"
-              size="lg"
-              className="focus:border-none"
-            />
-
-            <Input
-              variant="standard"
-              type="password"
-              label="Password"
-              size="lg"
-              className="focus:border-MyPurple-400" // Add this class for focus styles
-            />
+            <div class="relative">
+              <input
+                type="text"
+                id="floating_filled"
+                class="peer block w-full appearance-none rounded-t-lg border-0 border-b-2 border-gray-300 bg-white px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-MyPurple-400"
+                placeholder=" "
+              />
+              <label
+                for="floating_filled"
+                class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-blue-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-MyPurple-400 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+              >
+                Email or Username
+              </label>
+            </div>
+            <div class="relative">
+              <input
+                type="password"
+                id="floating_filled"
+                class="peer block w-full appearance-none rounded-t-lg border-0 border-b-2 border-gray-300 bg-white px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-MyPurple-400"
+                placeholder=" "
+              />
+              <label
+                for="floating_filled"
+                class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-blue-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-MyPurple-400 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+              >
+                Password
+              </label>
+            </div>
 
             <div className="custom-checkbox">
               <input type="checkbox" id="rememberMe" />

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Card,
   CardHeader,
@@ -26,6 +28,11 @@ export function Tables() {
   const handleResponseSubmit = (authorName) => {
     const responseText = responses[authorName];
     console.log(`Response for ${authorName}: ${responseText}`);
+
+    toast(`Response submitted for ${authorName}`, {
+      className: "purple-progress-bar",
+      style: { borderRadius: "10px" },
+    });
   };
 
   return (
