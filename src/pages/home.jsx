@@ -36,35 +36,37 @@ export function Home() {
 
   return (
     <>
-   
-      <div className="relative flex h-screen content-center items-center justify-center pt-16 pb-32 ">
-        <div
-         
-        >
-     <img src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg" className="absolute top-0 h-full w-full" alt="Cover Image" />
-
-
-
+      <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
+        <div>
+          <img
+            src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg"
+            className="absolute top-0 h-full w-full"
+            alt="Cover Image"
+          />
         </div>
 
         <div className="max-w-8xl container relative mx-auto ">
           <div className="flex flex-wrap items-center">
-          <div className="mr-auto w-3/4 px-4 text-left">
-  <Typography
-    variant="h2"
-    color="white"
-    className="mb-6 font-black text-[#B089BE]"
-  >
-    Your Digital Co-Parent in Child Upbringing
-  </Typography>
- 
-
-</div>
- <div className="mr-auto w-1/2 px-4 text-left">
- <Typography variant="lead" className="text-black opacity-60 text-justify">
-  Empower your parenting journey with MyParentPal - where technology meets the art of raising happy, responsible, and confident children. Together, we empower you to raise not just children, but the architects of their own remarkable futures.
-</Typography>
-</div>
+            <div className="mr-auto w-3/4 px-4 text-left">
+              <Typography
+                variant="h2"
+                color="white"
+                className="mb-6 font-black text-[#B089BE]"
+              >
+                Your Digital Co-Parent in Child Upbringing
+              </Typography>
+            </div>
+            <div className="mr-auto w-1/2 px-4 text-left">
+              <Typography
+                variant="lead"
+                className="text-justify text-black opacity-60"
+              >
+                Empower your parenting journey with MyParentPal - where
+                technology meets the art of raising happy, responsible, and
+                confident children. Together, we empower you to raise not just
+                children, but the architects of their own remarkable futures.
+              </Typography>
+            </div>
           </div>
         </div>
       </div>
@@ -76,10 +78,10 @@ export function Home() {
                 key={title}
                 color={color}
                 title={
-                  <div style={{ color: '#B089BE' }}>{title}</div> // Apply style to change text color
+                  <div style={{ color: "#B089BE" }}>{title}</div> // Apply style to change text color
                 } // Apply style to change text color
                 description={
-                  <div style={{ color: 'black' }}>{description}</div> // Apply style to change text color
+                  <div style={{ color: "black" }}>{description}</div> // Apply style to change text color
                 } // Apply style to change text color
                 icon={React.createElement(icon, {
                   className: "w-5 h-5 text-white ",
@@ -105,7 +107,7 @@ export function Home() {
             </Typography>
 
             <Typography
-              className="mb-6 text-left text-justify font-normal text-[#808080]"
+              className="mb-6 text-left text-justify font-normal text-black"
               style={{ fontSize: "18px" }}
             >
               Welcome to MyParentPal, your partner in parenting. Our webapp is
@@ -141,22 +143,24 @@ export function Home() {
           </div>
         </div>
       </section>
-      <section className="pb-45 pt-20">
-        <div className="ttext-[#808080] container mx-auto">
+      <section className="">
+        <div className="container mx-auto text-black">
           <PageTitle className="text-Custom" heading="Why Digital Co-Parent?">
-            <p
-             className="mb-8 font-normal text-[#808080]"
-            >
+            <p className="mb-8 font-normal text-black">
               Help parents to shape their child's future, instill civility, and
               foster responsibility effectively through streamlined task
               management and improved communication
             </p>
           </PageTitle>
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+        </div>
+      </section>
+      <section className="">
+        <div className="container mx-auto text-black">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
             {teamData.map(({ img, name }) => (
               <div
                 key={name}
-                className="mb-8 mt-7 text-center font-normal text-[#808080]"
+                className="mb-8  text-center font-normal text-black"
                 style={{ border: "4px solid #B089BE", padding: "10px" }}
               >
                 <img
@@ -165,7 +169,7 @@ export function Home() {
                   className="team-member-img img-equal-size transition-transform duration-300 ease-in-out hover:scale-90 hover:opacity-70"
                 />
                 <div
-                  className="mb-1 mt-7 text-center font-normal text-[#808080]"
+                  className="mb-1 mt-7 text-center font-normal text-black"
                   style={{ fontSize: "19px" }}
                 >
                   {name}
@@ -175,11 +179,15 @@ export function Home() {
           </div>
         </div>
       </section>
-      <section className="bg-blue-red-50/50 relative top-0 h-full w-full bg-cover bg-center px-4 py-1">
-        <div className="container mx-auto">
+      <section className="">
+        <div className="container mx-auto text-black">
           <PageTitle heading="Parents Reviews">
             What parents say about us?
           </PageTitle>
+        </div>
+      </section>
+      <section className="bg-blue-red-50/50 relative top-0 h-full w-full bg-cover bg-center px-4 py-1">
+        <div className="container mx-auto">
           <div className="mx-auto mb-10 mt-10 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
             {contactData
               .map(({ id, title, image, description }) => (
@@ -302,7 +310,7 @@ export function Home() {
                   variant="gradient"
                   size="lg"
                   style={{ background: "#B089BE" }}
-                  className="rounded-lg px-4 py-3 text-white"
+                  className="rounded-lg px-4 py-3 uppercase text-white shadow-transparent hover:shadow-transparent"
                 >
                   Send Message
                 </Button>
