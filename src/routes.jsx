@@ -5,8 +5,9 @@ import {
   InformationCircleIcon,
   StarIcon,
   EnvelopeIcon,
-  
 } from "@heroicons/react/24/solid";
+import { MaterialTailwindControllerProvider } from "@/admin/context";
+import App from "@/admin/App";
 
 export const routes = [
   {
@@ -18,8 +19,12 @@ export const routes = [
   {
     icon: ListBulletIcon,
     name: "features",
-    path: "/profile",
-    element: <Profile />,
+    path: "/*",
+    element: (
+      <MaterialTailwindControllerProvider>
+        <App />
+      </MaterialTailwindControllerProvider>
+    ),
   },
   {
     icon: InformationCircleIcon,
