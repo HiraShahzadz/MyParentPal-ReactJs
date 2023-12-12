@@ -146,7 +146,11 @@ export function Home() {
       <section className="">
         <div className="container mx-auto text-black">
           <PageTitle className="text-Custom" heading="Why Digital Co-Parent?">
+<<<<<<< HEAD
             <p className="mb-8 font-normal text-black">
+=======
+            <p className="mb-8 font-normal text-[#808080]">
+>>>>>>> admin
               Help parents to shape their child's future, instill civility, and
               foster responsibility effectively through streamlined task
               management and improved communication

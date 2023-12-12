@@ -21,7 +21,7 @@ export function Navbar({ brandName, routes, action }) {
   }, []);
 
   const navList = (
-    <ul className="mb-4 mt-2 flex flex-col gap-2 text-inherit lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 text-[#B089BE]">
+    <ul className="mb-4 mt-2 flex flex-col gap-2 text-[#B089BE] text-inherit lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {routes.map(({ name, path, icon, href, target }) => (
         <Typography
           key={name}
@@ -64,13 +64,12 @@ export function Navbar({ brandName, routes, action }) {
     <MTNavbar color="transparent" className="p-3">
       <div className="container mx-auto flex items-center justify-between text-black">
         <Link to="/">
-        <Typography
-  className="mr-4 ml-2 cursor-pointer py-1.5 font-bold text-[#B089BE]"
-  style={{ fontSize: '24px'  }} // Adjust the font size as needed
->
-  My Parent Pal
-</Typography>
-
+          <Typography
+            className="ml-2 mr-4 cursor-pointer py-1.5 font-bold text-[#B089BE]"
+            style={{ fontSize: "24px" }} // Adjust the font size as needed
+          >
+            My Parent Pal
+          </Typography>
         </Link>
         <div className="hidden lg:block">{navList}</div>
         <div className="hidden gap-2 lg:flex">
@@ -78,7 +77,12 @@ export function Navbar({ brandName, routes, action }) {
             href="https://www.material-tailwind.com/blocks?ref=mtkr"
             target="_blank"
           >
-            <Button variant="text" size="sm" style={{color: '#b089bf'}} fullWidth>
+            <Button
+              variant="text"
+              size="sm"
+              style={{ color: "#b089bf" }}
+              fullWidth
+            >
               Sign In
             </Button>
           </a>
@@ -101,7 +105,7 @@ export function Navbar({ brandName, routes, action }) {
         </IconButton>
       </div>
       <MobileNav
-        className="rounded-xl bg-white px-4 pt-2 pb-4 text-blue-gray-900"
+        className="rounded-xl bg-white px-4 pb-4 pt-2 text-blue-gray-900"
         open={openNav}
       >
         <div className="container mx-auto">
@@ -111,7 +115,7 @@ export function Navbar({ brandName, routes, action }) {
             target="_blank"
             className="mb-2 block"
           >
-            <Button variant="text" size="sm" fullWidth color="purple"> 
+            <Button variant="text" size="sm" fullWidth color="purple">
               Sign In
             </Button>
           </a>
@@ -131,8 +135,9 @@ Navbar.defaultProps = {
       href="https://www.creative-tim.com/product/material-tailwind-kit-react"
       target="_blank"
     >
-      <button class="bg-customColor text-white py-2 px-4 rounded-lg">Sign Up</button>
-
+      <button class="bg-customColor rounded-lg px-4 py-2 text-white">
+        Sign Up
+      </button>
     </a>
   ),
 };

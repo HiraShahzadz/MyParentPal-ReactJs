@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Typography } from "@material-tailwind/react";
 import { HeartIcon } from "@heroicons/react/24/solid";
 
-export function SimpleFooter({ brandName, brandLink, routes }) {
+export function Footer({ brandName, brandLink, routes }) {
   const year = new Date().getFullYear();
 
   return (
@@ -40,7 +40,7 @@ export function SimpleFooter({ brandName, brandLink, routes }) {
   );
 }
 
-SimpleFooter.defaultProps = {
+Footer.defaultProps = {
   brandName: "Creative Tim",
   brandLink: "https://www.creative-tim.com",
   routes: [
@@ -51,12 +51,12 @@ SimpleFooter.defaultProps = {
   ],
 };
 
-SimpleFooter.propTypes = {
+Footer.propTypes = {
   brandName: PropTypes.string,
   brandLink: PropTypes.string,
   routes: PropTypes.arrayOf(PropTypes.object),
 };
 
-SimpleFooter.displayName = "/src/widgets/layout/simple-footer.jsx";
+Footer.displayName = "/src/widgets/layout/footer.jsx";
 
-export default SimpleFooter;
+export default Footer;
