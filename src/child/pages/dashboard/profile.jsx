@@ -153,14 +153,14 @@ export function Profile() {
               <div className="w-full mt-6 mb-1 pl-3 pr-10 flex justify-between items-center">
                 <div className="text-black text-left font-bold text-lg">Task Summary</div>
                 <div className="text-right">
-                  <a href="child/pages/dashboard/home" className="text-blue-500 hover:underline">View All</a>
+                  <a href="child/pages/dashboard/home" className="text-purple-500 hover:underline">View All</a>
                 </div>
               </div>
-              <h2 className="ml-3 mb-3 mt-5 text-md font-bold">Assigned Tasks</h2>
+              <h2 className="ml-3 mb-3 mt-5 text-md text-black font-bold">Assigned Tasks</h2>
               <div className="max-h-96 overflow-y-auto">
                 {tasksData
                   .map(({ id, title, image, description, points, details, rewardImage }) => (
-                    <div key={id} href="" className="mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
+                    <div key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
                       <div className="flex">
                         <img className="mt-2 h-6 w-6 " src="/img/bookmark.png" alt="" />
@@ -202,7 +202,7 @@ export function Profile() {
                     </div>
                   )
                   )}
-                <h2 className="ml-3 mb-3 mt-3 text-md font-bold">Completed Tasks</h2>
+                <h2 className="ml-3 mb-5 mt-5 text-md text-black font-bold">Completed Tasks</h2>
                 <div className="max-h-96 overflow-y-auto">
                   <p className="text-sm text-center">Content for Completed Task goes here</p>
                   <div className="flex justify-center items-center">
@@ -254,7 +254,7 @@ export function Profile() {
                     ))}
                 </div>
 
-                <h2 className="ml-3 mb-3 mt-3 text-md font-bold">Pending Tasks</h2>
+                <h2 className="ml-3 mb-5 mt-5 text-md text-black font-bold">Pending Tasks</h2>
                 <div className="mb-5 max-h-96 overflow-y-auto">
                   <p className='text-sm text-center'>Content for pending Task goes here</p>
                   <div className="flex justify-center items-center">
