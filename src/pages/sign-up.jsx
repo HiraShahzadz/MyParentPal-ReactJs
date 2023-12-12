@@ -111,12 +111,17 @@ export function SignUp() {
             </div>
           </CardBody>
           <CardFooter className="pt-0">
-            <Button fullWidth className="bg-MyPurple-400" onClick={save}>
+            <Button
+              fullWidth
+              className="bg-MyPurple-400 shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
+              onClick={save}
+            >
               Sign Up
             </Button>
             <br />
             <Button
               fullWidth
+              className="shadow-transparent hover:shadow-transparent"
               style={{
                 backgroundColor: "#FFFFFF",
                 color: "#B089BE",

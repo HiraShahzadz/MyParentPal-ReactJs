@@ -65,7 +65,10 @@ export function SignIn() {
           </CardBody>
 
           <CardFooter className="pt-0">
-            <Button fullWidth className="bg-MyPurple-400">
+            <Button
+              fullWidth
+              className="bg-MyPurple-400 shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
+            >
               Sign In
             </Button>
             <Typography variant="small" className="mt-6 flex justify-center">
