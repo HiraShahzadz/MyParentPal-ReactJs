@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-hot-toast";
-
+import axios from "axios";
 import {
   Typography,
   Card,
@@ -17,6 +17,7 @@ import TaskStatus from "../../attributes/TaskStatus";
 import TaskTime from "../../attributes/TaskTime";
 import RewardPoints from "./RewardPoints";
 import MonitorTask from "./MonitorTask";
+import Tags from "@/parent/Report/Tags";
 
 export function TaskCreation() {
   const [tasks, setTasks] = useState([]);
@@ -68,6 +69,25 @@ export function TaskCreation() {
       status: "todo",
     });
   };
+  const [taskid, setId] = useState("");
+  const [taskname, setTaskname] = useState("");
+  const [taskdescription, setTaskdescription] = useState("");
+
+  async function save(event) {
+    event.preventDefault();
+    try {
+      await axios.post("http://localhost:8080/api/v1/task/save", {
+        taskname: taskname,
+        taskdescription: taskdescription,
+      });
+      alert("Task created Successfully");
+
+      setTaskname("");
+      setTaskdescription("");
+    } catch (err) {
+      alert("Task creation Failed");
+    }
+  }
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-9">
@@ -105,13 +125,13 @@ export function TaskCreation() {
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                           <input
                             type="text"
-                            value={task.name}
-                            onChange={(e) =>
-                              setTask({ ...task, name: e.target.value })
-                            }
-                            name="task"
-                            id="task"
-                            autoComplete="task"
+                            value={taskname}
+                            onChange={(event) => {
+                              setTaskname(event.target.value);
+                            }}
+                            name="taskname"
+                            id="taskname"
+                            autoComplete="taskname"
                             className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                             placeholder="Task name"
                           />
@@ -128,9 +148,14 @@ export function TaskCreation() {
                       </label>
                       <div className="mt-2">
                         <textarea
-                          id="about"
-                          name="about"
+                          type="text"
+                          id="taskdescription"
+                          name="taskdescription"
+                          value={taskdescription}
                           rows={3}
+                          onChange={(event) => {
+                            setTaskdescription(event.target.value);
+                          }}
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
                           defaultValue={""}
                           placeholder="Write a few sentences about task."
@@ -197,6 +222,14 @@ export function TaskCreation() {
                       htmlFor="photo"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
+                      Tags
+                    </label>
+                  </div>
+                  <div className="mt-10">
+                    <label
+                      htmlFor="photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
                       Type
                     </label>
                   </div>
@@ -214,8 +247,11 @@ export function TaskCreation() {
                   <div className="mb-7">
                     <CalenderInput />
                   </div>
-                  <div>
+                  <div className="mb-7">
                     <TaskTime />
+                  </div>
+                  <div>
+                    <Tags />
                   </div>
 
                   <div className="mb-20 space-y-10">
@@ -255,18 +291,19 @@ export function TaskCreation() {
                 </div>
               </div>
 
-              <div className="absolute bottom-5 right-10 mt-8 flex justify-end gap-x-6 lg:mt-52">
+              <div className="absolute bottom-5  mt-8 flex justify-end gap-x-6 lg:mt-52">
+                <button
+                  type="submit"
+                  onClick={save}
+                  className="mt-6 rounded-md bg-[#B089BE] px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  + Create
+                </button>
                 <button
                   type="button"
                   className="mt-6 rounded-md bg-gray-400 px-3 py-1 font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="mt-6 rounded-md bg-[#B089BE] px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  + Create
                 </button>
               </div>
             </CardBody>

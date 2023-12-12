@@ -10,6 +10,10 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@material-tailwind/react";
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { toast } from "react-hot-toast";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 class AboutSection extends Component {
   state = {
@@ -31,6 +35,7 @@ class AboutSection extends Component {
     e.preventDefault();
     // Implement your logic here for handling form submission
     console.log("Form Submitted:", this.state);
+    toast.success("Information saved");
   };
 
   togglePasswordVisibility = () => {
@@ -144,7 +149,10 @@ class AboutSection extends Component {
   render() {
     return (
       <div className="text-md mb-1 w-full rounded-lg text-center font-bold">
-        <form onSubmit={this.handleSubmit} className="flex flex-wrap">
+        <form onSubmit={this.handleSubmit} className="">
+          <DndProvider backend={HTML5Backend}>
+            <Toaster />
+          </DndProvider>
           <div className="mb-1 w-full rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-lg font-bold text-black">
             About
           </div>
@@ -168,16 +176,18 @@ class AboutSection extends Component {
             <img className="mr-6 h-4 w-4" src="/img/id-card.png" alt="" />
             {this.renderField("CNIC", "")}
           </div>
+          <div className="flex items-center justify-center">
+            <Button
+              type="submit"
+              className="mr-2 mt-2 rounded-md bg-MyPurple-400 px-5 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
+            >
+              Save
+            </Button>
+            <Button className="mt-2 rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white">
+              Cancel
+            </Button>
+          </div>
         </form>
-
-        <div className="flex items-center justify-center">
-          <Button className="mr-2 mt-2 rounded-md bg-MyPurple-400 px-5 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white">
-            Save
-          </Button>
-          <Button className="mt-2 rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white">
-            Cancel
-          </Button>
-        </div>
       </div>
     );
   }

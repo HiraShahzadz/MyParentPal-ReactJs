@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import ChildProfileData from "../data/child-profile-data";
 import { MyProfile } from "./Profile/profile";
+import AddAccount from "./Profile/AddAccount";
 
 function MyChild() {
   const [showProfiles, setShowProfiles] = useState(true);
@@ -9,6 +10,7 @@ function MyChild() {
   const handleViewProfile = () => {
     setShowProfiles(false);
   };
+  const [showModal, setShowModal] = useState(false);
   return (
     <div>
       {showProfiles ? (
@@ -36,9 +38,13 @@ function MyChild() {
               </svg>
             </div>
 
-            <button className="rounded-md bg-[#B089BE] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            <button
+              onClick={() => setShowModal(true)}
+              className="rounded-md bg-[#B089BE] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
               + Add Account
             </button>
+            {showModal && <AddAccount onClose={setShowModal} />}
           </div>
           <div className="mb-12 grid gap-16 gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-4">
             {ChildProfileData.map(({ img, name, username }, index) => (

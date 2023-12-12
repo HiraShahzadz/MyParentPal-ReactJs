@@ -32,35 +32,36 @@ export const routes = [
         element: <ParentHome />,
       },
       {
-        icon: <RectangleGroupIcon {...icon} />,
-        name: "create tasks",
-        path: "/tasks",
-        element: <TaskCreation />,
-      },
-
-      {
         icon: <UserCircleIcon {...icon} />,
         name: "profile",
         path: "/profile",
         element: <ParentProfile />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
-        name: "tables",
-        path: "/tables",
-        element: <Tables />,
-      },
-      {
-        icon: <BellIcon {...icon} />,
-        name: "notifactions",
-        path: "/notifactions",
-        element: <Notifications />,
+        icon: <RectangleGroupIcon {...icon} />,
+        name: "create tasks",
+        path: "/tasks",
+        element: <TaskCreation />,
       },
       {
         icon: <UserIcon {...icon} />,
         name: "My Child",
         path: "/child",
         element: <MyChild />,
+      },
+
+      {
+        icon: <BellIcon {...icon} />,
+        name: "notifactions",
+        path: "/notifactions",
+        element: <Notifications />,
+      },
+
+      {
+        icon: <TableCellsIcon {...icon} />,
+        name: "tables",
+        path: "/tables",
+        element: <Tables />,
       },
     ],
   },

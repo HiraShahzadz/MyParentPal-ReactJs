@@ -7,10 +7,10 @@ function classNames(...classes) {
 }
 
 const status = [
-  { label: "Todo", image: "/img/purple.png", color: "purple-50" },
-  { label: "Completed", image: "/img/green.png", color: "green-50" },
-  { label: "Reviewed", image: "/img/orange.png", color: "deep-orange-50" },
-  { label: "Rewarded", image: "/img/blue.png", color: "blue-50" },
+  { label: "Todo", image: "/img/purple.png" },
+  { label: "Completed", image: "/img/green.png" },
+  { label: "Reviewed", image: "/img/orange.png" },
+  { label: "Rewarded", image: "/img/blue.png" },
 ];
 
 function TaskStatus() {
@@ -19,9 +19,7 @@ function TaskStatus() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button
-          className={`inline-flex w-full justify-center gap-x-1.5 rounded-md bg-${selectedStatus.color} px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 `}
-        >
+        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 ">
           <img
             className="m-1 h-3 w-3 rounded-full"
             src={selectedStatus.image}
@@ -46,13 +44,13 @@ function TaskStatus() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {status.map(({ label, image, color }, index) => (
+          {status.map(({ label, image }, index) => (
             <div className="py-1" key={index}>
               <Menu.Item>
                 {({ active }) => (
                   <a
                     onClick={() => {
-                      setSelectedStatus({ label, image, color });
+                      setSelectedStatus({ label, image });
                     }}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
