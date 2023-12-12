@@ -23,15 +23,7 @@ export function SignIn() {
 
       <div className="container mx-auto p-4">
         <Card className="absolute left-2/4 top-2/4 w-full max-w-[24rem] -translate-x-2/4 -translate-y-2/4">
-<<<<<<< HEAD
-          <CardHeader
-            variant="gradient"
-            color="blue"
-            className="mb-4 grid h-28 place-items-center"
-          >
-=======
           <CardHeader className="mb-4 grid h-20 place-items-center bg-MyPurple-400">
->>>>>>> admin
             <Typography variant="h3" color="white">
               Sign In
             </Typography>
