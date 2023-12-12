@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -12,6 +14,26 @@ import {
 import { SimpleFooter } from "@/widgets/layout";
 
 export function SignUp() {
+  const [parentid, setId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function save(event) {
+    event.preventDefault();
+    try {
+      await axios.post("http://localhost:8081/api/v1/parent/save", {
+        email: email,
+        password: password,
+      });
+      alert("Student Registation Successfully");
+
+      setEmail("");
+      setPassword("");
+    } catch (err) {
+      alert("User Registation Failed");
+    }
+  }
+
   return (
     <>
       <img
@@ -34,9 +56,13 @@ export function SignUp() {
             <div class="relative">
               <input
                 type="email"
-                id="floating_filled"
+                id="email"
                 class="peer block w-full appearance-none rounded-t-lg border-0 border-b-2 border-gray-300 bg-white px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-MyPurple-400"
                 placeholder=" "
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
               />
               <label
                 for="floating_filled"
@@ -48,9 +74,13 @@ export function SignUp() {
             <div class="relative">
               <input
                 type="password"
-                id="floating_filled"
+                id="password"
                 class="peer block w-full appearance-none rounded-t-lg border-0 border-b-2 border-gray-300 bg-white px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-MyPurple-400"
                 placeholder=" "
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                }}
               />
               <label
                 for="floating_filled"
@@ -81,7 +111,7 @@ export function SignUp() {
             </div>
           </CardBody>
           <CardFooter className="pt-0">
-            <Button fullWidth className="bg-MyPurple-400">
+            <Button fullWidth className="bg-MyPurple-400" onClick={save}>
               Sign Up
             </Button>
             <br />
