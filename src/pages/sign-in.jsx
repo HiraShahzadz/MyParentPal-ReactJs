@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 import {
   Card,
   CardHeader,
@@ -14,6 +17,37 @@ import "./Checkbox.css";
 import "./InputField.css";
 
 export function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function signin(event) {
+    event.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/api/v1/parent/signin",
+        {
+          email: email,
+          password: password,
+        }
+      );
+
+      const message = response.data.message;
+      alert(message); // Display the success message
+
+      // Redirect to the dashboard page after successful login
+
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      console.error("Login error:", error);
+      if (error.response && error.response.status === 401) {
+        alert("Wrong email or password");
+      } else {
+        alert("An error occurred during login");
+      }
+    }
+  }
+
   return (
     <>
       <img
@@ -32,7 +66,9 @@ export function SignIn() {
             <div class="relative">
               <input
                 type="text"
-                id="floating_filled"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 class="peer block w-full appearance-none rounded-t-lg border-0 border-b-2 border-gray-300 bg-white px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-MyPurple-400"
                 placeholder=" "
               />
@@ -46,7 +82,9 @@ export function SignIn() {
             <div class="relative">
               <input
                 type="password"
-                id="floating_filled"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 class="peer block w-full appearance-none rounded-t-lg border-0 border-b-2 border-gray-300 bg-white px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-MyPurple-400"
                 placeholder=" "
               />
@@ -68,6 +106,7 @@ export function SignIn() {
             <Button
               fullWidth
               className="bg-MyPurple-400 shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
+              onClick={signin}
             >
               Sign In
             </Button>
