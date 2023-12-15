@@ -22,6 +22,20 @@ export function SignIn() {
 
   async function signin(event) {
     event.preventDefault();
+    if (!email || !password) {
+      alert("Please fill in all fields");
+      return;
+    }
+    if (
+      password.length < 8 ||
+      !/[A-Z]/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
+      alert("Enter valid password");
+      setPassword("");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:8081/api/v1/parent/signin",

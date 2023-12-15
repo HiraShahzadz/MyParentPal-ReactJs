@@ -17,9 +17,44 @@ export function SignUp() {
   const [parentid, setId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
   async function save(event) {
     event.preventDefault();
+
+    if (!email || !password || !confirmPassword) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert("Please enter a valid email address");
+      setEmail("");
+      return;
+    }
+
+    if (
+      password.length < 8 ||
+      !/[A-Z]/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
+      alert(
+        "Password should be at least 8 characters long, contain at least one uppercase letter, and one special character"
+      );
+
+      setPassword("");
+      setConfirmPassword("");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Password and Confirm Password should match");
+      return;
+    }
+    if (!isChecked) {
+      alert("Please agree to the Terms and Conditions");
+      return;
+    }
     try {
       await axios.post("http://localhost:8081/api/v1/parent/save", {
         email: email,
@@ -29,6 +64,8 @@ export function SignUp() {
 
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
+      setIsChecked(false);
     } catch (err) {
       alert("User Registation Failed");
     }
@@ -92,9 +129,13 @@ export function SignUp() {
             <div class="relative">
               <input
                 type="password"
-                id="floating_filled"
+                id="confirmPassword"
                 class="peer block w-full appearance-none rounded-t-lg border-0 border-b-2 border-gray-300 bg-white px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-MyPurple-400"
                 placeholder=" "
+                value={confirmPassword}
+                onChange={(event) => {
+                  setConfirmPassword(event.target.value);
+                }}
               />
               <label
                 for="floating_filled"
@@ -104,7 +145,12 @@ export function SignUp() {
               </label>
             </div>
             <div className="custom-checkbox">
-              <input type="checkbox" id="IagreetheTermsandConditions" />
+              <input
+                type="checkbox"
+                id="IagreetheTermsandConditions"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+              />
               <label htmlFor="IagreetheTermsandConditions">
                 I agree the Terms and Conditions
               </label>
