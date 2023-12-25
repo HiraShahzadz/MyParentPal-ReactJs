@@ -15,6 +15,10 @@ import {
 import { SimpleFooter } from "@/widgets/layout";
 import "./Checkbox.css";
 import "./InputField.css";
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { toast } from "react-hot-toast";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -23,17 +27,16 @@ export function SignIn() {
   async function signin(event) {
     event.preventDefault();
     if (!email || !password) {
-      alert("Please fill in all fields");
-      return;
+      return toast.error("Please fill in all fields");
     }
     if (
       password.length < 8 ||
       !/[A-Z]/.test(password) ||
       !/[!@#$%^&*(),.?":{}|<>]/.test(password)
     ) {
-      alert("Enter valid password");
+      setEmail("");
       setPassword("");
-      return;
+      return toast.error("Enter valid credentials");
     }
 
     try {
@@ -46,7 +49,7 @@ export function SignIn() {
       );
 
       const message = response.data.message;
-      alert(message); // Display the success message
+      toast.success(message); // Display the success message
 
       // Redirect to the dashboard page after successful login
 
@@ -55,15 +58,19 @@ export function SignIn() {
     } catch (error) {
       console.error("Login error:", error);
       if (error.response && error.response.status === 401) {
-        alert("Wrong email or password");
+        toast.error("Wrong email or password");
       } else {
-        alert("An error occurred during login");
+        toast.error("An error occurred during login");
       }
     }
   }
 
   return (
     <>
+      <DndProvider backend={HTML5Backend}>
+        <Toaster />
+      </DndProvider>
+
       <img
         src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg"
         className="absolute inset-0 z-0 h-full w-full object-cover"

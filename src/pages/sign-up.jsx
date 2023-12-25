@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import {
   Card,
@@ -23,14 +27,12 @@ export function SignUp() {
     event.preventDefault();
 
     if (!email || !password || !confirmPassword) {
-      alert("Please fill in all fields");
-      return;
+      return toast.error("Please fill in all fields");
     }
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      alert("Please enter a valid email address");
       setEmail("");
-      return;
+      return toast.error("Please enter a valid email address");
     }
 
     if (
@@ -38,41 +40,41 @@ export function SignUp() {
       !/[A-Z]/.test(password) ||
       !/[!@#$%^&*(),.?":{}|<>]/.test(password)
     ) {
-      alert(
-        "Password should be at least 8 characters long, contain at least one uppercase letter, and one special character"
-      );
-
       setPassword("");
       setConfirmPassword("");
-      return;
+      return toast.error(
+        "Password should be at least 8 characters long, contain at least one uppercase letter, and one special character"
+      );
     }
 
     if (password !== confirmPassword) {
-      alert("Password and Confirm Password should match");
+      toast.error("Password and Confirm Password should match");
       return;
     }
     if (!isChecked) {
-      alert("Please agree to the Terms and Conditions");
-      return;
+      return toast.error("Please agree to the Terms and Conditions");
     }
     try {
       await axios.post("http://localhost:8081/api/v1/parent/save", {
         email: email,
         password: password,
       });
-      alert("Student Registation Successfully");
+      toast.success("Student Registation Successfully");
 
       setEmail("");
       setPassword("");
       setConfirmPassword("");
       setIsChecked(false);
     } catch (err) {
-      alert("User Registation Failed");
+      toast.error("User Registation Failed");
     }
   }
 
   return (
     <>
+      <DndProvider backend={HTML5Backend}>
+        <Toaster />
+      </DndProvider>
       <img
         img
         src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg"
