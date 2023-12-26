@@ -9,7 +9,7 @@ const NotificationData = [
     {
       time: "10:00 am",
       name: "Hira Shahzad",
-      description: " Assigned you a task",
+      description: " Rejected reward request",
       image: "/img/men.jpg",
       task: "Make Bed",
     },
@@ -23,14 +23,14 @@ const NotificationData = [
     {
       time: "12 hours ago",
       name: "Aiman Abid",
-      description: " Assigned you a task",
+      description: " Task rewarded",
       image: "/img/women1.jpg",
       task: "Cooking",
     },
     {
       time: "9 hours ago",
       name: "Hira Shahzad",
-      description: " Assigned you a task",
+      description: " Accepted your reward request",
       image: "/img/men.jpg",
       task: "Wash dishes",
     },

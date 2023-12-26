@@ -173,7 +173,7 @@ export function Home() {
 
   return (
     <div>
-      <div className="flex flex-col lg:flex-row">
+      <div className="mt-3 flex flex-col lg:flex-row">
         <div className="mb-2 lg:w-1/2 flex-1 lg:ml-1">
           <div className="custom-container-task">
             <Typography variant="h5" color="blue-gray" className="mb-1">
