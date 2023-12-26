@@ -3,7 +3,7 @@ import { Typography } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import TimeLeftCalculator from './TimeLeftCalculator';
-
+import { Link } from 'react-router-dom';
 const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleSubmitTask }) => {
     return (
         selectedTaskDetails && (
@@ -32,7 +32,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                             </thead>
                             <tbody>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4  text-md text-black text-md font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <th scope="row" className="border-r px-6 py-4  text-md text-black text-md font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         Assigner
                                     </th>
                                     <td className="px-6 py-4 text-gray text-md">
@@ -40,7 +40,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <th scope="row" className="border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         Tags
                                     </th>
                                     <td className="px-6 py-4">
@@ -48,7 +48,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <th scope="row" className="border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         Submission date:
                                     </th>
                                     <td className="px-6 py-4">
@@ -56,19 +56,19 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <th scope="row" className="border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         Time Remaining:
                                     </th>
                                     <td className="px-6 py-4">
-                                        <TimeLeftCalculator targetTime={new Date(selectedTaskDetails.description)} />
+                                        1 day 10 hours<TimeLeftCalculator targetTime={new Date(selectedTaskDetails.description)} />
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <th scope="row" className=" border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         Reward
                                     </th>
                                     <td className="px-6 py-4">
-                                        {selectedTaskDetails.points}
+                                        {selectedTaskDetails.reward}
                                     </td>
                                 </tr>
                             </tbody>
@@ -76,22 +76,13 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
 
                     </div>
                     <div className="flex justify-center">
+                    <Link to="/dashboard/submitTask">
                         <button
-                            onClick={() =>
-                                handleSubmitTask({
-                                    id: selectedTaskDetails.id,
-                                    title: selectedTaskDetails.title,
-                                    image: selectedTaskDetails.image,
-                                    description: selectedTaskDetails.description.toLocaleDateString(),
-                                    points: selectedTaskDetails.points,
-                                    details: selectedTaskDetails.details,
-                                    rewardImage: selectedTaskDetails.rewardImage
-                                })
-                            }
-                            className="mt-14 mr-3 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                          className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                         >
-                            Complete Task
+                          Complete
                         </button>
+                      </Link>
                         <button
                             onClick={handleCloseTaskDetails}
                             className="mt-14 text-white bg-gray-400 hover:bg-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
