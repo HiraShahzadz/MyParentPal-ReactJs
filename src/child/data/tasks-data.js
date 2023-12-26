@@ -12,8 +12,6 @@ import {
       id: 1,
       title: "Clean Bedroom",
       description: new Date("2023-12-12"),
-      
-       rewardImage:"/img/coin.png",
        reward: "Pencil Box",
        time:"10:00 pm",
        details:"Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
@@ -23,8 +21,6 @@ import {
       id: 2,
       title: "Mopping",
       description: new Date("2023-12-26"),
-      
-       rewardImage:"/img/coin.png",
        reward: "Paint colors",
        time:"8:00 pm",
        details:"Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
