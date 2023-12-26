@@ -9,7 +9,6 @@ class ProfileSection extends Component {
   state = {
     name: "Aiman Abid",
     dob: new Date("2015-12-20"),
-    email: "aiman123@gmail.com",
     gender: "Female",
     genderOptionsVisible: false,
     selectedGender: "",
@@ -111,8 +110,6 @@ class ProfileSection extends Component {
                       ? "Date of Birth"
                       : fieldName === "gender" && !this.state[fieldName]
                       ? "Gender"
-                      : fieldName === "email" && !this.state[fieldName]
-                      ? "Email"
                       : fieldName === "password" && !this.state[fieldName]
                       ? "Enter your password"
                       : ""
@@ -166,8 +163,6 @@ class ProfileSection extends Component {
               ? "Your date of birth"
               : fieldName === "gender"
               ? "Your gender"
-              : fieldName === "email"
-              ? "Your email"
               : "")}
       </div>
     );
@@ -192,10 +187,7 @@ class ProfileSection extends Component {
             <FontAwesomeIcon icon={faVenusMars} className="mr-6" />
             {this.renderField("gender", "Gender")}
           </div>
-          <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
-            <FontAwesomeIcon icon={faEnvelope} className="mr-7" />
-            {this.renderField("email", "Email")}
-          </div>
+          
           <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
             <FontAwesomeIcon icon={faLock} className="mr-7" />
             {this.renderField("password", "Password")}
