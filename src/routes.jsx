@@ -1,4 +1,4 @@
-import { Home, Profile, SignIn, SignUp } from "@/pages";
+import { Home, Profile, SignIn } from "@/pages";
 import { MaterialTailwindControllerProvider } from "@/child/context";
 import {
   HomeIcon,
