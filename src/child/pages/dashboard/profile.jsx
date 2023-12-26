@@ -153,13 +153,15 @@ export function Profile() {
               <div className="w-full mt-6 mb-1 pl-3 pr-10 flex justify-between items-center">
                 <div className="text-black text-left font-bold text-lg">Task Summary</div>
                 <div className="text-right">
-                  <a href="child/pages/dashboard/home" className="text-purple-500 hover:underline">View All</a>
+                  <a href="/child/pages/dashboard/home" className="text-purple-500 hover:underline">View All</a>
                 </div>
               </div>
-              <h2 className="ml-3 mb-3 mt-5 text-md text-black font-bold">Assigned Tasks</h2>
               <div className="max-h-96 overflow-y-auto">
+              <h2 className="ml-3 mb-3 mt-5 text-md text-black font-bold">Task Rewarded</h2>
+              
                 {tasksData
-                  .map(({ id, title, image, description, points, details, rewardImage }) => (
+                  .filter(task => task.id === 1 || task.id === 2)
+                  .map(({ id, title, image, description, reward, details }) => (
                     <div key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
                       <div className="flex">
@@ -172,9 +174,9 @@ export function Profile() {
 
                           </span>
                           <div className="mt-1.5 flex">
-                            <img className="h-3 w-3" src="/img/coin.png" alt="" />
+                            <img className="h-3 w-3" src="/img/gift.png" alt="" />
                             <span className="ml-1 text-xs text-black ">
-                              Reward: {points}
+                              Reward: {reward}
                             </span>
                           </div>
                         </div>
@@ -189,9 +191,54 @@ export function Profile() {
                             title,
                             image,
                             description: description.toLocaleDateString(),
-                            points,
-                            details,
-                            rewardImage
+                            reward,
+                            details
+                          })}
+                          className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                        >
+                          more info
+                        </button>
+                      </div>
+
+                    </div>
+                  )
+                  )}
+                 
+              <h2 className="ml-3 mb-3 mt-5 text-md text-black font-bold">Assigned Tasks</h2>
+              <div className="">
+                {tasksData
+                  .map(({ id, title, image, description, reward, details }) => (
+                    <div key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
+
+                      <div className="flex">
+                        <img className="mt-2 h-6 w-6 " src="/img/bookmark.png" alt="" />
+                        <div className="ml-3">
+                          <span className="font-medium text-black">{title}</span>
+                          <br></br>
+                          <span className="mt-2 text-black">Submission date: {description.toLocaleDateString()}</span>
+                          <span className="text-black">
+
+                          </span>
+                          <div className="mt-1.5 flex">
+                            <img className="h-3 w-3" src="/img/gift.png" alt="" />
+                            <span className="ml-1 text-xs text-black ">
+                              Reward: {reward}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        className="ml-auto flex items-end  hover:border-MyPurple-400"
+                      >
+                        <button
+                          onClick={() => handleMoreInfoClick({
+                            id,
+                            title,
+                            image,
+                            description: description.toLocaleDateString(),
+                            reward,
+                            details
                           })}
                           className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                         >
@@ -312,6 +359,7 @@ export function Profile() {
                   // handleSubmitTask={/* Pass your handleSubmitTask function here */}
                   />
                 )}
+              </div>
               </div>
             </div>
           </div>
