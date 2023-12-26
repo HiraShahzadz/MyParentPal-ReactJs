@@ -8,6 +8,7 @@ import ProfileSection from './ProfileSection';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import TaskDetailsModal from './TaskDetailsModel';
+import defaultImage from '/img/women1.jpg';
 import {
   requestData
 } from "@/child/data";
@@ -26,7 +27,7 @@ export function Profile() {
     setTaskDetailsToShow(null);
   };
 
-  const [image, setImage] = useState(null);
+ 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -34,11 +35,21 @@ export function Profile() {
     name: ''
   });
   const [hiddenImages, setHiddenImages] = useState([]);
+  const [image, setImage] = useState(defaultImage);
+  const [editing, setEditing] = useState(false);
 
-  const handleImageClick = (index) => {
-    // Set the index of the clicked image to the hiddenImages state
-    setHiddenImages([...hiddenImages, index]);
+  const handleImageChange = (event) => {
+    const selectedImage = event.target.files[0];
+    if (selectedImage) {
+      setImage(URL.createObjectURL(selectedImage));
+      setEditing(false); // Save the image
+    }
   };
+
+  const handleImageClick = () => {
+    setEditing(true);
+  };
+ 
   function DiscardChangesModal({ show, setShow }) {
     // Function to handle confirmation of discarding changes
     const handleDiscardChanges = (confirmDiscard) => {
@@ -75,10 +86,7 @@ export function Profile() {
       </div>
     );
   }
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-    setImage(selectedImage);
-  };
+ 
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -126,19 +134,29 @@ export function Profile() {
                 className="hidden"
                 onChange={handleImageChange}
               />
-              <div className="ml-10 mb-5 relative w-40 h-40 border-2 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center mt-[-70px]">
-                {image ? (
-                  <div className="w-full h-full">
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt="Selected"
-                      className="object-cover w-full h-full rounded-full"
-                    />
-                  </div>
-                ) : (
-                  <CameraIcon className="text-gray-400 w-10 h-10" />
-                )}
-              </div>
+           <div className="ml-10 mb-5 relative w-40 h-40 border-2 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center mt-[-70px]">
+      {editing || !image ? (
+        <label htmlFor="upload-image" className="cursor-pointer">
+          <input
+            type="file"
+            accept="image/*"
+            id="upload-image"
+            className="hidden"
+            onChange={handleImageChange}
+          />
+          <CameraIcon className="text-gray-400 w-10 h-10" />
+        </label>
+      ) : (
+        <div className="w-full h-full">
+          <img
+            src={image}
+            alt="Selected"
+            className="object-cover w-full h-full rounded-full"
+            onClick={handleImageClick}
+          />
+        </div>
+      )}
+    </div>
             </label>
           </div>
 
