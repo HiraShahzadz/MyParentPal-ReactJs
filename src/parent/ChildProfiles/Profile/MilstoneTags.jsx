@@ -1,17 +1,17 @@
 import React from "react";
 import { TagIcon } from "@heroicons/react/24/solid";
 
-function MilstoneTags({ childtags, setChildtags }) {
+function MilstoneTags({ tags, setTags }) {
   const addTags = (e) => {
     if (e.keyCode === 13 && e.target.value) {
-      setChildtags([...childtags, e.target.value]);
+      setTags([...tags, e.target.value]);
       e.target.value = "";
     }
   };
 
   const deleteTags = (val) => {
-    const remainingTags = childtags.filter((t) => t !== val);
-    setChildtags(remainingTags);
+    const remainingTags = tags.filter((t) => t !== val);
+    setTags(remainingTags);
   };
 
   return (
@@ -32,7 +32,7 @@ function MilstoneTags({ childtags, setChildtags }) {
                 X
               </span>
             </button>
-            {childtags.map((item, index) => (
+            {tags.map((item, index) => (
               <button
                 className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-1 pl-3  outline-transparent"
                 key={index}

@@ -40,33 +40,34 @@ function AddAccount(props) {
       [name]: value,
     });
   };
-  const [childid, setId] = useState("");
-  const [childname, setChildname] = useState("");
-  const [chilusername, setChilusername] = useState("");
-  const [childdob, setChilddob] = useState("");
-  const [childpassword, setChildpassword] = useState("");
-  const [childgender, setChildgender] = useState("");
-  const [childtags, setChildtags] = useState([]);
-
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [dob, setDob] = useState("");
+  const [password, setPassword] = useState("");
+  const [gender, setGender] = useState("");
+  const [tags, setTags] = useState([]);
+  const [role, setRole] = useState("child");
   async function save(event) {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/v1/account/save", {
-        childname: childname,
-        chilusername: chilusername,
-        childdob: childdob,
-        childpassword: childpassword,
-        childgender: childgender,
-        childtags: childtags,
+      await axios.post("http://localhost:8080/api/v1/user/save", {
+        name: name,
+        email: email,
+        dob: dob,
+        password: password,
+        gender: gender,
+        tags: tags,
+        role: role,
       });
       alert("Chils Account is created Successfully");
       setId("");
-      setChildname("");
-      setChilusername("");
-      setChilddob("");
-      setChildpassword("");
-      setChildgender("");
-      setChildtags([]);
+      setName("");
+      setEmail("");
+      setDob("");
+      setPassword("");
+      setGender("");
+      setTags([]);
     } catch (err) {
       alert("Chils Account is creation Failed");
     }
@@ -120,11 +121,11 @@ function AddAccount(props) {
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                 <input
                   type="text"
-                  id="childname"
-                  name="childname"
-                  value={childname}
+                  id="name"
+                  name="name"
+                  value={name}
                   onChange={(event) => {
-                    setChildname(event.target.value);
+                    setName(event.target.value);
                   }}
                   className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                   placeholder="Enter child's name"
@@ -143,11 +144,11 @@ function AddAccount(props) {
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                 <input
                   type="date"
-                  id="childdob"
-                  name="childdob"
-                  value={childdob}
+                  id="dob"
+                  name="dob"
+                  value={dob}
                   onChange={(event) => {
-                    setChilddob(event.target.value);
+                    setDob(event.target.value);
                   }}
                   className="ml-1 block flex-1  border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400  focus:ring-0 sm:text-sm sm:leading-6"
                   required
@@ -165,11 +166,11 @@ function AddAccount(props) {
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                 <input
                   type="text"
-                  id="chilusername"
-                  name="chilusername"
-                  value={chilusername}
+                  id="email"
+                  name="email"
+                  value={email}
                   onChange={(event) => {
-                    setChilusername(event.target.value);
+                    setEmail(event.target.value);
                   }}
                   className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                   placeholder="Enter child's username"
@@ -188,11 +189,11 @@ function AddAccount(props) {
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                 <input
                   type="password"
-                  id="childpassword"
-                  name="childpassword"
-                  value={childpassword}
+                  id="password"
+                  name="password"
+                  value={password}
                   onChange={(event) => {
-                    setChildpassword(event.target.value);
+                    setPassword(event.target.value);
                   }}
                   className="block w-full rounded-md border-0 py-1.5 pl-2 pr-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
                   placeholder="Enter password"
@@ -215,7 +216,7 @@ function AddAccount(props) {
                     name="gender"
                     value="male"
                     onChange={(event) => {
-                      setChildgender(event.target.value);
+                      setGender(event.target.value);
                     }}
                     className="mr-2 h-4 w-4 border-gray-300 text-MyPurple-600 focus:ring-MyPurple-400"
                     required
@@ -235,7 +236,7 @@ function AddAccount(props) {
                     name="gender"
                     value="female"
                     onChange={(event) => {
-                      setChildgender(event.target.value);
+                      setGender(event.target.value);
                     }}
                     className="mr-2 h-4 w-4 border-gray-300 text-MyPurple-400 focus:ring-MyPurple-400"
                   />
@@ -251,7 +252,7 @@ function AddAccount(props) {
             </div>
           </div>
           <div className="item-center flex justify-center">
-            <MilstoneTags childtags={childtags} setChildtags={setChildtags} />
+            <MilstoneTags tags={tags} setTags={setTags} />
           </div>
           <div className="mt-4 flex justify-center">
             <Button
