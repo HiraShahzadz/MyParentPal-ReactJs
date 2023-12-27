@@ -203,7 +203,7 @@ export function Home() {
                     <ul className="flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
                       <li className="w-full flex items-center space-x-4 rtl:space-x-reverse">
                         <div className="flex-shrink-0">
-                          <img className="w-10 h-10 rounded-full" src="/img/bookmark.png" alt="Neil image" />
+                          <img className="w-10 h-10 mt-0.5 " src="/img/task.png" alt="Neil image" />
                         </div>
                         <div className="ml-5 block flex-1 min-w-0">
                         <Typography
@@ -313,11 +313,7 @@ export function Home() {
                     <div
                     
                       className="flex items-center">
-                      <img
-                        src="/img/bookmark.png"
-                        alt=""
-                        className="ml-2 lg:ml-5 rounded-full w-8 h-8 lg:w-12 lg:h-12 mr-2 lg:mr-6"
-                      />
+                      <img className="w-10 h-10 mt-0.5 " src="/img/task.png" alt="Neil image" />
                       <div>
                         <Typography
                           variant="h5" className=" pr-12 mt-2 lg:mt-0 mb-1 lg:mb-1">
@@ -337,7 +333,7 @@ export function Home() {
                         Time Left: 1 day 10 hours <TimeLeftCalculator targetTime={new Date(description)} />
                       </label>
                     </div>
-                    <div className="ml-auto flex items-end mr-3 absolute inset-0 flex items-center justify-end">
+                    <div className="ml-auto sm:flex items-end mr-3 absolute inset-0 flex items-center justify-end">
 
                       <Link to="/dashboard/submitTask">
                         <button

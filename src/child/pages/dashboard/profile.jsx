@@ -12,6 +12,7 @@ import defaultImage from '/img/women1.jpg';
 import {
   requestData
 } from "@/child/data";
+import { GiftIcon } from "@heroicons/react/24/solid";
 import {
   tasksData,
 } from "@/child/data";
@@ -183,7 +184,7 @@ export function Profile() {
                     <div key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
                       <div className="flex">
-                        <img className="mt-2 h-6 w-6 " src="/img/bookmark.png" alt="" />
+                        <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
                         <div className="ml-3">
                           <span className="font-medium text-black">{title}</span>
                           <br></br>
@@ -192,7 +193,7 @@ export function Profile() {
 
                           </span>
                           <div className="mt-1.5 flex">
-                            <img className="h-3 w-3" src="/img/gift.png" alt="" />
+                          <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
                             <span className="ml-1 text-xs text-black ">
                               Reward: {reward}
                             </span>

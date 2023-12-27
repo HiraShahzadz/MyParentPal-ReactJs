@@ -111,21 +111,36 @@ export function Configurator() {
             Choose between 3 different sidenav types.
           </Typography>
           <div className="mt-3 flex items-center gap-2">
-            <Button
-              variant={sidenavType === "dark" ? "gradient" : "outlined"}
+          <Button
+              variant={sidenavType === "dark"}
               onClick={() => setSidenavType(dispatch, "dark")}
+              className={
+                sidenavType === "dark"
+                  ? "bg-MyPurple-400 shadow-white hover:bg-purple-400 hover:shadow-white"
+                  : "border border-MyPurple-400 bg-white text-MyPurple-400 shadow-white hover:bg-MyPurple-400 hover:text-white hover:shadow-white"
+              }
             >
               Dark
             </Button>
             <Button
-              variant={sidenavType === "transparent" ? "gradient" : "outlined"}
+              variant={sidenavType === "transparent"}
               onClick={() => setSidenavType(dispatch, "transparent")}
+              className={
+                sidenavType === "transparent"
+                  ? "bg-MyPurple-400 shadow-white hover:bg-purple-400 hover:shadow-white"
+                  : "border border-MyPurple-400 bg-white text-MyPurple-400 shadow-white hover:bg-MyPurple-400 hover:text-white hover:shadow-white"
+              }
             >
               Transparent
             </Button>
             <Button
-              variant={sidenavType === "white" ? "gradient" : "outlined"}
+              variant={sidenavType === "white"}
               onClick={() => setSidenavType(dispatch, "white")}
+              className={
+                sidenavType === "white"
+                  ? "bg-MyPurple-400 shadow-white hover:bg-purple-400 hover:shadow-white"
+                  : "border border-MyPurple-400 bg-white text-MyPurple-400 shadow-white hover:bg-MyPurple-400 hover:text-white hover:shadow-white"
+              }
             >
               White
             </Button>

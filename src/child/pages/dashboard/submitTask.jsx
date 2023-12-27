@@ -98,6 +98,14 @@ const SubmitTask = () => {
                 </td>
               </tr>
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" className="border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  Submission Required
+                </th>
+                <td className="px-6 py-4">
+                  Picture
+                </td>
+              </tr>
+              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" className="border-r px-6 py-4  text-md text-black font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   File Submitted
                 </th>

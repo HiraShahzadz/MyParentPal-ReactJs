@@ -130,7 +130,7 @@ export function DashboardNavbar() {
                 shadow={false}
               >
               </CardHeader>
-              <CardBody >
+             
                 <Link to="/dashboard/notifications">
                   {NotificationData.map(
                     ({ time, name, description, image, task }, index) => (
@@ -171,7 +171,7 @@ export function DashboardNavbar() {
                     )
                   )}
                 </Link>
-              </CardBody>
+             
             </MenuList>
           </Menu>
         </div>

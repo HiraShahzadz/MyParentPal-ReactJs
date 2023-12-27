@@ -3,9 +3,11 @@ import {
   UserCircleIcon,
   TableCellsIcon,
   BellIcon,
-  ArrowRightOnRectangleIcon,
+  GiftIcon,
+  ArrowLeftOnRectangleIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
+
 import * as HeroIcons from "@heroicons/react/24/solid";
 import ProgressReport from "@/child/pages/dashboard/ProgressReport"; 
 import SubmitTask from "./pages/dashboard/SubmitTask";// Check if the file path is correct
@@ -33,7 +35,7 @@ export const routes = [
         element: <Profile />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <GiftIcon {...icon} />,
         name: "Reward Request",
         path: "/request",
         element: <Reward_Request />,
@@ -53,7 +55,13 @@ export const routes = [
       },
       {
        
-        icon: <TableCellsIcon {...icon} />,
+        icon: (
+          <img
+            src="/img/upload.png" // Replace this with your image path
+            alt="Upload Icon"
+            className="w-6 h-6" // Set appropriate width and height
+          />
+        ),
         name: "Submit Task",
         path: "/submitTask",
         element: <SubmitTask/>,
@@ -65,8 +73,8 @@ export const routes = [
     layout: "auth",
     pages: [
       {
-        icon: <ArrowRightOnRectangleIcon {...icon} />,
-        name: "sign in",
+        icon: <ArrowLeftOnRectangleIcon {...icon} />,
+        name: "Logout",
         path: "/sign-in",
         element: <SignIn />,
       },
