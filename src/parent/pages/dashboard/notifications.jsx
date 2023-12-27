@@ -7,9 +7,13 @@ import {
   CardBody,
   Button,
 } from "@material-tailwind/react";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import NotificationData from "@/parent/data/NotificationData";
-
+import RespondNotificationsData from "@/parent/data/RespondNotificationsData";
+import RespondNotifications from "@/parent/pages/dashboard/RespondNotifications";
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { toast } from "react-hot-toast";
+import { HTML5Backend } from "react-dnd-html5-backend";
 export function Notifications() {
   const [hiddenImages, setHiddenImages] = useState([]);
 
@@ -18,24 +22,12 @@ export function Notifications() {
     setHiddenImages([...hiddenImages, index]);
   };
 
-  const [showAlerts, setShowAlerts] = React.useState({
-    blue: true,
-    green: true,
-    orange: true,
-    red: true,
-    MyPurple: true,
-  });
-  const [showAlertsWithIcon, setShowAlertsWithIcon] = React.useState({
-    blue: true,
-    green: true,
-    orange: true,
-    red: true,
-    MyPurple: true,
-  });
-  const alerts = ["blue", "green", "orange", "red", "MyPurple"];
-
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="mx-auto my-10 flex max-w-screen-lg flex-col gap-8">
+      <DndProvider backend={HTML5Backend}>
+        <Toaster />
+      </DndProvider>
       <Card>
         <CardHeader
           color="transparent"
@@ -47,7 +39,7 @@ export function Notifications() {
             Notifications
           </Typography>
         </CardHeader>
-        <CardBody className="flex flex-col gap-4 p-3">
+        <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
           {NotificationData.map(
             ({ time, name, description, image, task }, index) => (
               <div
@@ -58,7 +50,7 @@ export function Notifications() {
                 <div className="flex">
                   <img className="h-10 w-10 rounded-full" src={image} alt="" />
                   <div className="ml-3">
-                    <span className="font-medium text-black">{name}</span>
+                    <span className="mr-1 font-medium text-black">{name}</span>
                     <span className="text-black">{description}</span>
                     <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
                       {time}
@@ -99,17 +91,14 @@ export function Notifications() {
             Respond Notifications
           </Typography>
         </CardHeader>
-        <CardBody className="flex flex-col gap-4 p-3">
-          {NotificationData.map(
+        <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
+          {RespondNotificationsData.map(
             ({ time, name, description, image, task }, index) => (
-              <a
-                href=""
-                className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
-              >
+              <div className="items-center rounded-md p-3 text-sm hover:bg-blue-gray-50 sm:flex">
                 <div className="flex">
                   <img className="h-10 w-10 rounded-full" src={image} alt="" />
                   <div className="ml-3">
-                    <span className="font-medium text-black">{name}</span>
+                    <span className="mr-1 font-medium text-black">{name}</span>
                     <span className="text-black">{description}</span>
                     <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
                       {time}
@@ -122,57 +111,20 @@ export function Notifications() {
                     </div>
                   </div>
                 </div>
-                <div className="ml-auto flex items-end">
-                  <Button className="mb-2 mr-3 bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white md:rounded-md">
-                    Reject
-                  </Button>
-                  <Button className="mb-2 border border-MyPurple-400 bg-white px-3 py-2 text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-white hover:bg-MyPurple-400 hover:text-white hover:shadow-white md:rounded-md">
-                    Accept
+                <div className="ml-12 mt-3 flex items-end sm:ml-auto">
+                  <Button
+                    onClick={() => setShowModal(true)}
+                    className="mb-2 border border-MyPurple-400 bg-white px-3 py-2 text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent hover:bg-MyPurple-400 hover:text-white hover:shadow-white md:rounded-md"
+                  >
+                    View Request
                   </Button>
                 </div>
-              </a>
+                {showModal && <RespondNotifications onClose={setShowModal} />}
+              </div>
             )
           )}
         </CardBody>
       </Card>
-    </div>
-  );
-}
-function DiscardChangesModal({ show, setShow }) {
-  // Function to handle confirmation of discarding changes
-  const handleDiscardChanges = (confirmDiscard) => {
-    if (confirmDiscard) {
-      // Handle discarding changes here
-      console.log("Changes discarded");
-    }
-    setShow(false); // Close the modal
-  };
-
-  return (
-    <div
-      className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${
-        show ? "" : "hidden"
-      }`}
-    >
-      <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
-        <p className="mb-4 text-gray-800">
-          Are you sure you want to discard changes?
-        </p>
-        <div className="flex justify-end">
-          <button
-            onClick={() => handleDiscardChanges(false)}
-            className="mr-4 text-gray-500 hover:text-gray-700"
-          >
-            No
-          </button>
-          <button
-            onClick={() => handleDiscardChanges(true)}
-            className="rounded-lg bg-purple-400 px-4 py-2 text-white hover:bg-purple-500"
-          >
-            Yes
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
