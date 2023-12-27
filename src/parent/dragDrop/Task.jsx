@@ -48,7 +48,7 @@ function Task({ task, tasks, setTasks }) {
   return (
     <div
       ref={drag}
-      className={` relative mb-8 cursor-grab rounded-md p-4 shadow-md ${
+      className={` relative mb-4 cursor-grab rounded-md p-4 shadow-md ${
         isDragging ? "opacity-25" : "opacity-100"
       }`}
     >
