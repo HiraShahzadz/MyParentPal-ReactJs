@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { TagIcon } from "@heroicons/react/24/solid";
 
-function MilstoneTags() {
-  const [tagValue, setTagValue] = useState("");
-  const [tags, setTags] = useState([]);
-
+function MilstoneTags({ childtags, setChildtags }) {
   const addTags = (e) => {
-    if (e.keyCode === 13 && tagValue) {
-      setTags([...tags, tagValue]);
-      setTagValue("");
+    if (e.keyCode === 13 && e.target.value) {
+      setChildtags([...childtags, e.target.value]);
+      e.target.value = "";
     }
   };
 
   const deleteTags = (val) => {
-    let reaminTags = tags.filter((t) => t !== val);
-    setTags(reaminTags);
+    const remainingTags = childtags.filter((t) => t !== val);
+    setChildtags(remainingTags);
   };
 
   return (
@@ -22,7 +19,7 @@ function MilstoneTags() {
       <div className="sm:col-span-full">
         <label
           htmlFor="username"
-          className=" flex text-sm font-medium leading-6 text-gray-900"
+          className="flex text-sm font-medium leading-6 text-gray-900"
         >
           <TagIcon className="m-1 h-5 w-5 text-MyPurple-400" />
           Tags
@@ -35,31 +32,27 @@ function MilstoneTags() {
                 X
               </span>
             </button>
-            {tags.map((item, index) => {
-              return (
-                <button
-                  className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-1 pl-3  outline-transparent"
-                  key={index}
+            {childtags.map((item, index) => (
+              <button
+                className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-1 pl-3  outline-transparent"
+                key={index}
+              >
+                {item}
+                <span
+                  onClick={() => deleteTags(item)}
+                  className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50 hover:bg-gray-500 hover:text-white"
                 >
-                  {item}
-                  <span
-                    onClick={() => deleteTags(item)}
-                    className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50 hover:bg-gray-500 hover:text-white"
-                  >
-                    X
-                  </span>
-                </button>
-              );
-            })}
+                  X
+                </span>
+              </button>
+            ))}
             <input
               type="text"
               name="task"
               id="task"
-              value={tagValue}
               autoComplete="task"
-              onChange={(e) => setTagValue(e.target.value)}
               onKeyDown={addTags}
-              className="ml-1 block flex-1  border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+              className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
               placeholder="Add skill tags"
             />
           </div>

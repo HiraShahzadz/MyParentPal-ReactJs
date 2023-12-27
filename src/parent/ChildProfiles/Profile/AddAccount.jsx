@@ -6,6 +6,7 @@ import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import MilstoneTags from "./MilstoneTags";
+import axios from "axios";
 
 function AddAccount(props) {
   const [image, setImage] = useState(null);
@@ -39,7 +40,37 @@ function AddAccount(props) {
       [name]: value,
     });
   };
+  const [childid, setId] = useState("");
+  const [childname, setChildname] = useState("");
+  const [chilusername, setChilusername] = useState("");
+  const [childdob, setChilddob] = useState("");
+  const [childpassword, setChildpassword] = useState("");
+  const [childgender, setChildgender] = useState("");
+  const [childtags, setChildtags] = useState([]);
 
+  async function save(event) {
+    event.preventDefault();
+    try {
+      await axios.post("http://localhost:8080/api/v1/account/save", {
+        childname: childname,
+        chilusername: chilusername,
+        childdob: childdob,
+        childpassword: childpassword,
+        childgender: childgender,
+        childtags: childtags,
+      });
+      alert("Chils Account is created Successfully");
+      setId("");
+      setChildname("");
+      setChilusername("");
+      setChilddob("");
+      setChildpassword("");
+      setChildgender("");
+      setChildtags([]);
+    } catch (err) {
+      alert("Chils Account is creation Failed");
+    }
+  }
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center overflow-y-auto bg-gray-900 bg-opacity-50">
       <div className="rounded-lg bg-white p-6 shadow-lg md:w-9/12 lg:w-6/12">
@@ -89,10 +120,14 @@ function AddAccount(props) {
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                 <input
                   type="text"
-                  id="name"
-                  name="name"
+                  id="childname"
+                  name="childname"
+                  value={childname}
+                  onChange={(event) => {
+                    setChildname(event.target.value);
+                  }}
                   className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  placeholder="Enter your name"
+                  placeholder="Enter child's name"
                   required
                 />
               </div>
@@ -108,32 +143,18 @@ function AddAccount(props) {
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                 <input
                   type="date"
-                  id="dob"
-                  name="dob"
-                  className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                  id="childdob"
+                  name="childdob"
+                  value={childdob}
+                  onChange={(event) => {
+                    setChilddob(event.target.value);
+                  }}
+                  className="ml-1 block flex-1  border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400  focus:ring-0 sm:text-sm sm:leading-6"
                   required
                 />
               </div>
             </div>
 
-            <div className="mb-3 w-full pl-3  pr-10 sm:w-1/2">
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Email
-              </label>
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  placeholder="username@gmail.com"
-                  required
-                />
-              </div>
-            </div>
             <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
               <label
                 htmlFor="name"
@@ -144,10 +165,14 @@ function AddAccount(props) {
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                 <input
                   type="text"
-                  id="name"
-                  name="name"
+                  id="chilusername"
+                  name="chilusername"
+                  value={chilusername}
+                  onChange={(event) => {
+                    setChilusername(event.target.value);
+                  }}
                   className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  placeholder="Enter your username"
+                  placeholder="Enter child's username"
                   required
                 />
               </div>
@@ -163,10 +188,14 @@ function AddAccount(props) {
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                 <input
                   type="password"
-                  id="password"
-                  name="password"
-                  className="react-datepicker-ignore-onclickoutside block w-full rounded-md border-0 py-1.5 pl-2 pr-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
-                  placeholder="Enter your password"
+                  id="childpassword"
+                  name="childpassword"
+                  value={childpassword}
+                  onChange={(event) => {
+                    setChildpassword(event.target.value);
+                  }}
+                  className="block w-full rounded-md border-0 py-1.5 pl-2 pr-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                  placeholder="Enter password"
                   required
                 />
               </div>
@@ -185,7 +214,11 @@ function AddAccount(props) {
                     id="male"
                     name="gender"
                     value="male"
+                    onChange={(event) => {
+                      setChildgender(event.target.value);
+                    }}
                     className="mr-2 h-4 w-4 border-gray-300 text-MyPurple-600 focus:ring-MyPurple-400"
+                    required
                   />
                   <label
                     htmlFor="male"
@@ -201,6 +234,9 @@ function AddAccount(props) {
                     id="female"
                     name="gender"
                     value="female"
+                    onChange={(event) => {
+                      setChildgender(event.target.value);
+                    }}
                     className="mr-2 h-4 w-4 border-gray-300 text-MyPurple-400 focus:ring-MyPurple-400"
                   />
                   <label
@@ -215,11 +251,12 @@ function AddAccount(props) {
             </div>
           </div>
           <div className="item-center flex justify-center">
-            <MilstoneTags />
+            <MilstoneTags childtags={childtags} setChildtags={setChildtags} />
           </div>
           <div className="mt-4 flex justify-center">
             <Button
               type="submit"
+              onClick={save}
               className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
             >
               Save
