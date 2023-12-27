@@ -62,6 +62,7 @@ class AboutSection extends Component {
                 id={fieldName}
                 autoComplete={fieldName}
                 className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-sm font-light text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                required
               />
             </div>
           ) : (
@@ -86,6 +87,7 @@ class AboutSection extends Component {
                 id={fieldName}
                 autoComplete={fieldName}
                 className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                required
               />
             </div>
           )}
