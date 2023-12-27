@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import TimeLeftCalculator from './TimeLeftCalculator';
 import { Link } from 'react-router-dom';
-const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleSubmitTask }) => {
+const CompletedTaskDetailsModal = ({ selectedTaskDetails, handleCloseCompletedTaskDetails, handleSubmitTask }) => {
     return (
         selectedTaskDetails && (
             <div className="fixed top-0 left-0 z-50 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
                 <div className="bg-white rounded-lg shadow-lg p-6 w-200">
                     <div className="flex justify-end">
-                        <button className="focus:outline-none" onClick={handleCloseTaskDetails}>
+                        <button className="focus:outline-none" onClick={handleCloseCompletedTaskDetails}>
                             <FontAwesomeIcon icon={faTimes} className="text-gray-600 text-lg" />
                         </button>
                     </div>
@@ -55,20 +55,21 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                         {selectedTaskDetails.description}
                                     </td>
                                 </tr>
-                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Time Remaining:
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        1 day 10 hours<TimeLeftCalculator targetTime={new Date(selectedTaskDetails.description)} />
-                                    </td>
-                                </tr>
+                                
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <th scope="row" className=" border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         Reward
                                     </th>
                                     <td className="px-6 py-4">
                                         {selectedTaskDetails.reward}
+                                    </td>
+                                </tr>
+                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" className=" border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Reward Given
+                                    </th>
+                                    <td className="px-6 py-4">
+                                        Task rewarded
                                     </td>
                                 </tr>
                             </tbody>
@@ -80,11 +81,11 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                         <button
                           className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                         >
-                          Complete
+                          Get Details
                         </button>
                       </Link>
                         <button
-                            onClick={handleCloseTaskDetails}
+                            onClick={handleCloseCompletedTaskDetails}
                             className="mt-14 text-white bg-gray-400 hover:bg-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                         >
                             Close
@@ -97,4 +98,4 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
     );
 };
 
-export default TaskDetailsModal;
+export default CompletedTaskDetailsModal;

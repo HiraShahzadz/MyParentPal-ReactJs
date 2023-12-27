@@ -51,6 +51,7 @@ StatisticsCard.propTypes = {
     "yellow",
     "lime",
     "light-green",
+    "MyPurple",
     "green",
     "teal",
     "cyan",

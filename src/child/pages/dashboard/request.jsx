@@ -114,9 +114,9 @@ export function Reward_Request() {
   }, []);
   return (
     <div>
-      <div className="p-4 bg-white mt-12 mb-8 flex flex-col lg:flex-row gap-4 rounded-lg">
+      <div className="p-4 bg-white mt-4 mb-8 flex flex-col lg:flex-row gap-4 rounded-lg">
         <div className="lg:w-1/2">
-          <Typography variant="h5" color="blue-gray" className="mt-5 mb-8">
+          <Typography variant="h5" color="blue-gray" className="mt-3 mb-8">
             Reward Request
           </Typography>
 
@@ -160,22 +160,21 @@ export function Reward_Request() {
               />
             </div>
             <div className="mb-6">
-              <label htmlFor="parentSelection" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Select Parent
+              <label htmlFor="rewardDescription" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Why do you need this reward?
               </label>
-              <input
-                type="text"
-                id="defaultParent"
-                value={parentName}
-                readOnly
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500 focus:outline-none"
-                placeholder="Your Parent Name"
+              <textarea
+                id="rewardDescription"
+                name="rewardDescription"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 h-32 resize-none dark:bg-gray-700 dark:border-purple-600 dark:placeholder-purple-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500 focus:outline-none"
+                placeholder="Please provide reasons for your need for this reward"
                 required
-              />
+              ></textarea>
             </div>
+
             <button
               type="submit"
-              className="text-white bg-purple-300 hover:bg-purple-300 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
             >
               Submit
             </button>
@@ -291,69 +290,69 @@ export function Reward_Request() {
                   <th scope="col" class="px-6 py-3  text-purple-400">
                     Desired Reward
                   </th>
-                 
+
                 </tr>
               </thead>
               <tbody>
                 {requestData
-                .filter(({ id }) => id === 1)
-                .map(({ id, title, description, reward, status }) => (
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {description}
-                    </th>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {title}
-                    </td>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {reward}
-                    </td>
-                   
-                  </tr>
-                ))}
+                  .filter(({ id }) => id === 1)
+                  .map(({ id, title, description, reward, status }) => (
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {description}
+                      </th>
+                      <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {title}
+                      </td>
+                      <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {reward}
+                      </td>
+
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
         )}
-     
-     {selectedTask === "Rejected Requests" && (
-        <div class="mt-8 relative overflow-x-auto">
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700 bg-purple-800 rounded-lg ">
-            <thead class="text-xs text-gray-700 uppercase bg-purple-50 dark:bg-gray-100 dark:text-gray-400">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-purple-400">
-                  Task Description
-                </th>
-                <th scope="col" class="px-6 py-3  text-purple-400">
-                  Task Name
-                </th>
-                <th scope="col" class="px-6 py-3  text-purple-400">
-                  Desired Reward
-                </th>
-               
-              </tr>
-            </thead>
-            <tbody>
-              {requestData
-              .filter(({ id }) => id === 2)
-              .map(({ id, title, description, reward, status }) => (
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {description}
+
+        {selectedTask === "Rejected Requests" && (
+          <div class="mt-8 relative overflow-x-auto">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700 bg-purple-800 rounded-lg ">
+              <thead class="text-xs text-gray-700 uppercase bg-purple-50 dark:bg-gray-100 dark:text-gray-400">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-purple-400">
+                    Task Description
                   </th>
-                  <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {title}
-                  </td>
-                  <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {reward}
-                  </td>
-                 
+                  <th scope="col" class="px-6 py-3  text-purple-400">
+                    Task Name
+                  </th>
+                  <th scope="col" class="px-6 py-3  text-purple-400">
+                    Desired Reward
+                  </th>
+
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-     )}
+              </thead>
+              <tbody>
+                {requestData
+                  .filter(({ id }) => id === 2)
+                  .map(({ id, title, description, reward, status }) => (
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {description}
+                      </th>
+                      <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {title}
+                      </td>
+                      <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {reward}
+                      </td>
+
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
 
