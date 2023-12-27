@@ -21,7 +21,7 @@ import TaskTime from "../../attributes/TaskTime";
 import RewardPoints from "./RewardPoints";
 import MonitorTask from "./MonitorTask";
 import Tags from "@/parent/Report/Tags";
-import RegulateAccess from "./ RegulateAccess";
+import RegulateAccess from "./RegulateAccess";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
