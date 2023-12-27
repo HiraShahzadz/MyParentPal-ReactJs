@@ -1,24 +1,35 @@
 import React, { useState } from "react";
 
-function MonitorTask() {
-  const [selectedOption, setSelectedOption] = useState(""); // State to track the selected option
-  const [selectedOptions, setSelectedOptions] = useState([]); // State to track the selected file types
+function MonitorTask(props) {
+  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   const handleTypeChange = (event) => {
     const selected = Array.from(
       event.target.selectedOptions,
       (option) => option.value
     );
+
     setSelectedOptions((prevSelectedOptions) =>
       Array.from(new Set([...prevSelectedOptions, ...selected]))
+    );
+
+    // Save selected file types in the parent component using props
+    props.setTaskfiletype(
+      Array.from(new Set([...props.taskfiletype, ...selected]))
     );
   };
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value); // Update the selected option when a radio button is clicked
   };
+
+  const handleClear = () => {
+    setSelectedOptions([]);
+    props.setTaskfiletype([]);
+  };
   return (
-    <div className="mt-10 space-y-10 ">
+    <div className="mt-6 space-y-10 ">
       <fieldset>
         <legend className="flex text-sm font-semibold leading-6 text-gray-900">
           {/* Your SVG and text here */}
@@ -30,7 +41,7 @@ function MonitorTask() {
         <div className="mt-5 flex gap-x-20 ">
           <div className="flex items-center gap-x-3">
             <input
-              id="push-everything"
+              id="monitor-task"
               name="monitor-task"
               type="radio"
               className="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
@@ -47,7 +58,7 @@ function MonitorTask() {
           </div>
           <div className="flex items-center gap-x-3">
             <input
-              id="push-email"
+              id="monitor-task"
               name="monitor-task"
               type="radio"
               className="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
@@ -65,48 +76,7 @@ function MonitorTask() {
         </div>
 
         {selectedOption === "file-proof" && (
-          <div className="mt-4 grid grid-cols-1 gap-x-2 gap-y-8 sm:grid-cols-8">
-            <div className="sm:col-span-2 sm:col-start-1">
-              <label
-                htmlFor="city"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Maximum Files
-              </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  name="number"
-                  id="file"
-                  placeholder="Max files upload: 20"
-                  autoComplete="address-level2"
-                  min="0"
-                  max="20"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="region"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                File Size
-              </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  name="number"
-                  id="size"
-                  autoComplete="address-level1"
-                  placeholder="Max: 25MB"
-                  min="0"
-                  max="25"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+          <div className="mt-4 grid grid-cols-1 gap-x-2 gap-y-4 sm:grid-cols-4">
             <div className="sm:col-span-2">
               <label
                 htmlFor="postal-code"
@@ -114,16 +84,25 @@ function MonitorTask() {
               >
                 File type
               </label>
-              <div className="mt-2">
+              <div className="relative mt-2 flex">
                 <input
                   type="text"
                   name="postal-code"
                   id="postal-code"
                   autoComplete="postal-code"
-                  placeholder="No Selection"
+                  placeholder="Choose audio, video or picture"
                   value={selectedOptions.join(", ")}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                  disabled
                 />
+
+                <a
+                  type="button"
+                  onClick={handleClear}
+                  className="absolute right-2 top-1/2 ml-2 flex h-4 w-4 -translate-y-1/2  transform cursor-pointer items-center justify-center rounded-full bg-MyPurple-400 p-4 px-3 py-3  text-white focus:outline-none"
+                >
+                  X
+                </a>
               </div>
             </div>
             <div className="sm:col-span-2">
@@ -140,11 +119,11 @@ function MonitorTask() {
                 onChange={handleTypeChange}
                 className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
               >
-                <option>Choose</option>
-                <option>.jpg</option>
-                <option>.png</option>
-                <option>.mp4</option>
-                <option>.mp3</option>
+                <option>Choose from here</option>
+                <option>Video</option>
+                <option>Audio</option>
+                <option>Picture</option>
+                <option>Text</option>
               </select>
             </div>
           </div>

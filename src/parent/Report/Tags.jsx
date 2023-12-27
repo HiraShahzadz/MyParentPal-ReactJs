@@ -1,36 +1,28 @@
 import React, { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-
+import { TagIcon } from "@heroicons/react/24/solid";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const mystatus = [
-  { label: "Todo", image: "/img/purple.png" },
-  { label: "Completed", image: "/img/green.png" },
-  { label: "Reviewed", image: "/img/orange.png" },
-  { label: "Rewarded", image: "/img/blue.png" },
+const status = [
+  { label: "Skills" },
+  { label: "House Holds" },
+  { label: "Art & Craft" },
+  { label: "Cooking", image: "/img/blue.png", color: "blue-50" },
 ];
 
-function TaskStatus({ setStatus }) {
-  const [selectedStatus, setSelectedStatus] = useState(mystatus[0]); // Initial selected status
+function Tags() {
+  const [selectedStatus, setSelectedStatus] = useState(status[0]); // Initial selected status
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div>
+      <div className="bg-white">
         <Menu.Button
-          status={selectedStatus.label}
-          onChange={(event) => {
-            setStatus(selectedStatus.label); // Update the status when the menu button is clicked
-          }}
-          className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 "
+          className={`inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 `}
         >
-          <img
-            className="m-1 h-3 w-3 rounded-full"
-            src={selectedStatus.image}
-            alt=""
-          />
+          <TagIcon className="h-4 w-4 text-MyPurple-400" />
 
           {selectedStatus.label}
           <ChevronDownIcon
@@ -50,25 +42,20 @@ function TaskStatus({ setStatus }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {mystatus.map(({ label, image }, index) => (
+          {status.map(({ label }, index) => (
             <div className="py-1" key={index}>
               <Menu.Item>
                 {({ active }) => (
                   <a
                     onClick={() => {
-                      setSelectedStatus({ label, image });
-                      setStatus(label);
+                      setSelectedStatus({ label });
                     }}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "flex px-4 py-2 text-sm "
                     )}
                   >
-                    <img
-                      className="m-1 h-3 w-3 rounded-full"
-                      src={image}
-                      alt=""
-                    />
+                    <TagIcon className="h-4 w-4 text-MyPurple-400" />
                     <span className="ml-2">{label}</span>
                   </a>
                 )}
@@ -81,4 +68,4 @@ function TaskStatus({ setStatus }) {
   );
 }
 
-export default TaskStatus;
+export default Tags;

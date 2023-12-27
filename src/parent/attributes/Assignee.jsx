@@ -7,8 +7,8 @@ function classNames(...classes) {
 
 const options = [
   { label: "Unassigned", image: "/img/user.png" },
-  { label: "Nida", image: "/img/Woman6.jpg" },
-  { label: "Hira", image: "/img/women2.jpg" },
+  { label: "Nida", image: "/img/userc.png" },
+  { label: "Hira", image: "/img/userc.png" },
 ];
 
 function Assignee() {

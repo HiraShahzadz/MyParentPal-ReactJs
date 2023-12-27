@@ -9,12 +9,12 @@ import {
 } from "@material-tailwind/react";
 import NotificationData from "@/parent/data/NotificationData";
 import RespondNotificationsData from "@/parent/data/RespondNotificationsData";
-import RespondNotifications from "@/parent/pages/dashboard/RespondNotifications";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
-export function Notifications() {
+import RequestDetails from "./RequestDetail";
+export function TaskRequests() {
   const [hiddenImages, setHiddenImages] = useState([]);
 
   const handleImageClick = (index) => {
@@ -24,10 +24,11 @@ export function Notifications() {
 
   const [showModal, setShowModal] = useState(false);
   return (
-    <div className="mx-auto my-10 flex max-w-screen-lg flex-col gap-8">
+    <div className="mx-auto my-8 flex max-w-screen-lg flex-col gap-8">
       <DndProvider backend={HTML5Backend}>
         <Toaster />
       </DndProvider>
+
       <Card>
         <CardHeader
           color="transparent"
@@ -36,62 +37,10 @@ export function Notifications() {
           className="m-0 p-4"
         >
           <Typography variant="h5" color="blue-gray">
-            Notifications
+            Task Requests History
           </Typography>
         </CardHeader>
-        <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
-          {NotificationData.map(
-            ({ time, name, description, image, task }, index) => (
-              <div
-                href=""
-                className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
-                key={index}
-              >
-                <div className="flex">
-                  <img className="h-10 w-10 rounded-full" src={image} alt="" />
-                  <div className="ml-3">
-                    <span className="mr-1 font-medium text-black">{name}</span>
-                    <span className="text-black">{description}</span>
-                    <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
-                      {time}
-                    </span>
-                    <div className="mt-1.5 flex">
-                      <img className="h-3 w-3" src="/img/task.png" alt="" />
-                      <span className="ml-1 text-xs text-black hover:underline">
-                        {task}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                {!hiddenImages.includes(index) && (
-                  <div
-                    className="ml-auto flex items-end rounded-full border p-1 hover:border-MyPurple-400"
-                    onClick={() => handleImageClick(index)}
-                  >
-                    <img
-                      className="h-1.5 w-1.5 rounded-full"
-                      src="/img/purple.png"
-                      alt=""
-                    />
-                  </div>
-                )}
-              </div>
-            )
-          )}
-        </CardBody>
-      </Card>
-      <Card>
-        <CardHeader
-          color="transparent"
-          floated={false}
-          shadow={false}
-          className="m-0 p-4"
-        >
-          <Typography variant="h5" color="blue-gray">
-            Respond Notifications
-          </Typography>
-        </CardHeader>
-        <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
+        <CardBody className="flex flex-col gap-4 p-3">
           {RespondNotificationsData.map(
             ({ time, name, description, image, task }, index) => (
               <div className="items-center rounded-md p-3 text-sm hover:bg-blue-gray-50 sm:flex">
@@ -119,7 +68,7 @@ export function Notifications() {
                     View Request
                   </Button>
                 </div>
-                {showModal && <RespondNotifications onClose={setShowModal} />}
+                {showModal && <RequestDetails onClose={setShowModal} />}
               </div>
             )
           )}
@@ -128,4 +77,4 @@ export function Notifications() {
     </div>
   );
 }
-export default Notifications;
+export default TaskRequests;

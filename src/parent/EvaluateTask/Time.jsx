@@ -3,15 +3,11 @@ import TimePicker from "react-time-picker";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-function TaskTime({ tasktime, setTasktime }) {
-  const [selectedTime, setSelectedTime] = useState(tasktime);
+function Time() {
+  const [selectedTime, setSelectedTime] = useState();
 
-  useEffect(() => {
-    setTasktime(selectedTime);
-  }, [selectedTime, setTasktime]);
+  useEffect(() => {}, [selectedTime]);
 
   const handleTimeChange = (time) => {
     setSelectedTime(time);
@@ -24,11 +20,11 @@ function TaskTime({ tasktime, setTasktime }) {
       padding-top: 0.1rem;
       padding-left: 0.5rem;
       color: #1a202c;
-      box-shadow: inset 0 1px 2px 0 #e0e0e0;
+      box-shadow: inset 0 1px 2px 0 transparent;
       border-color: #e0e0e0;
       placeholder: #e0e0e0;
 
-      box-shadow: 0 0 0 2px #fff;
+      box-shadow: 0 0 0 2px transparent;
     }
     .react-time-picker__wrapper:focus {
       box-shadow: 0 0 0 2px #b089be;
@@ -43,7 +39,7 @@ function TaskTime({ tasktime, setTasktime }) {
   `;
 
   return (
-    <div>
+    <div className="rounded-md bg-white">
       <StyledTimePicker
         onChange={handleTimeChange}
         value={selectedTime}
@@ -82,9 +78,10 @@ function TaskTime({ tasktime, setTasktime }) {
             />
           </svg>
         }
+        required
       />
     </div>
   );
 }
 
-export default TaskTime;
+export default Time;

@@ -1,37 +1,28 @@
 import React, { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const mystatus = [
-  { label: "Todo", image: "/img/purple.png" },
-  { label: "Completed", image: "/img/green.png" },
-  { label: "Reviewed", image: "/img/orange.png" },
-  { label: "Rewarded", image: "/img/blue.png" },
+const options = [
+  { label: "Select Child", image: "/img/user.png" },
+  { label: "Nida", image: "/img/userc.png" },
+  { label: "Hira", image: "/img/userc.png" },
 ];
 
-function TaskStatus({ setStatus }) {
-  const [selectedStatus, setSelectedStatus] = useState(mystatus[0]); // Initial selected status
+function ChildSelection() {
+  const [selectedStatus, setSelectedStatus] = useState(options[0]); // Initial selected status
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button
-          status={selectedStatus.label}
-          onChange={(event) => {
-            setStatus(selectedStatus.label); // Update the status when the menu button is clicked
-          }}
-          className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 "
-        >
+        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
           <img
-            className="m-1 h-3 w-3 rounded-full"
+            className="h-5 w-5 rounded-full"
             src={selectedStatus.image}
             alt=""
           />
-
           {selectedStatus.label}
           <ChevronDownIcon
             className="-mr-1 h-5 w-5 text-gray-400"
@@ -50,25 +41,20 @@ function TaskStatus({ setStatus }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {mystatus.map(({ label, image }, index) => (
+          {options.map(({ label, image }, index) => (
             <div className="py-1" key={index}>
               <Menu.Item>
                 {({ active }) => (
                   <a
                     onClick={() => {
                       setSelectedStatus({ label, image });
-                      setStatus(label);
                     }}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "flex px-4 py-2 text-sm "
                     )}
                   >
-                    <img
-                      className="m-1 h-3 w-3 rounded-full"
-                      src={image}
-                      alt=""
-                    />
+                    <img className="h-6 w-6 rounded-full" src={image} alt="" />
                     <span className="ml-2">{label}</span>
                   </a>
                 )}
@@ -81,4 +67,4 @@ function TaskStatus({ setStatus }) {
   );
 }
 
-export default TaskStatus;
+export default ChildSelection;
