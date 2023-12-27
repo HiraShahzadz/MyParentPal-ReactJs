@@ -7,7 +7,7 @@ const websiteViewsChart = {
   series: [
     {
       name: "Users",
-      data: [90, 40, 50, 22, 60, 70, 40, 30],
+      data: [90, 40, 50, 22, 60],
     },
   ],
   options: {
@@ -18,22 +18,13 @@ const websiteViewsChart = {
     },
     plotOptions: {
       bar: {
-        columnWidth: "16%",
+        columnWidth: "9%",
         borderRadius: 5,
       },
     },
     xaxis: {
       ...chartsConfig.xaxis,
-      categories: [
-        "Pakistan",
-        "America",
-        "India",
-        "Canada",
-        "Japan",
-        "Nigeria",
-        "Australia",
-        "Malaysia",
-      ],
+      categories: ["Punjab", "KPK", "Sindh", "Balochistan", "Islamabad"],
     },
   },
 };
