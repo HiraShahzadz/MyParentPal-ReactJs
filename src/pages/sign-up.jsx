@@ -69,7 +69,7 @@ export function SignUp() {
       return toast.error("Please agree to the Terms and Conditions");
     }
     try {
-      await axios.post("http://localhost:8081/api/v1/user/save", {
+      await axios.post("http://localhost:8080/api/v1/user/save", {
         email: email,
         password: password,
         role: role,
