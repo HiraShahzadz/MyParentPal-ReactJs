@@ -5,6 +5,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import {
   tasksData,
 } from "@/child/data";
+import { GiftIcon } from "@heroicons/react/24/solid";
 import TaskDetailsModal from './TaskDetailsModel';
 import { isSameDay } from 'date-fns';
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -211,7 +212,7 @@ export function Home() {
                           {title}
                         </Typography>
                           <h5 className="flex items-center mb-1 lg:mb-2">
-                            Reward: <img src="/img/gift.png" alt="Reward" className="ml-2" /> {reward}
+                            Reward:  <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " /> {reward}
                           </h5>
                           <h5 className="flex items-center mb-1 lg:mb-2">
                             Time Remaining: 30 minutes
@@ -320,7 +321,7 @@ export function Home() {
                           {title}
                         </Typography>
                         <h5 className="flex items-center ml-2 mb-1 lg:mb-2">
-                          Reward: <img src="/img/gift.png" alt="Reward" className="ml-2 mr-1" /> {reward}
+                          Reward:  <GiftIcon className="ml-1 mr-1 h-4 w-4 rounded-sm text-MyPurple-400 " /> {reward}
                         </h5>
                         <Typography className="ml-2 lg:mb-4 text-justify font-normal">
                           Submission date: {description.toLocaleDateString()}
@@ -409,7 +410,7 @@ export function Home() {
                         {title}
                       </Typography>
                       <h5 className="flex items-center ml-2 mb-1 lg:mb-2">
-                        Reward: <img src="/img/gift.png" alt="Reward" className="ml-2 mr-1" /> {reward}
+                        Reward:  <GiftIcon className="ml-1 mr-1 h-4 w-4 rounded-sm text-MyPurple-400 " /> {reward}
                       </h5>
                       <Typography className="ml-2 lg:mb-4 text-justify font-normal">
                         Submission date: {description.toLocaleDateString()}
