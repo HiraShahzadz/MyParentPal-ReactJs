@@ -11,11 +11,12 @@ export const tasksData = [
     description: new Date("2023-12-2"),
     progress: "20%",
     rewardImage: "/img/coin.png",
-    points: "40 points",
+    points: "Ice Cream",
     time: "10:00 pm",
     details:
       "Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
     image: "/img/women1.jpg",
+    name: "Nida Javed",
   },
   {
     id: 2,
@@ -23,11 +24,12 @@ export const tasksData = [
     description: new Date("2023-12-3"),
     progress: "30%",
     rewardImage: "/img/coin.png",
-    points: "20 points",
+    points: "Play Station",
     time: "8:00 pm",
     details:
       "Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
     image: "/img/women1.jpg",
+    name: "Aiman Abid",
   },
   {
     id: 3,
@@ -35,11 +37,12 @@ export const tasksData = [
     description: new Date("2023-12-28"),
     progress: "10%",
     rewardImage: "/img/coin.png",
-    points: "30 points",
+    points: "Mobile",
     time: "11:00 pm",
     details:
       "Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
     image: "/img/women1.jpg",
+    name: "Aiman Abid",
   },
   {
     id: 4,
@@ -47,11 +50,12 @@ export const tasksData = [
     description: new Date("2023-12-2"),
     progress: "50%",
     rewardImage: "/img/coin.png",
-    points: "15 points",
+    points: "Laptop",
     time: "11:00 pm",
     details:
       "Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
     image: "/img/women1.jpg",
+    name: "Hira Shahzad",
   },
   {
     id: 5,
@@ -59,11 +63,12 @@ export const tasksData = [
     description: new Date("2023-12-02"),
     progress: "90%",
     rewardImage: "/img/coin.png",
-    points: "25 points",
+    points: "Tablet",
     time: "9:00 pm",
     details:
       "Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
     image: "/img/women1.jpg",
+    name: "Nida Javed",
   },
   {
     id: 6,
@@ -71,11 +76,12 @@ export const tasksData = [
     description: new Date("2023-12-30"),
     progress: "67%",
     rewardImage: "/img/coin.png",
-    points: "30 points",
+    points: "Play Station",
     time: "12pm",
     details:
       "Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
     image: "/img/women1.jpg",
+    name: "Hira Shahzad",
   },
 ];
 
