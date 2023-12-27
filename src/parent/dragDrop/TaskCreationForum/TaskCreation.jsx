@@ -99,8 +99,25 @@ export function TaskCreation() {
   //for saving in database
   async function save(event) {
     event.preventDefault();
+    if (
+      !taskname ||
+      !taskdescription ||
+      !rewardname ||
+      !taskdate ||
+      !tasktime ||
+      !tasktype
+    ) {
+      return toast.error("Please fill in all fields");
+    }
+    const taskDate = new Date(taskdate);
+
+    const currentDate = new Date();
+
+    if (taskDate < currentDate) {
+      return toast.error("Task submission date cannot be in the past");
+    }
     try {
-      if (taskname.length > 3 && taskname.length < 100) {
+      if (taskname.length > 3 && taskname.length < 15) {
         await axios.post("http://localhost:8080/api/v1/task/save", {
           taskname: taskname,
           taskdescription: taskdescription,
@@ -126,12 +143,12 @@ export function TaskCreation() {
         setTaskassignee("");
         setTasktype("");
       }
-      if (taskname.length < 3) {
+      if (taskname.length <= 3) {
         return toast.error("A task must have more than 3 characters");
       }
 
-      if (taskname.length > 100) {
-        return toast.error("A task must not be more than 100 characters");
+      if (taskname.length >= 15) {
+        return toast.error("A task must not be more than 15 characters");
       }
     } catch (err) {
       return toast.error("Task creation is faild");
@@ -307,10 +324,15 @@ export function TaskCreation() {
                       <div className="mt-8 flex gap-x-10">
                         <div className="flex items-center gap-x-3">
                           <input
-                            id="push-everything"
-                            name="push-notifications"
+                            id="onetime"
+                            name="type"
                             type="radio"
+                            value="One Time"
+                            onChange={(event) => {
+                              setTasktype(event.target.value);
+                            }}
                             className="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
+                            required
                           />
                           <label
                             htmlFor="push-everything"
@@ -321,9 +343,13 @@ export function TaskCreation() {
                         </div>
                         <div className="flex items-center gap-x-3">
                           <input
-                            id="push-email"
-                            name="push-notifications"
+                            id="series"
+                            name="type"
                             type="radio"
+                            value="Series"
+                            onChange={(event) => {
+                              setTasktype(event.target.value);
+                            }}
                             className="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
                           />
                           <label
