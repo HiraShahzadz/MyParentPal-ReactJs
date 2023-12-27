@@ -125,57 +125,15 @@ export function Home() {
                 </>
               )}
             </Typography>
-
-            <Button
-              style={{
-                backgroundColor: "#b089bf",
-                color: "#ffffff",
-                padding: "18px 27px",
-                fontSize: "12px",
-              }}
+            <button
               onClick={toggleText}
+              className="mb-2 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
             >
               {showMoreText ? "Show less" : "Show more"}
-            </Button>
+            </button>
           </div>
           <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
             <img src="/img/canva3.3.png" />
-          </div>
-        </div>
-      </section>
-      <section className="">
-        <div className="container mx-auto text-black">
-          <PageTitle className="text-Custom" heading="Why Digital Co-Parent?">
-            <p className="mb-8 font-normal text-[#808080]">
-              Help parents to shape their child's future, instill civility, and
-              foster responsibility effectively through streamlined task
-              management and improved communication
-            </p>
-          </PageTitle>
-        </div>
-      </section>
-      <section className="">
-        <div className="container mx-auto text-black">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {teamData.map(({ img, name }) => (
-              <div
-                key={name}
-                className="mb-8  text-center font-normal text-black"
-                style={{ border: "4px solid #B089BE", padding: "10px" }}
-              >
-                <img
-                  src={img}
-                  alt="Team Member"
-                  className="team-member-img img-equal-size transition-transform duration-300 ease-in-out hover:scale-90 hover:opacity-70"
-                />
-                <div
-                  className="mb-1 mt-7 text-center font-normal text-black"
-                  style={{ fontSize: "19px" }}
-                >
-                  {name}
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -285,35 +243,31 @@ export function Home() {
                   Feel free to contact us.
                 </PageTitle>
                 <div className="mb-4 gap-64 ">
-                  <Input
+                  <input
                     size="lg"
-                    label="Full Name"
-                    className="w-full rounded-lg border border-gray-400 bg-white px-3 py-2"
+                    placeholder="Full Name"
+                    className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                   />
                 </div>
                 <div className="mb-4 gap-4">
-                  <Input
+                  <input
                     size="lg"
-                    label="Email Address"
-                    className="w-full rounded-lg border border-gray-400 bg-white px-3 py-2"
+                    placeholder="Email Address"
+                    className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                   />
                 </div>
                 <div className="mb-4 gap-4">
-                  <Textarea
+                  <textarea
                     size="lg"
-                    label="Message"
                     rows={8}
-                    className="bg-white"
+                    placeholder="Enter your query"
+                    className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                   />
                 </div>
-                <Button
-                  variant="gradient"
-                  size="lg"
-                  style={{ background: "#B089BE" }}
-                  className="rounded-lg px-4 py-3 uppercase text-white shadow-transparent hover:shadow-transparent"
-                >
+
+                <button className="mb-2 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0">
                   Send Message
-                </Button>
+                </button>
               </form>
             </div>
           </div>
