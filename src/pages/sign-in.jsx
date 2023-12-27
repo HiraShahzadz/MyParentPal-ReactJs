@@ -1,7 +1,5 @@
-import { Link } from "react-router-dom";
-
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
-
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -27,6 +25,7 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -37,6 +36,7 @@ export function SignIn() {
     if (!email || !password) {
       return toast.error("Please fill in all fields");
     }
+
     if (
       password.length < 8 ||
       !/[A-Z]/.test(password) ||
@@ -46,10 +46,9 @@ export function SignIn() {
       setPassword("");
       return toast.error("Enter valid credentials");
     }
-
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/v1/parent/signin",
+        "http://localhost:8081/api/v1/user/signin",
         {
           email: email,
           password: password,
@@ -57,16 +56,20 @@ export function SignIn() {
       );
 
       const message = response.data.message;
-      toast.success(message); // Display the success message
-
-      // Redirect to the dashboard page after successful login
+      toast.success(message);
+      if (message == "Parent Login successful") {
+        navigate("/home"); //Navigate to Parent dashboard
+      } else if (message == "Child Login successful") {
+        navigate("/home"); //Navigate to Child dashboard
+      }
 
       setEmail("");
       setPassword("");
     } catch (error) {
-      console.error("Login error:", error);
       if (error.response && error.response.status === 401) {
         toast.error("Wrong email or password");
+        setEmail("");
+        setPassword("");
       } else {
         toast.error("An error occurred during login");
       }

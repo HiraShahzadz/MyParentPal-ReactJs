@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
@@ -25,7 +25,9 @@ export function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState("parent");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -67,22 +69,22 @@ export function SignUp() {
       return toast.error("Please agree to the Terms and Conditions");
     }
     try {
-      await axios.post("http://localhost:8081/api/v1/parent/save", {
+      await axios.post("http://localhost:8081/api/v1/user/save", {
         email: email,
         password: password,
+        role: role,
       });
 
       console.log("After Axios Request - Success");
 
-      toast.success("Student Registration Successfully");
+      toast.success("Sign Up Successfully");
+      navigate("/home");
 
       setEmail("");
       setPassword("");
       setConfirmPassword("");
       setIsChecked(false);
     } catch (err) {
-      console.error("After Axios Request - Error:", err);
-
       if (err.response) {
         console.error("Server Error:", err.response.data);
       } else if (err.request) {
