@@ -250,7 +250,7 @@ export function Home() {
         </div>
       </div>
 
-      <div className="ml-3 mr-2 mt-2 mb-20 custom-container-series mx-auto ">
+      <div className="ml-3 mr-2 mt-2 mb-2 custom-container-series mx-auto ">
         <h2>Summary</h2>
         <br></br>
         <div className="task-titles">
