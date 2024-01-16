@@ -8,7 +8,8 @@ export function Footer({ title, description, socials, menus, copyright }) {
     <footer className="relative px-4 pb-6 pt-8">
       <div className="container mx-auto">
         <div className="flex flex-wrap pt-6 text-center lg:text-left">
-          <div className="w-full px-4 lg:w-6/12">
+          {/* First Column */}
+          <div className="mb-8 w-full px-4 md:mb-0 md:w-6/12 lg:w-4/12">
             <Typography variant="h4" className="mb-4 text-white">
               {title}
             </Typography>
@@ -25,14 +26,14 @@ export function Footer({ title, description, socials, menus, copyright }) {
                 >
                   <IconButton color="white" className="rounded-full">
                     <Typography color={color}>
-                      <i className={`fa-brands fa-${name}`} />
+                    <i className={`fa-brands fa-${name}`} />
                     </Typography>
                   </IconButton>
                 </a>
               ))}
             </div>
           </div>
-          <div className="mx-auto mt-12 grid w-max grid-cols-2 gap-24 lg:mt-0">
+          <div className="mx-auto ml-72 mt-12 grid w-max grid-cols-2 gap-24 pl-3 lg:mt-0">
             {menus.map(({ name, items }) => (
               <div key={name}>
                 <Typography
@@ -61,13 +62,14 @@ export function Footer({ title, description, socials, menus, copyright }) {
             ))}
           </div>
         </div>
-        <hr className="my-6 border-gray-300" />
-        <div className="flex flex-wrap items-center justify-center md:justify-between">
-          <div className="mx-auto w-full px-4 text-center">
-            <Typography variant="small" className="font-normal text-white">
-              {copyright}
-            </Typography>
-          </div>
+      </div>
+      <hr className="my-6 border-gray-300" />
+
+      <div className="flex flex-wrap items-center justify-center md:justify-between">
+        <div className="mx-auto w-full px-4 text-center">
+          <Typography variant="small" className="font-normal text-white">
+            {copyright}
+          </Typography>
         </div>
       </div>
     </footer>
@@ -86,7 +88,7 @@ Footer.defaultProps = {
     {
       color: "light-blue",
       name: "twitter",
-      path: "https://www.twitter.com/creativetim",
+      path: "https://www.twitter.com",
     },
     {
       color: "purple",
@@ -96,7 +98,7 @@ Footer.defaultProps = {
     {
       color: "pink",
       name: "dribbble",
-      path: "https://www.dribbble.com/creativetim",
+      path: "https://www.dribbble.com",
     },
     {
       color: "red",
@@ -106,22 +108,21 @@ Footer.defaultProps = {
     {
       color: "black",
       name: "github",
-      path: "https://github.com/HiraShahzadz",
+      path: "https://github.com/HiraShahzadz/MyParentPal-ReactJs",
     },
   ],
   menus: [
     {
       name: "useful links",
       items: [
-        { name: "Features", path: "https://www.creative-tim.com/presentation" },
-        { name: "About Us", path: "https://www.creative-tim.com/blog" },
+        { name: "About Us", path: "" },
         {
           name: "Reviews",
-          path: "https://www.github.com/creativetimofficial/material-tailwind?ref=mtk",
+          path: "",
         },
         {
           name: "Contact Us",
-          path: "https://www.creative-tim.com/templates/free?ref=mtk",
+          path: "",
         },
       ],
     },
@@ -130,11 +131,11 @@ Footer.defaultProps = {
       items: [
         {
           name: "GitHub",
-          path: "https://github.com/creativetimofficial/material-tailwind/blob/main/LICENSE.md?ref=mtk",
+          path: "https://github.com/HiraShahzadz/MyParentPal-ReactJs",
         },
         {
-          name: "LinkedIn",
-          path: "https://github.com/creativetimofficial/material-tailwind/blob/main/CONTRIBUTING.md?ref=mtk",
+          name: "Jira",
+          path: "https://tarbeeyat.atlassian.net/jira/software/projects/NUR/boards/2",
         },
       ],
     },
