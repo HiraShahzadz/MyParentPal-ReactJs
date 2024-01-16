@@ -4,6 +4,12 @@ import TaskDetailsModal from './TaskDetailsModel';
 import { useState, useEffect } from "react";
 import FileUploader from './FileUploader';
 import ChatForm from './Recorder';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+
+
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 const SubmitTask = () => {
   // Your component logic goes here
@@ -40,9 +46,15 @@ const SubmitTask = () => {
 
   const handleSaveChangesClick = (newFile) => {
     setShowFileUploader(false);
-    // Hide the FileUploader after saving changes
+   // Hide the FileUploader after saving changes
   };
 
+  async function SubmitTask() {
+    toast.success("Task submitted successfully!");
+  }
+  async function CancelSubmit() {
+    toast.error("Submission Cancelled!");
+  }
   const handleCancelClick = () => {
     setShowFileUploader(false); // Hide the FileUploader when cancel is clicked
   };
@@ -137,17 +149,20 @@ const SubmitTask = () => {
               <div className="flex justify-center items-center mt-5">
                 <button
                   className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                  onClick={handleSaveChangesClick} // You may adjust this if needed
+                  onClick={ SubmitTask} // You may adjust this if needed
                 >
                   Save Changes
                 </button>
                 <button
                   className="mt-5 ml-2 text-white bg-gray-500 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-red-900 sm:mx-2 mb-2 sm:mb-0"
-                  onClick={handleCancelClick}
+                  onClick={ handleCancelClick } 
                 >
                   Cancel
                 </button>
               </div>
+              <DndProvider backend={HTML5Backend}>
+                <Toaster />
+                </DndProvider>
             </div>
           )}
         </div>
@@ -178,7 +193,7 @@ const SubmitTask = () => {
             </button>
           </div>
         </div>
-
+      
       </div>
     </div>
 

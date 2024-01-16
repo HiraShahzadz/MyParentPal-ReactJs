@@ -331,7 +331,7 @@ export function Home() {
 
                     <div className="mr-5 absolute inset-0 flex items-center justify-end">
                       <label className="-mt-9 block text-sm font-medium text-gray-900 dark:text-white">
-                        Time Left: 1 day 10 hours <TimeLeftCalculator targetTime={new Date(description)} />
+                        Time Left: <TimeLeftCalculator targetTime={new Date(description)} />
                       </label>
                     </div>
                     <div className="ml-auto sm:flex items-end mr-3 absolute inset-0 flex items-center justify-end">
