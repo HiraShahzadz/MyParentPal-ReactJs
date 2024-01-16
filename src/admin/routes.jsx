@@ -3,10 +3,10 @@ import {
   UserCircleIcon,
   TableCellsIcon,
   BellIcon,
-  ArrowRightOnRectangleIcon,
+  ArrowLeftOnRectangleIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Tables, Notifications } from "@/admin/pages/dashboard";
+import { Home, Tables } from "@/admin/pages/dashboard";
 import { SignIn, SignUp } from "@/admin/pages/auth";
 
 const icon = {
@@ -23,23 +23,12 @@ export const routes = [
         path: "/home",
         element: <Home />,
       },
-      {
-        icon: <UserCircleIcon {...icon} />,
-        name: "profile",
-        path: "/profile",
-        element: <Profile />,
-      },
+
       {
         icon: <TableCellsIcon {...icon} />,
         name: "Feedback and Queries",
         path: "/tables",
         element: <Tables />,
-      },
-      {
-        icon: <BellIcon {...icon} />,
-        name: "notifactions",
-        path: "/notifactions",
-        element: <Notifications />,
       },
     ],
   },
@@ -48,16 +37,10 @@ export const routes = [
     layout: "auth",
     pages: [
       {
-        icon: <ArrowRightOnRectangleIcon {...icon} />,
-        name: "sign in",
+        icon: <ArrowLeftOnRectangleIcon {...icon} />,
+        name: "Log out",
         path: "/sign-in",
         element: <SignIn />,
-      },
-      {
-        icon: <UserPlusIcon {...icon} />,
-        name: "sign up",
-        path: "/sign-up",
-        element: <SignUp />,
       },
     ],
   },
