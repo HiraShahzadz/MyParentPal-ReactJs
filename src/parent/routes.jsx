@@ -5,7 +5,7 @@ import {
   ArrowLeftOnRectangleIcon,
   ChartBarSquareIcon,
   ClipboardDocumentCheckIcon,
-  PlusIcon,
+  PlusCircleIcon,
   UserGroupIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
@@ -50,14 +50,7 @@ export const routes = [
         element: <MyChild />,
       },
       {
-        icon: (
-          <PlusIcon
-            {...icon}
-            className="h-4 rounded-sm border bg-white text-blue-gray-800"
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-        ),
+        icon: <PlusCircleIcon {...icon} />,
         name: "create tasks",
         path: "/tasks",
         element: <TaskCreation />,

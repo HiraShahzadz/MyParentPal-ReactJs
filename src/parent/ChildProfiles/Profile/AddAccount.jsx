@@ -30,7 +30,6 @@ function AddAccount(props) {
 
     console.log("Form Data:", formData);
     console.log("Image File:", image);
-    toast.success("Information saved");
   };
 
   const handleInputChange = (event) => {
@@ -50,6 +49,27 @@ function AddAccount(props) {
   const [role, setRole] = useState("child");
   async function save(event) {
     event.preventDefault();
+    if (!email || !password || !name || !dob || !gender || !tags) {
+      return toast.error("Please fill in all fields");
+    }
+
+    const dobDate = new Date(dob);
+
+    const currentDate = new Date();
+
+    if (dobDate > currentDate) {
+      return toast.error("Date of Birth cannot be in the future");
+    }
+    if (
+      password.length < 8 ||
+      !/[A-Z]/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
+      setPassword("");
+      return toast.error(
+        "Password should be at least 8 characters long, contain at least one uppercase letter, and one special character"
+      );
+    }
     try {
       await axios.post("http://localhost:8080/api/v1/user/save", {
         name: name,
@@ -60,7 +80,8 @@ function AddAccount(props) {
         tags: tags,
         role: role,
       });
-      alert("Chils Account is created Successfully");
+
+      toast.success("Child Account is created Successfully");
       setId("");
       setName("");
       setEmail("");
@@ -69,7 +90,14 @@ function AddAccount(props) {
       setGender("");
       setTags([]);
     } catch (err) {
-      alert("Chils Account is creation Failed");
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+      } else if (err.request) {
+        console.error("Network Error:", err.request);
+      } else {
+        console.error("Other Error:", err.message);
+      }
+      toast.error("User Registration Failed");
     }
   }
   return (

@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import EditTask from "./EditTask"; // Import your EditTask component
-
+import tasksData from "@/parent/data/tasksData";
 function Task({ task, tasks, setTasks }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
@@ -48,7 +48,7 @@ function Task({ task, tasks, setTasks }) {
   return (
     <div
       ref={drag}
-      className={` relative mb-8 cursor-grab rounded-md p-4 shadow-md ${
+      className={` relative mb-4 cursor-grab rounded-md p-4 shadow-md ${
         isDragging ? "opacity-25" : "opacity-100"
       }`}
     >
@@ -72,15 +72,16 @@ function Task({ task, tasks, setTasks }) {
                 Delete
               </MenuItem>
               <div className="border-b border-gray-900 border-opacity-10"></div>
+
               <MenuItem
                 onClick={() =>
                   handleMoreInfoClick({
-                    id,
-                    title,
-                    image,
-                    description: description.toLocaleDateString(),
-                    reward,
-                    details,
+                    id: task.id,
+                    title: task.title,
+                    image: task.image,
+                    description: task.description,
+                    reward: task.points,
+                    details: task.details,
                   })
                 }
               >

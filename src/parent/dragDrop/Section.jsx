@@ -85,7 +85,7 @@ function Section({
       ref={drop}
       className={`rounded-md p-2 ${isOver ? "bg-blue-gray-200" : ""}`}
     >
-      <div className="pb-2 pl-4 pr-4 pt-4 ">
+      <div className=" pl-4 pr-4 pt-4 ">
         <Header
           className="h-fit w-fit"
           text={text}

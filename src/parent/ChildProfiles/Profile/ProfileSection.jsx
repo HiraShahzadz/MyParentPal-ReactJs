@@ -7,12 +7,14 @@ import {
   faVenusMars,
   faEnvelope,
   faLock,
+  faTags,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@material-tailwind/react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import Tags from "@/parent/Report/Tags";
 
 class ProfileSection extends Component {
   state = {
@@ -185,6 +187,11 @@ class ProfileSection extends Component {
             <FontAwesomeIcon icon={faLock} className="mr-7" />
             {this.renderField("password", "Password")}
           </div>
+          <div className="mb-2 flex w-full items-center rounded-lg  pb-4 pl-3 pr-10 pt-4 text-gray-900 ">
+            <FontAwesomeIcon icon={faTags} className="mr-6" />
+            <Tags />
+          </div>
+
           <div className=" mt-5 flex items-center justify-center">
             <Button
               type="submit"

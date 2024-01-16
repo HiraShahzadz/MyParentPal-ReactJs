@@ -3,7 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import CalenderInput from "../attributes/CalenderInput";
+import TaskTime from "../attributes/TaskTime";
+import Time from "../EvaluateTask/Time";
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { toast } from "react-hot-toast";
 const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDetails, setEditedDetails] = useState({
@@ -31,6 +37,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
         setSavedDetails(editedDetails); // Store the edited details upon save
       }
     );
+    toast.success("Task details edited");
   };
 
   const handleCancel = () => {
@@ -58,6 +65,9 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
   const renderEditableField = (field, placeholder, label) => {
     return (
       <div className="mb-6">
+        <DndProvider backend={HTML5Backend}>
+          <Toaster />
+        </DndProvider>
         <label
           htmlFor={field}
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -70,9 +80,8 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
           name={field}
           value={editedDetails[field]}
           onChange={(e) => handleInputChange(field, e.target.value)}
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-500 focus:outline-none focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
           placeholder={placeholder}
-          readOnly={!isEditing}
           required
         />
       </div>
@@ -92,7 +101,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
               value="Picture"
               checked={fileTypes.includes("Picture")}
               onChange={handleCheckboxChange}
-              disabled={!isEditing}
+              className="border-gray-300 text-MyPurple-400 focus:ring-MyPurple-400"
             />
             <span className="ml-2">Picture</span>
           </label>
@@ -102,7 +111,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
               value="Video"
               checked={fileTypes.includes("Video")}
               onChange={handleCheckboxChange}
-              disabled={!isEditing}
+              className="border-gray-300 text-MyPurple-400 focus:ring-MyPurple-400"
             />
             <span className="ml-2">Video</span>
           </label>
@@ -112,7 +121,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
               value="Audio"
               checked={fileTypes.includes("Audio")}
               onChange={handleCheckboxChange}
-              disabled={!isEditing}
+              className="border-gray-300 text-MyPurple-400 focus:ring-MyPurple-400"
             />
             <span className="ml-2">Audio</span>
           </label>
@@ -121,7 +130,8 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
           type="text"
           value={fileTypes.join(", ")}
           readOnly={true}
-          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-500 focus:outline-none focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+          placeholder="File Type"
+          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
           disabled={!isEditing}
         />
       </div>
@@ -146,19 +156,25 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
           {renderEditableField("reward", "Enter Reward", "Reward")}
           {renderFileTypeField()}
           {renderEditableField("time", "Select timer", "Timer")}
-          <div className="mb-6">
-            <label
-              htmlFor="submissionDate"
-              className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Submission date
-            </label>
-            <DatePicker
-              selected={editedDate}
-              onChange={(date) => setEditedDate(date)}
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-500 focus:outline-none focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
-              disabled={!isEditing}
-            />
+          <div className="flex">
+            <div className="mt-3">
+              <label
+                htmlFor="about"
+                className="mb-2 block text-sm font-medium leading-6 text-gray-900"
+              >
+                Submission Date
+              </label>
+              <CalenderInput />
+            </div>
+            <div className="ml-10 mt-3">
+              <label
+                htmlFor="about"
+                className="mb-2 block text-sm font-medium leading-6 text-gray-900"
+              >
+                Submission Time
+              </label>
+              <Time />
+            </div>
           </div>
         </p>
 
@@ -180,20 +196,20 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
         )}
 
         <div className="flex justify-end">
-          {isEditing ? (
-            <div className="mt-2 flex">
-              <button onClick={handleSave} className="text-green-500">
-                Save
-              </button>
-              <button onClick={handleCancel} className="ml-2 text-red-500">
-                Cancel
-              </button>
-            </div>
-          ) : (
-            <button onClick={handleEdit} className="text-gray-500">
-              Edit
+          <div className="mt-2 flex">
+            <button
+              onClick={handleSave}
+              className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
+            >
+              Save
             </button>
-          )}
+            <button
+              onClick={handleCloseTaskDetails}
+              className="rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>
