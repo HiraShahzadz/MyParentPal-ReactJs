@@ -5,9 +5,12 @@ import ProfileSection from "./ProfileSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import TaskDetailsModal from "./TaskDetailsModal";
+import { GiftIcon } from "@heroicons/react/24/solid";
 
 import bgImage from "/img/bgcover.jpeg";
 import tasksData from "@/parent/data/tasksData";
+import MilstoneTags from "./MilstoneTags";
+import CheatTags from "@/parent/EvaluateTask/CheatTags";
 export function MyProfile() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {
@@ -108,6 +111,7 @@ export function MyProfile() {
     });
   };
   const [showModal, setShowModal] = useState(false);
+  const [tags, setTags] = useState([]);
   return (
     <>
       <div
@@ -184,15 +188,16 @@ export function MyProfile() {
                     points,
                     details,
                     rewardImage,
+                    name,
                   }) => (
                     <div
                       key={id}
                       href=""
-                      className="mb-2 flex items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50"
+                      className="mb-2 items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50 sm:flex"
                     >
                       <div className="flex">
                         <img
-                          className="mt-2 h-6 w-6 "
+                          className="mt-0.5 h-6 w-6 "
                           src="/img/task.png"
                           alt=""
                         />
@@ -206,13 +211,20 @@ export function MyProfile() {
                           </span>
                           <span className="text-black"></span>
                           <div className="mt-1.5 flex">
+                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                            <span className="ml-1 mt-0.5 text-xs text-black ">
+                              Reward: {points}
+                            </span>
+                          </div>
+                          <div className="mt-1.5 flex">
                             <img
-                              className="h-3 w-3"
-                              src="/img/coin.png"
+                              className="mt-0.5 h-5 w-5 rounded-s-full "
+                              src="/img/user.png"
                               alt=""
                             />
-                            <span className="ml-1 text-xs text-black ">
-                              Reward: {points}
+                            <span className="ml-1 mt-1 text-xs text-black ">
+                              {name}
                             </span>
                           </div>
                         </div>
@@ -229,9 +241,10 @@ export function MyProfile() {
                               points,
                               details,
                               rewardImage,
+                              name,
                             })
                           }
-                          className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
+                          className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
                         >
                           more info
                         </button>
@@ -260,6 +273,7 @@ export function MyProfile() {
                         points,
                         details,
                         rewardImage,
+                        name,
                       }) => (
                         <div
                           key={id}
@@ -268,7 +282,7 @@ export function MyProfile() {
                         >
                           <div className="flex">
                             <img
-                              className="mt-2 h-6 w-6 "
+                              className="mt-0.5 h-6 w-6 "
                               src="/img/task.png"
                               alt=""
                             />
@@ -283,13 +297,20 @@ export function MyProfile() {
                               </span>
                               <span className="text-black"></span>
                               <div className="mt-1.5 flex">
+                                <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                                <span className="ml-1 mt-0.5 text-xs text-black ">
+                                  Reward: {points}
+                                </span>
+                              </div>
+                              <div className="mt-1.5 flex">
                                 <img
-                                  className="h-3 w-3"
-                                  src="/img/coin.png"
+                                  className="mt-0.5 h-5 w-5 rounded-s-full "
+                                  src="/img/user.png"
                                   alt=""
                                 />
-                                <span className="ml-1 text-xs text-black ">
-                                  Reward: {points}
+                                <span className="ml-1 mt-1 text-xs text-black ">
+                                  {name}
                                 </span>
                               </div>
                             </div>
@@ -306,9 +327,10 @@ export function MyProfile() {
                                   points,
                                   details,
                                   rewardImage,
+                                  name,
                                 })
                               }
-                              className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
+                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
                             >
                               more info
                             </button>
@@ -339,6 +361,7 @@ export function MyProfile() {
                         points,
                         details,
                         rewardImage,
+                        name,
                       }) => (
                         <div
                           key={id}
@@ -347,7 +370,7 @@ export function MyProfile() {
                         >
                           <div className="flex">
                             <img
-                              className="mt-2 h-6 w-6 "
+                              className="mt-0.5 h-6 w-6 "
                               src="/img/task.png"
                               alt=""
                             />
@@ -362,13 +385,20 @@ export function MyProfile() {
                               </span>
                               <span className="text-black"></span>
                               <div className="mt-1.5 flex">
+                                <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                                <span className="ml-1 mt-0.5 text-xs text-black ">
+                                  Reward: {points}
+                                </span>
+                              </div>
+                              <div className="mt-1.5 flex">
                                 <img
-                                  className="h-3 w-3"
-                                  src="/img/coin.png"
+                                  className="mt-0.5 h-5 w-5 rounded-s-full "
+                                  src="/img/user.png"
                                   alt=""
                                 />
-                                <span className="ml-1 text-xs text-black ">
-                                  Reward: {points}
+                                <span className="ml-1 mt-1 text-xs text-black ">
+                                  {name}
                                 </span>
                               </div>
                             </div>
@@ -385,9 +415,10 @@ export function MyProfile() {
                                   points,
                                   details,
                                   rewardImage,
+                                  name,
                                 })
                               }
-                              className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
+                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
                             >
                               more info
                             </button>
@@ -404,6 +435,7 @@ export function MyProfile() {
                   />
                 )}
               </div>
+              <MilstoneTags tags={tags} setTags={setTags} />
             </div>
           </div>
         </CardBody>

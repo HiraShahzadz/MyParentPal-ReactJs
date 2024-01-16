@@ -2,8 +2,8 @@ import React from "react";
 
 function FilterChildTask() {
   const options = [
-    { label: "Nida", image: "/img/Woman6.jpg" },
-    { label: "Hira", image: "/img/women2.jpg" },
+    { label: "Nida", image: "/img/user.png" },
+    { label: "Hira", image: "/img/user.png" },
   ];
 
   return (

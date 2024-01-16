@@ -260,7 +260,7 @@
 .task-nav-item.active {
   font-weight: bold; 
   padding: 6px;
-  background-color: #d8d3d9;
+  background-color: rgb(255, 215, 255);
   padding: 6px;
   border-radius: 8px;/* Set the font weight for active tasks */
 }

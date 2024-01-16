@@ -8,10 +8,10 @@ function ListTasks({ tasks, setTasks }) {
   const [rewarded, setRewarded] = useState([]);
 
   useEffect(() => {
-    const fTodos = tasks?.filter((task) => task.status === "todo");
-    const fCompleted = tasks?.filter((task) => task.status === "completed");
-    const fReviewed = tasks?.filter((task) => task.status === "reviewed");
-    const fRewarded = tasks?.filter((task) => task.status === "rewarded");
+    const fTodos = tasks?.filter((task) => task.status === "Todo");
+    const fCompleted = tasks?.filter((task) => task.status === "Completed");
+    const fReviewed = tasks?.filter((task) => task.status === "Reviewed");
+    const fRewarded = tasks?.filter((task) => task.status === "Rewarded");
 
     setTodos(fTodos);
     setCompleted(fCompleted);
@@ -19,7 +19,7 @@ function ListTasks({ tasks, setTasks }) {
     setRewarded(fRewarded);
   }, [tasks]);
 
-  const statuses = ["todo", "completed", "reviewed", "rewarded"];
+  const statuses = ["Todo", "Completed", "Reviewed", "Rewarded"];
 
   return (
     <div className="mb-12 grid gap-16 gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-4">

@@ -4,15 +4,19 @@ import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import FilterChildTask from "@/parent/dragDrop/FilterChildTask";
-
+import axios from "axios";
 export function ParentHome() {
   const [tasks, setTasks] = useState([]);
-
-  console.log("tasks", tasks);
-
   useEffect(() => {
-    setTasks(JSON.parse(localStorage.getItem("tasks")));
+    (async () => await Load())();
   }, []);
+
+  async function Load() {
+    const result = await axios.get("http://localhost:8080/api/v1/task/getall");
+    setTasks(result.data);
+    console.log(result.data);
+  }
+  console.log("tasks", tasks);
 
   return (
     <div className="mt-6">
@@ -55,7 +59,6 @@ export function ParentHome() {
             <FilterChildTask />
           </div>
         </div>
-
         <ListTasks tasks={tasks} setTasks={setTasks} />
       </DndProvider>
     </div>

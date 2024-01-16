@@ -1,0 +1,31 @@
+/* Use a more specific selector to override default browser styles */
+.input-field {
+  border: 0px solid #b089be;
+}
+
+.input-field:focus {
+  border-color: #b089be;
+  outline: none; /* Remove the default focus outline */
+}
+input:focus {
+  outline: none;
+}
+*:focus {
+  outline: none;
+}
+input:focus,
+textarea:focus,
+select:focus,
+a:focus {
+  outline: none;
+}
+input:focus {
+  outline: none !important;
+}
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}

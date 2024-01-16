@@ -36,35 +36,37 @@ export function Home() {
 
   return (
     <>
-   
-      <div className="relative flex h-screen content-center items-center justify-center pt-16 pb-32 ">
-        <div
-         
-        >
-     <img src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg" className="absolute top-0 h-full w-full" alt="Cover Image" />
-
-
-
+      <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
+        <div>
+          <img
+            src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg"
+            className="absolute top-0 h-full w-full"
+            alt="Cover Image"
+          />
         </div>
 
         <div className="max-w-8xl container relative mx-auto ">
           <div className="flex flex-wrap items-center">
-          <div className="mr-auto w-3/4 px-4 text-left">
-  <Typography
-    variant="h2"
-    color="white"
-    className="mb-6 font-black text-[#B089BE]"
-  >
-    Your Digital Co-Parent in Child Upbringing
-  </Typography>
- 
-
-</div>
- <div className="mr-auto w-1/2 px-4 text-left">
- <Typography variant="lead" className="text-black opacity-60 text-justify">
-  Empower your parenting journey with MyParentPal - where technology meets the art of raising happy, responsible, and confident children. Together, we empower you to raise not just children, but the architects of their own remarkable futures.
-</Typography>
-</div>
+            <div className="mr-auto w-3/4 px-4 text-left">
+              <Typography
+                variant="h2"
+                color="white"
+                className="mb-6 font-black text-[#B089BE]"
+              >
+                Your Digital Co-Parent in Child Upbringing
+              </Typography>
+            </div>
+            <div className="mr-auto w-1/2 px-4 text-left">
+              <Typography
+                variant="lead"
+                className="text-justify text-black opacity-60"
+              >
+                Empower your parenting journey with MyParentPal - where
+                technology meets the art of raising happy, responsible, and
+                confident children. Together, we empower you to raise not just
+                children, but the architects of their own remarkable futures.
+              </Typography>
+            </div>
           </div>
         </div>
       </div>
@@ -76,10 +78,10 @@ export function Home() {
                 key={title}
                 color={color}
                 title={
-                  <div style={{ color: '#B089BE' }}>{title}</div> // Apply style to change text color
+                  <div style={{ color: "#B089BE" }}>{title}</div> // Apply style to change text color
                 } // Apply style to change text color
                 description={
-                  <div style={{ color: 'black' }}>{description}</div> // Apply style to change text color
+                  <div style={{ color: "black" }}>{description}</div> // Apply style to change text color
                 } // Apply style to change text color
                 icon={React.createElement(icon, {
                   className: "w-5 h-5 text-white ",
@@ -105,7 +107,7 @@ export function Home() {
             </Typography>
 
             <Typography
-              className="mb-6 text-left text-justify font-normal text-[#808080]"
+              className="mb-6 text-left text-justify font-normal text-black"
               style={{ fontSize: "18px" }}
             >
               Welcome to MyParentPal, your partner in parenting. Our webapp is
@@ -123,63 +125,27 @@ export function Home() {
                 </>
               )}
             </Typography>
-
-            <Button
-              style={{
-                backgroundColor: "#b089bf",
-                color: "#ffffff",
-                padding: "18px 27px",
-                fontSize: "12px",
-              }}
+            <button
               onClick={toggleText}
+              className="mb-2 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
             >
               {showMoreText ? "Show less" : "Show more"}
-            </Button>
+            </button>
           </div>
           <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
             <img src="/img/canva3.3.png" />
           </div>
         </div>
       </section>
-      <section className="pb-45 pt-20">
-        <div className="ttext-[#808080] container mx-auto">
-          <PageTitle className="text-Custom" heading="Why Digital Co-Parent?">
-            <p
-             className="mb-8 font-normal text-[#808080]"
-            >
-              Help parents to shape their child's future, instill civility, and
-              foster responsibility effectively through streamlined task
-              management and improved communication
-            </p>
+      <section className="">
+        <div className="container mx-auto text-black">
+          <PageTitle heading="Parents Reviews">
+            What parents say about us?
           </PageTitle>
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {teamData.map(({ img, name }) => (
-              <div
-                key={name}
-                className="mb-8 mt-7 text-center font-normal text-[#808080]"
-                style={{ border: "4px solid #B089BE", padding: "10px" }}
-              >
-                <img
-                  src={img}
-                  alt="Team Member"
-                  className="team-member-img img-equal-size transition-transform duration-300 ease-in-out hover:scale-90 hover:opacity-70"
-                />
-                <div
-                  className="mb-1 mt-7 text-center font-normal text-[#808080]"
-                  style={{ fontSize: "19px" }}
-                >
-                  {name}
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
       <section className="bg-blue-red-50/50 relative top-0 h-full w-full bg-cover bg-center px-4 py-1">
         <div className="container mx-auto">
-          <PageTitle heading="Parents Reviews">
-            What parents say about us?
-          </PageTitle>
           <div className="mx-auto mb-10 mt-10 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
             {contactData
               .map(({ id, title, image, description }) => (
@@ -277,35 +243,31 @@ export function Home() {
                   Feel free to contact us.
                 </PageTitle>
                 <div className="mb-4 gap-64 ">
-                  <Input
+                  <input
                     size="lg"
-                    label="Full Name"
-                    className="w-full rounded-lg border border-gray-400 bg-white px-3 py-2"
+                    placeholder="Full Name"
+                    className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                   />
                 </div>
                 <div className="mb-4 gap-4">
-                  <Input
+                  <input
                     size="lg"
-                    label="Email Address"
-                    className="w-full rounded-lg border border-gray-400 bg-white px-3 py-2"
+                    placeholder="Email Address"
+                    className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                   />
                 </div>
                 <div className="mb-4 gap-4">
-                  <Textarea
+                  <textarea
                     size="lg"
-                    label="Message"
                     rows={8}
-                    className="bg-white"
+                    placeholder="Enter your query"
+                    className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                   />
                 </div>
-                <Button
-                  variant="gradient"
-                  size="lg"
-                  style={{ background: "#B089BE" }}
-                  className="rounded-lg px-4 py-3 text-white"
-                >
+
+                <button className="mb-2 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0">
                   Send Message
-                </Button>
+                </button>
               </form>
             </div>
           </div>

@@ -3,11 +3,16 @@ import {
   UserCircleIcon,
   TableCellsIcon,
   BellIcon,
-  ArrowRightOnRectangleIcon,
+  GiftIcon,
+  ArrowLeftOnRectangleIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Reward_Request, Notifications } from "@/child/pages/dashboard";
-import { SignIn, SignUp } from "@/child/pages/auth";
+
+import * as HeroIcons from "@heroicons/react/24/solid";
+import ProgressReport from "@/child/pages/dashboard/ProgressReport"; 
+import SubmitTask from "./pages/dashboard/SubmitTask";// Check if the file path is correct
+import { Home, Profile, Reward_Request, Notifications} from "@/child/pages/dashboard";
+import { SignIn} from "@/child/pages/auth";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -25,21 +30,41 @@ export const routes = [
       },
       {
         icon: <UserCircleIcon {...icon} />,
-        name: "Edit Profile",
+        name: "Profile",
         path: "/profile",
         element: <Profile />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <GiftIcon {...icon} />,
         name: "Reward Request",
         path: "/request",
         element: <Reward_Request />,
       },
       {
         icon: <BellIcon {...icon} />,
-        name: "notifactions",
-        path: "/notifactions",
+        name: "notifications",
+        path: "/notifications",
         element: <Notifications />,
+      },
+      {
+       
+        icon: <TableCellsIcon {...icon} />,
+        name: "Progress Report",
+        path: "/ProgressReport",
+        element: <ProgressReport/>,
+      },
+      {
+       
+        icon: (
+          <img
+            src="/img/upload.png" // Replace this with your image path
+            alt="Upload Icon"
+            className="w-6 h-6" // Set appropriate width and height
+          />
+        ),
+        name: "Submit Task",
+        path: "/submitTask",
+        element: <SubmitTask/>,
       },
     ],
   },
@@ -48,17 +73,12 @@ export const routes = [
     layout: "auth",
     pages: [
       {
-        icon: <ArrowRightOnRectangleIcon {...icon} />,
-        name: "sign in",
+        icon: <ArrowLeftOnRectangleIcon {...icon} />,
+        name: "Logout",
         path: "/sign-in",
         element: <SignIn />,
       },
-      {
-        icon: <UserPlusIcon {...icon} />,
-        name: "sign up",
-        path: "/sign-up",
-        element: <SignUp />,
-      },
+      
     ],
   },
 ];

@@ -43,9 +43,11 @@ export function Notifications() {
           shadow={false}
           className="m-0 p-4"
         >
-          <Typography variant="h5" color="blue-gray">
-            Notifications
-          </Typography>
+          <div className="ml-3 mt-4">
+      <Typography variant="h5" color="black">
+        Notifications
+      </Typography>
+    </div>
         </CardHeader>
         <CardBody className="flex flex-col gap-4 p-4">
           {NotificationData.map(

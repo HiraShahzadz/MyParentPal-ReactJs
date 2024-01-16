@@ -8,13 +8,14 @@ import {
   MenuList,
   MenuItem,
 } from "@material-tailwind/react";
+import axios from "axios";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import EditTask from "./EditTask"; // Import your EditTask component
-
+import tasksData from "@/parent/data/tasksData";
 function Task({ task, tasks, setTasks }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
-    item: { id: task.id },
+    item: { id: task._id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -29,17 +30,31 @@ function Task({ task, tasks, setTasks }) {
   };
 
   const [showModal, setShowModal] = useState(false);
+  const [taskid, setId] = useState("");
+  async function DeleteStudent(taskid) {
+    await axios.delete("http://localhost:8080/api/v1/task/delete/" + taskid);
+    toast("Task removed", { icon: "💀" });
 
+    window.location.reload();
+  }
+  const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
+  const handleMoreInfoClick = (task) => {
+    setTaskDetailsToShow(task);
+  };
+
+  const handleCloseTaskDetails = () => {
+    setTaskDetailsToShow(null);
+  };
   return (
     <div
       ref={drag}
-      className={` relative mt-8 cursor-grab rounded-md p-4 shadow-md ${
+      className={` relative mb-4 cursor-grab rounded-md p-4 shadow-md ${
         isDragging ? "opacity-25" : "opacity-100"
       }`}
     >
       <div className="flex">
         <img className=" mr-2 mt-1 h-4 w-4 " src="/img/task.png" alt="" />
-        <p className="text-black hover:underline">{task.name}</p>
+        <p className="text-black hover:underline">{task.taskname}</p>
         <div className="absolute right-1">
           <Menu placement="left-start">
             <MenuHandler>
@@ -53,23 +68,42 @@ function Task({ task, tasks, setTasks }) {
               </IconButton>
             </MenuHandler>
             <MenuList className="text-black">
-              <MenuItem onClick={() => handleRemove(task.id)}>Delete</MenuItem>
+              <MenuItem onClick={() => DeleteStudent(task._id)}>
+                Delete
+              </MenuItem>
               <div className="border-b border-gray-900 border-opacity-10"></div>
-              <MenuItem onClick={() => setShowModal(true)}>Edit</MenuItem>
+
+              <MenuItem
+                onClick={() =>
+                  handleMoreInfoClick({
+                    id: task.id,
+                    title: task.title,
+                    image: task.image,
+                    description: task.description,
+                    reward: task.points,
+                    details: task.details,
+                  })
+                }
+              >
+                Edit
+              </MenuItem>
             </MenuList>
           </Menu>
         </div>
 
-        {showModal && (
-          <EditTask task={task} tasks={tasks} onClose={setShowModal} />
+        {taskDetailsToShow && (
+          <EditTask
+            selectedTaskDetails={taskDetailsToShow}
+            handleCloseTaskDetails={handleCloseTaskDetails}
+          />
         )}
       </div>
       <div className="flex">
-        <p className="ml-0 mt-7 text-xs text-black ">5-2-2023</p>
+        <p className="ml-0 mt-7 text-xs text-black ">{task.taskdate}</p>
         <div className="absolute bottom-4 right-1">
           <img
             className="mr-2 mt-1 h-6 w-6 rounded-full"
-            src="/img/men.jpg"
+            src="/img/userc.png"
             alt=""
           />
         </div>
