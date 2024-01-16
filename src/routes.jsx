@@ -9,8 +9,13 @@ import {
 } from "@heroicons/react/24/solid";
 import ParentApp from "./parent/ParentApp";
 
-import { MaterialTailwindControllerProvider } from "@/parent/context";
+import { MaterialTailwindControllerProvider as ParentProvider } from "@/parent/context";
+import { MaterialTailwindControllerProvider as ChildProvider } from "@/child/context";
+
 import App from "@/admin/App";
+import { ParentDashboard } from "@/parent/layouts";
+import { ChildDashboard } from "@/child/layouts";
+
 export const routes = [
   {
     icon: HomeIcon,
@@ -20,12 +25,22 @@ export const routes = [
   },
   {
     icon: UserCircleIcon,
-    name: "profile",
-    path: "/*",
+    name: "parentDashboard",
+    path: "/parentDashboard/parent/*",
     element: (
-      <MaterialTailwindControllerProvider>
-        <ParentApp />
-      </MaterialTailwindControllerProvider>
+      <ParentProvider>
+        <ParentDashboard />
+      </ParentProvider>
+    ),
+  },
+  {
+    icon: UserCircleIcon,
+    name: "childDashboard",
+    path: "/childDashboard/*",
+    element: (
+      <ChildProvider>
+        <ChildDashboard />
+      </ChildProvider>
     ),
   },
 

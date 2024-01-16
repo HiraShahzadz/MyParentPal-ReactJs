@@ -47,7 +47,7 @@ export function SignIn() {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/v1/user/signin",
+        "http://localhost:8080/api/v1/user/signin",
         {
           email: email,
           password: password,
@@ -57,9 +57,9 @@ export function SignIn() {
       const message = response.data.message;
       toast.success(message);
       if (message == "Parent Login successful") {
-        navigate("/*"); //Navigate to Parent dashboard
+        navigate("/parentDashboard/parent/*"); //Navigate to Parent dashboard
       } else if (message == "Child Login successful") {
-        navigate("/*"); //Navigate to Child dashboard
+        navigate("/childDashboard/*"); //Navigate to Child dashboard
       }
 
       setEmail("");
