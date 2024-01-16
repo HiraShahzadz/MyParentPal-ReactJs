@@ -9,6 +9,8 @@ import { GiftIcon } from "@heroicons/react/24/solid";
 
 import bgImage from "/img/bgcover.jpeg";
 import tasksData from "@/parent/data/tasksData";
+import MilstoneTags from "./MilstoneTags";
+import CheatTags from "@/parent/EvaluateTask/CheatTags";
 export function MyProfile() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {
@@ -109,6 +111,7 @@ export function MyProfile() {
     });
   };
   const [showModal, setShowModal] = useState(false);
+  const [tags, setTags] = useState([]);
   return (
     <>
       <div
@@ -432,6 +435,7 @@ export function MyProfile() {
                   />
                 )}
               </div>
+              <MilstoneTags tags={tags} setTags={setTags} />
             </div>
           </div>
         </CardBody>

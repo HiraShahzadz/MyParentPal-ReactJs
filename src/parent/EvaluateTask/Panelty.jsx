@@ -120,7 +120,7 @@ function Panelty() {
                   htmlFor="about"
                   className="mb-2 block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Date
+                  Submission Date
                 </label>
                 <CalenderInput />
               </div>
@@ -129,7 +129,7 @@ function Panelty() {
                   htmlFor="about"
                   className="mb-2 block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Time
+                  Submission Time
                 </label>
                 <Time />
               </div>
