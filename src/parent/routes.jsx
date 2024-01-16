@@ -29,7 +29,7 @@ const icon = {
 
 export const routes = [
   {
-    layout: "dashboard",
+    layout: "parentDashboard/parent",
     pages: [
       {
         icon: <HomeIcon {...icon} />,
