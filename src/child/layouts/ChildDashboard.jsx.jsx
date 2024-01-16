@@ -8,9 +8,12 @@ import {
   Footer,
 } from "@/child/widgets/layout";
 import routes from "@/child/routes";
-import { useMaterialTailwindController, setOpenConfigurator } from "@/child/context";
+import {
+  useMaterialTailwindController,
+  setOpenConfigurator,
+} from "@/child/context";
 
-export function Dashboard() {
+export function ChildDashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
 
@@ -37,7 +40,7 @@ export function Dashboard() {
         <Routes>
           {routes.map(
             ({ layout, pages }) =>
-              layout === "dashboard" &&
+              layout === "childDashboard" &&
               pages.map(({ path, element }) => (
                 <Route exact path={path} element={element} />
               ))
@@ -51,6 +54,6 @@ export function Dashboard() {
   );
 }
 
-Dashboard.displayName = "/src/layout/dashboard.jsx";
+ChildDashboard.displayName = "/src/layout/ChildDashboard.jsx";
 
-export default Dashboard;
+export default ChildDashboard;

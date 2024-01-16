@@ -13,7 +13,7 @@ import {
   setOpenConfigurator,
 } from "@/parent/context";
 
-export function Dashboard() {
+export function ParentDashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
 
@@ -38,7 +38,7 @@ export function Dashboard() {
         <Routes>
           {routes.map(
             ({ layout, pages }) =>
-              layout === "dashboard" &&
+              layout === "parentDashboard/parent" &&
               pages.map(({ path, element }) => (
                 <Route exact path={path} element={element} />
               ))
@@ -52,6 +52,6 @@ export function Dashboard() {
   );
 }
 
-Dashboard.displayName = "/src/parent/layout/dashboard.jsx";
+ParentDashboard.displayName = "/src/parent/layout/ParentDashboard.jsx";
 
-export default Dashboard;
+export default ParentDashboard;

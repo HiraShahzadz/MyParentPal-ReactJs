@@ -1,6 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Navbar } from "@/widgets/layout";
 import routes from "@/routes";
+import ParentApp from "./parent/ParentApp";
+import { ParentDashboard } from "@/parent/layouts";
+import { ChildDashboard } from "@/child/layouts";
 
 function App() {
   return (
@@ -14,6 +17,8 @@ function App() {
             element && <Route key={key} exact path={path} element={element} />
         )}
         <Route path="*" element={<Navigate to="/home" replace />} />
+        <Route path="/parentDashboard/parent/*" element={<ParentDashboard />} />
+        <Route path="/childDashboard/*" element={<ChildDashboard />} />
       </Routes>
     </>
   );

@@ -1,2 +1,2 @@
-export * from "@/child/layouts/dashboard";
+export * from "@/child/layouts/ChildDashboard.jsx";
 export * from "@/child/layouts/auth";
