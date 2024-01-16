@@ -215,7 +215,7 @@ export function Home() {
                             Reward:  <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " /> {reward}
                           </h5>
                           <h5 className="flex items-center mb-1 lg:mb-2">
-                            Time Remaining: 30 minutes
+                            Time Remaining: 4 hours
                           </h5>
                           <label className="mt-2 block text-md font-medium text-gray-900 dark:text-white">
                             <TimeLeftCalculator targetTime={new Date(description)} />
@@ -223,7 +223,7 @@ export function Home() {
                         </div>
                         <div className="flex items-center">
 
-                        <Link to="/dashboard/submitTask">
+                        <Link to="/childDashboard/submitTask">
                         <button
                           className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                         >
@@ -336,7 +336,7 @@ export function Home() {
                     </div>
                     <div className="ml-auto sm:flex items-end mr-3 absolute inset-0 flex items-center justify-end">
 
-                      <Link to="/dashboard/submitTask">
+                      <Link to="/childDashboard/submitTask">
                         <button
                           className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                         >

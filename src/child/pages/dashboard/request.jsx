@@ -113,7 +113,7 @@ export function Reward_Request() {
     setRejectedRequests(rejected);
   };
   async function sendrequest(event) {
-    toast.success("Form submitted successfully!");
+    toast.success("Request sent successfully!");
   }
   
   useEffect(() => {
@@ -129,7 +129,7 @@ export function Reward_Request() {
             Reward Request
           </Typography>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={sendrequest}>
             <div className="mb-6">
               <label htmlFor="taskName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Task Name
@@ -183,7 +183,7 @@ export function Reward_Request() {
 
             <button
               type="submit"
-              onClick={sendrequest}
+             
               className="text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
             >
               Submit

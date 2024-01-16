@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
+import { Button } from "@material-tailwind/react";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCalendarAlt, faVenusMars, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
-
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 class ProfileSection extends Component {
   state = {
     name: "Aiman Abid",
@@ -29,16 +33,17 @@ class ProfileSection extends Component {
     this.setState({ dob: date, editField: "" });
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    // Implement your logic here for handling form submission
-    console.log("Form Submitted:", this.state);
-  };
+  
 
   togglePasswordVisibility = () => {
     this.setState((prevState) => ({ showPassword: !prevState.showPassword }));
   };
-
+  handleSubmit = (e) => {
+    e.preventDefault();
+    // Implement your logic here for handling form submission
+    console.log("Form Submitted:", this.state);
+    toast.success("Request for profile changes sent");
+  };
     
   renderField = (fieldName, label) => {
     const genderOptions = [
@@ -171,6 +176,9 @@ class ProfileSection extends Component {
   render() {
     return (
       <div className="text-md mb-1 w-full rounded-lg text-center font-bold">
+        <DndProvider backend={HTML5Backend}>
+            <Toaster />
+          </DndProvider>
         <form onSubmit={this.handleSubmit} className="flex flex-wrap">
           <div className="mb-1 w-full rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-lg font-bold text-black">
             About
@@ -192,15 +200,19 @@ class ProfileSection extends Component {
             <FontAwesomeIcon icon={faLock} className="mr-7" />
             {this.renderField("password", "Password")}
           </div>
+          
         </form>
-        <div className="flex items-center justify-center">
-          <button className="mr-2 mt-5 rounded-md bg-[#b089be] hover:bg-purple-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white">
-            Submit
-          </button>
-          <button className="mt-5 rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white">
-            Cancel
-          </button>
-        </div>
+       <div className=" mt-5 flex items-center justify-center">
+            <Button
+              type="submit"
+              className="mr-2 rounded-md bg-MyPurple-400 px-5 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
+            >
+              Save
+            </Button>
+            <Button className="rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white">
+              Cancel
+            </Button>
+          </div>
       </div>
     );
   }

@@ -18,6 +18,11 @@ import {
 } from "@/child/data";
 import { Typography } from "@material-tailwind/react";
 import bgImage from '/img/bgcover.jpeg'; // Import the image
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+
 export function Profile() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null);//taskdetailmodel
   const handleMoreInfoClick = (task) => {
@@ -28,7 +33,10 @@ export function Profile() {
     setTaskDetailsToShow(null);
   };
 
- 
+  async function SubmitChanges(event) {
+    toast.success("Profile Changes Request sent successfully!");
+  }
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -164,7 +172,9 @@ export function Profile() {
           <div className="flex flex-col md:flex-row mb-4 mt-10 bg-white mb-8 rounded-lg">
             {/* Left side div */}
             <div className="ml-5 mr-5 mt-5 mb-5 md:w-1/4 p-3 border border-gray-200 rounded-lg shadow-lg">
+             <form onClick={SubmitChanges}>
               <ProfileSection />
+              </form>
             </div>
 
             {/* Right side div covering remaining space */}
@@ -172,7 +182,7 @@ export function Profile() {
               <div className="w-full mt-6 mb-1 pl-3 pr-10 flex justify-between items-center">
                 <div className="text-black text-left font-bold text-lg">Task Summary</div>
                 <div className="text-right">
-                  <a href="/child/pages/dashboard/home" className="text-purple-500 hover:underline">View All</a>
+                  <a href="childDashboard/pages/dashboard/home" className="text-purple-500 hover:underline">View All</a>
                 </div>
               </div>
               <div className="max-h-96 overflow-y-auto">
