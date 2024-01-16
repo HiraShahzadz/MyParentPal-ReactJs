@@ -39,7 +39,6 @@ function formatNumber(number, decPlaces) {
 
   return number;
 }
-
 export function Configurator() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { openConfigurator, sidenavColor, sidenavType, fixedNavbar } =
@@ -52,12 +51,30 @@ export function Configurator() {
   };
 
   React.useEffect(() => {
-    const stars = fetch(
-      "https://api.github.com/repos/creativetimofficial/material-tailwind-dashboard-react"
-    )
-      .then((response) => response.json())
-      .then((data) => setStars(formatNumber(data.stargazers_count, 1)));
+    // Fetch GitHub stars count
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://api.github.com/repos/creativetimofficial/material-tailwind-dashboard-react"
+        );
+        const data = await response.json();
+        setStars(formatNumber(data.stargazers_count, 1));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  React.useEffect(() => {
+    setOpenConfigurator(dispatch, true);
+  }, [dispatch]);
+
+  // Set Navbar to be fixed by default
+  React.useEffect(() => {
+    setFixedNavbar(dispatch, true);
+  }, [dispatch]);
 
   return (
     <aside
@@ -157,11 +174,6 @@ export function Configurator() {
             />
           </div>
           <hr />
-        </div>
-        <div className="mt-10 text-center">
-          <Typography variant="h6" color="blue-gray">
-            Thank you using MyParentPal❤️
-          </Typography>
         </div>
       </div>
     </aside>
