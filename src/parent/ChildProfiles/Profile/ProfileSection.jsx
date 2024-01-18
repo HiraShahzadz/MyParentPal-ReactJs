@@ -187,10 +187,6 @@ class ProfileSection extends Component {
             <FontAwesomeIcon icon={faLock} className="mr-7" />
             {this.renderField("password", "Password")}
           </div>
-          <div className="mb-2 flex w-full items-center rounded-lg  pb-4 pl-3 pr-10 pt-4 text-gray-900 ">
-            <FontAwesomeIcon icon={faTags} className="mr-6" />
-            <Tags />
-          </div>
 
           <div className=" mt-5 flex items-center justify-center">
             <Button

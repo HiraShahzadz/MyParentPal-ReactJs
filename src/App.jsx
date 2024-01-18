@@ -1,24 +1,47 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Navbar } from "@/widgets/layout";
 import routes from "@/routes";
 import ParentApp from "./parent/ParentApp";
 import { ParentDashboard } from "@/parent/layouts";
 import { ChildDashboard } from "@/child/layouts";
+import { MaterialTailwindControllerProvider as ParentProvider } from "@/parent/context";
+import { MaterialTailwindControllerProvider as ChildProvider } from "@/child/context";
 
 function App() {
+  const location = useLocation();
+  const isDashboardRoute =
+    location.pathname.startsWith("/parentDashboard/parent") ||
+    location.pathname.startsWith("/childDashboard");
+
   return (
     <>
-      <div className="container absolute left-2/4 z-10 mx-auto -translate-x-2/4 p-4">
-        <Navbar routes={routes} />
-      </div>
+      {!isDashboardRoute && (
+        <div className="container absolute left-2/4 z-10 mx-auto -translate-x-2/4 p-4">
+          <Navbar routes={routes} />
+        </div>
+      )}
       <Routes>
         {routes.map(
           ({ path, element }, key) =>
             element && <Route key={key} exact path={path} element={element} />
         )}
         <Route path="*" element={<Navigate to="/home" replace />} />
-        <Route path="/parentDashboard/parent/*" element={<ParentDashboard />} />
-        <Route path="/childDashboard/*" element={<ChildDashboard />} />
+        <Route
+          path="/parentDashboard/parent/*"
+          element={
+            <ParentProvider>
+              <ParentDashboard />
+            </ParentProvider>
+          }
+        />
+        <Route
+          path="/childDashboard/*"
+          element={
+            <ChildProvider>
+              <ChildDashboard />
+            </ChildProvider>
+          }
+        />
       </Routes>
     </>
   );

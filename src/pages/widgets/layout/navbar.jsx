@@ -48,7 +48,7 @@ export function Navbar({ brandName, routes, action }) {
         <Link to="/">
           <Typography
             variant="small"
-            className="mr-4 ml-2 cursor-pointer py-1.5 font-bold"
+            className="ml-2 mr-4 cursor-pointer py-1.5 font-bold"
           >
             {brandName}
           </Typography>

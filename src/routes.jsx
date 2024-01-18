@@ -23,26 +23,6 @@ export const routes = [
     path: "/home",
     element: <Home />,
   },
-  {
-    icon: UserCircleIcon,
-    name: "parentDashboard",
-    path: "/parentDashboard/parent/*",
-    element: (
-      <ParentProvider>
-        <ParentDashboard />
-      </ParentProvider>
-    ),
-  },
-  {
-    icon: UserCircleIcon,
-    name: "childDashboard",
-    path: "/childDashboard/*",
-    element: (
-      <ChildProvider>
-        <ChildDashboard />
-      </ChildProvider>
-    ),
-  },
 
   {
     icon: ArrowRightOnRectangleIcon,

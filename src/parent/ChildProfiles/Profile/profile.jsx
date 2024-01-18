@@ -12,6 +12,13 @@ import tasksData from "@/parent/data/tasksData";
 import MilstoneTags from "./MilstoneTags";
 import CheatTags from "@/parent/EvaluateTask/CheatTags";
 export function MyProfile() {
+  const status = [
+    { label: "Skills" },
+    { label: "House Holds" },
+    { label: "Art & Craft" },
+    { label: "Religious" },
+    { label: "Cooking", image: "/img/blue.png", color: "blue-50" },
+  ];
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {
     setTaskDetailsToShow(task);
@@ -154,7 +161,7 @@ export function MyProfile() {
             </label>
           </div>
 
-          <div className="mb-4 mt-10 flex flex-col rounded-lg bg-white md:flex-row">
+          <div className=" mt-10 flex flex-col rounded-lg bg-white md:flex-row">
             {/* Left side div */}
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
               <ProfileSection />
@@ -435,7 +442,38 @@ export function MyProfile() {
                   />
                 )}
               </div>
+            </div>
+          </div>
+        </CardBody>
+        <CardBody>
+          <div className="ml-3.5 mr-3 mt-[-40px] rounded-lg border border-gray-200 p-7 shadow-lg">
+            <div className="text-left text-lg font-bold text-black">
+              Milstone Tags
+            </div>
+            <div className=" flex flex-wrap">
+              {status.map(({ label }, index) => (
+                <button className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-1 pl-3  outline-transparent">
+                  {label}
+                  <span
+                    onClick={() => deleteTags(label)}
+                    className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50 hover:bg-gray-500 hover:text-white"
+                  >
+                    X
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center">
               <MilstoneTags tags={tags} setTags={setTags} />
+            </div>
+            <div className="flex items-center justify-center">
+              <button
+                type="submit"
+                className="mr-2 mt-5 rounded-md bg-MyPurple-400 px-5 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
+              >
+                Add Tags
+              </button>
             </div>
           </div>
         </CardBody>

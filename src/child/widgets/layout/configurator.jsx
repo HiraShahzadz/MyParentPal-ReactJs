@@ -52,30 +52,12 @@ export function Configurator() {
   };
 
   React.useEffect(() => {
-    // Fetch GitHub stars count
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://api.github.com/repos/creativetimofficial/material-tailwind-dashboard-react"
-        );
-        const data = await response.json();
-        setStars(formatNumber(data.stargazers_count, 1));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    const stars = fetch(
+      "https://api.github.com/repos/creativetimofficial/material-tailwind-dashboard-react"
+    )
+      .then((response) => response.json())
+      .then((data) => setStars(formatNumber(data.stargazers_count, 1)));
   }, []);
-
-  React.useEffect(() => {
-    setOpenConfigurator(dispatch, true);
-  }, [dispatch]);
-
-  // Set Navbar to be fixed by default
-  React.useEffect(() => {
-    setFixedNavbar(dispatch, true);
-  }, [dispatch]);
 
   return (
     <aside

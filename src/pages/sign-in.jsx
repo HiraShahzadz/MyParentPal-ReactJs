@@ -134,7 +134,11 @@ export function SignIn() {
             </div>
 
             <div className="custom-checkbox">
-              <input class="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]" type="checkbox" id="rememberMe" />
+              <input
+                class="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
+                type="checkbox"
+                id="rememberMe"
+              />
               <label htmlFor="rememberMe">Remember me</label>
             </div>
           </CardBody>
@@ -162,7 +166,6 @@ export function SignIn() {
           </CardFooter>
         </Card>
       </div>
-     
     </>
   );
 }
