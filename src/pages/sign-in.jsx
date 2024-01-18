@@ -57,9 +57,9 @@ export function SignIn() {
       const message = response.data.message;
       toast.success(message);
       if (message == "Parent Login successful") {
-        navigate("/parentDashboard/parent/*"); //Navigate to Parent dashboard
+        navigate("/parentDashboard/parent/home/"); //Navigate to Parent dashboard
       } else if (message == "Child Login successful") {
-        navigate("/childDashboard/*"); //Navigate to Child dashboard
+        navigate("/childDashboard/home/"); //Navigate to Child dashboard
       }
 
       setEmail("");

@@ -5,7 +5,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import {
   tasksData,
 } from "@/child/data";
-import { GiftIcon } from "@heroicons/react/24/solid";
+import { GiftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import TaskDetailsModal from './TaskDetailsModel';
 import { isSameDay } from 'date-fns';
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -29,12 +29,15 @@ import {
   progress,
 } from "@material-tailwind/react";
 import TimeLeftCalculator from "./TimeLeftCalculator";
+const icon = {
+  className: "w-5 h-5 text-inherit",
+};
 export function Home() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null);//taskdetailmodel
   const handleMoreInfoClick = (task) => {
     setTaskDetailsToShow(task);
   };
- 
+
   const handleCloseTaskDetails = () => {
     setTaskDetailsToShow(null);
   };
@@ -176,82 +179,82 @@ export function Home() {
     <div>
       <div className="mt-3 flex flex-col lg:flex-row">
         <div className="mb-2 lg:w-1/2 flex-1 lg:ml-1">
-          <div className="custom-container-task">
-            <Typography variant="h5" color="blue-gray" className="mb-1">
+          <div className="mr-2  mb-1 p-4 bg-white rounded-lg">
+            <div className="text-black text-left font-bold text-lg">
               Timeline: Tasks Closing Soon
-            </Typography>
+            </div>
 
             <div>
-              <p className="ml-2 mt-3 text-gray-500 dark:text-gray-400">Complete your pending task</p>
+              <p className="ml-2 mt-3 mb-3 text-gray-500 dark:text-gray-400">Complete your pending task</p>
 
 
               {todaysTasks
                 .slice(0, PresentTasks)
-                .map(({ id, description, title, image, details,reward }) => (
+                .map(({ id, description, title, image, details, reward }) => (
 
-                  <div
-                    onClick={() =>
-                      handleCompleteTask({
-                        id,
-                        title,
-                        image,
-                        description: description.toLocaleDateString(), // Convert Date to string
-                        reward,
-                        details,
-                       })
-                    }
-                    className="p-1 md:p-1">
-                    <ul className="flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
-                      <li className="w-full flex items-center space-x-4 rtl:space-x-reverse">
-                        <div className="flex-shrink-0">
-                          <img className="w-10 h-10 mt-0.5 " src="/img/task.png" alt="Neil image" />
-                        </div>
-                        <div className="ml-5 block flex-1 min-w-0">
-                        <Typography
-                          variant="h5" className=" pr-12 mt-2 lg:mt-0 mb-1 lg:mb-1">
-                          {title}
-                        </Typography>
-                          <h5 className="flex items-center mb-1 lg:mb-2">
-                            Reward:  <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " /> {reward}
-                          </h5>
-                          <h5 className="flex items-center mb-1 lg:mb-2">
-                            Time Remaining: 4 hours
-                          </h5>
-                          <label className="mt-2 block text-md font-medium text-gray-900 dark:text-white">
-                            <TimeLeftCalculator targetTime={new Date(description)} />
-                          </label>
-                        </div>
-                        <div className="flex items-center">
+                  <div onClick={() => handleMoreInfoClick({
+                    id,
+                    title,
+                    image,
+                    description: description.toLocaleDateString(),
+                    reward,
+                    details
+                  })}
+                    key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
-                        <Link to="/childDashboard/submitTask">
+                    <div className="flex"
+                    >
+                      <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
+                      <div className="ml-3">
+                        <span className="font-medium text-black">{title}</span>
+                        <br></br>
+                        <span className="mt-3 text-black">Time Remaining: 4 hours</span>
+                        <span className="text-black">
+
+                        </span>
+                        <div className="mt-1.5 flex">
+                          <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                          <span className="ml-1 text-xs text-black ">
+                            Reward: {reward}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className="ml-auto flex items-end  hover:border-MyPurple-400"
+                    >
+                      <Link to="/childDashboard/submitTask">
                         <button
                           className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                         >
                           Complete
                         </button>
                       </Link>
+                    </div>
 
-                        </div>
-                      </li>
-                    </ul>
                   </div>
-                ))
+                )
+                )
               }
-              <div className=" mr-6 flex justify-end">
-                <button
-                  className="mt-4 mb-[-4] text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+              <div className="mt-5 flex justify-center">
+                <a
+                  className="text-purple-500 hover:underline flex items-center"
                   onClick={PresentTasks === 2 ? More : Less}
                 >
-                  {PresentTasks === 2 ? "View more" : "View less"}
-                </button>
+                  <span>
+                    {PresentTasks === 2 ? "View more" : "View less"}
+                  </span>
+                  {PresentTasks === 2 && <ChevronDownIcon className="h-4 w-4 ml-1" />}
+                </a>
               </div>
             </div>
-         </div>
+          </div>
         </div>
       </div>
 
-      <div className="ml-3 mr-2 mt-2 mb-2 custom-container-series mx-auto ">
-        <h2>Summary</h2>
+      <div className=" mr-2  mb-4 p-4 bg-white rounded-lg">
+        <div className="text-black text-left font-bold text-lg">Summary</div>
         <br></br>
         <div className="task-titles">
           <div
@@ -290,6 +293,174 @@ export function Home() {
 
         </div>
         {selectedTask === "Assigned" && (
+          <div className="ml-4 mr-4 mb-2">
+            <br></br>
+            <br></br>
+
+
+
+            {tasksData
+              .sort((a, b) => a.description - b.description)
+              .slice(0, visibleTasks)
+              .map(({ id, title, image, description, reward, details }) => (
+
+                <div
+                  onClick={() => handleMoreInfoClick({
+                    id,
+                    title,
+                    image,
+                    description: description.toLocaleDateString(),
+                    reward,
+                    details,
+                  })}
+                  key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
+
+                  <div className="flex">
+                    <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
+                    <div className="ml-3">
+                      <span className="font-medium text-black">{title}</span>
+                      <br></br>
+                     <div className="mt-2"></div>
+                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
+                       Time Remaining: 1 day 3 hours
+                      <span className="text-black">
+
+                      </span>
+                      <div className="mt-1.5 flex">
+                        <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                        <span className="ml-1 text-xs text-black ">
+                          Reward: {reward}
+                        </span>
+                        <br></br>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="ml-auto flex items-end  hover:border-MyPurple-400"
+                  >
+                  
+                    <button
+                      onClick={() => handleMoreInfoClick({
+                        id,
+                        title,
+                        image,
+                        description: description.toLocaleDateString(),
+                        reward,
+                        details
+                      })}
+                      className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                    >
+                      more info
+                    </button>
+                  </div>
+
+                </div>
+              )
+              )}
+
+            <div className="mt-5 flex justify-center">
+              <a
+                className="text-purple-500 hover:underline flex items-center"
+                onClick={visibleTasks === 3 ? loadMore : loadLess}
+              >
+                <span>
+                  {visibleTasks === 3 ? "View more" : "View less"}
+                </span>
+                {visibleTasks === 3 && <ChevronDownIcon className="h-4 w-4 ml-1" />}
+              </a>
+            </div>
+
+
+
+
+          </div>
+        )}
+
+        {selectedTask === "Pending" && (
+            <div className="ml-4 mr-4 mb-2">
+            <br></br>
+            <br></br>
+
+
+
+            {tasksData
+              .sort((a, b) => a.description - b.description)
+              .slice(0, visibleTasks)
+              .map(({ id, title, image, description, reward, details }) => (
+
+                <div
+                  onClick={() => handleMoreInfoClick({
+                    id,
+                    title,
+                    image,
+                    description: description.toLocaleDateString(),
+                    reward,
+                    details,
+                  })}
+                  key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
+
+                  <div className="flex">
+                    <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
+                    <div className="ml-3">
+                      <span className="font-medium text-black">{title}</span>
+                      <br></br>
+                     <div className="mt-2"></div>
+                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
+                       Time Remaining: 1 day 3 hours
+                      <span className="text-black">
+
+                      </span>
+                      <div className="mt-1.5 flex">
+                        <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                        <span className="ml-1 text-xs text-black ">
+                          Reward: {reward}
+                        </span>
+                        <br></br>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="ml-auto flex items-end  hover:border-MyPurple-400"
+                  >
+                  
+                    <button
+                      onClick={() => handleMoreInfoClick({
+                        id,
+                        title,
+                        image,
+                        description: description.toLocaleDateString(),
+                        reward,
+                        details
+                      })}
+                      className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                    >
+                      more info
+                    </button>
+                  </div>
+
+                </div>
+              )
+              )}
+
+            <div className="mt-5 flex justify-center">
+              <a
+                className="text-purple-500 hover:underline flex items-center"
+                onClick={visibleTasks === 3 ? loadMore : loadLess}
+              >
+                <span>
+                  {visibleTasks === 3 ? "View more" : "View less"}
+                </span>
+                {visibleTasks === 3 && <ChevronDownIcon className="h-4 w-4 ml-1" />}
+              </a>
+            </div>
+
+
+
+
+          </div>
+        )}
+
+        {selectedTask === "Completed" && (
           <div>
             <br></br>
             <br></br>
@@ -299,153 +470,71 @@ export function Home() {
               {tasksData
                 .sort((a, b) => a.description - b.description)
                 .slice(0, visibleTasks)
-                .map(({ id, title, image, description, reward, details}) => (
+                .map(({ id, title, image, description, reward, details }) => (
 
                   <div
-                  onClick={() => handleMoreInfoClick({
-                    id,
-                    title,
-                    image,
-                    description: description.toLocaleDateString(),
-                    reward,
-                    details,
-                  })}
-                    className="mb-2 bg-white border border-gray-200 rounded-lg text-blue-gray-900  p-4 lg:p-6 relative cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
-                    <div
-                    
-                      className="flex items-center">
-                      <img className="w-10 h-10 mt-0.5 " src="/img/task.png" alt="Neil image" />
-                      <div>
-                        <Typography
-                          variant="h5" className=" pr-12 mt-2 lg:mt-0 mb-1 lg:mb-1">
-                          {title}
-                        </Typography>
-                        <h5 className="flex items-center ml-2 mb-1 lg:mb-2">
-                          Reward:  <GiftIcon className="ml-1 mr-1 h-4 w-4 rounded-sm text-MyPurple-400 " /> {reward}
-                        </h5>
-                        <Typography className="ml-2 lg:mb-4 text-justify font-normal">
-                          Submission date: {description.toLocaleDateString()}
-                        </Typography>
+                    onClick={() => handleSubmittedClick({
+                      id,
+                      title,
+                      image,
+                      description: description.toLocaleDateString(),
+                      reward,
+                      details,
+                    })}
+                         key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
+
+                  <div className="flex">
+                    <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
+                    <div className="ml-3">
+                      <span className="font-medium text-black">{title}</span>
+                      <br></br>
+                     <div className="mt-2"></div>
+                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
+                      
+                      <span className="text-black">
+
+                      </span>
+                      <div className="mt-1.5 flex">
+                        <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                        <span className="ml-1 text-xs text-black ">
+                          Reward: {reward}
+                        </span>
+                        <br></br>
                       </div>
                     </div>
-
-                    <div className="mr-5 absolute inset-0 flex items-center justify-end">
-                      <label className="-mt-9 block text-sm font-medium text-gray-900 dark:text-white">
-                        Time Left:  <TimeLeftCalculator targetTime={new Date(description)} />
-                      </label>
-                    </div>
-                    <div className="ml-auto sm:flex items-end mr-3 absolute inset-0 flex items-center justify-end">
-
-                      <Link to="/childDashboard/submitTask">
-                        <button
-                          className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                        >
-                          Complete
-                        </button>
-                      </Link>
-                    </div>
                   </div>
-
-                ))
-
-              }
-              
-              <div className="mr-3 text-right">
-                <button
-                  className="mt-4 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                  onClick={visibleTasks === 3 ? loadMore : loadLess}
-                >
-                  {visibleTasks === 3 ? "View more" : "View less"}
-                </button>
-              </div>
-
-
-            </div>
-
-          </div>
-        )}
-
-        {selectedTask === "Pending" && (
-          <div>
-            <br></br>
-            <br></br>
-            <p>Content for pending Task goes here</p>
-            <FontAwesomeIcon icon={faExclamationCircle} />
-          </div>
-        )}
-
-        {selectedTask === "Completed" && (
-          <div>
-          <br></br>
-          <br></br>
-
-          <div>
-
-            {tasksData
-              .sort((a, b) => a.description - b.description)
-              .slice(0, visibleTasks)
-              .map(({ id, title, image, description, reward, details}) => (
-
-                <div
-                onClick={() => handleSubmittedClick({
-                  id,
-                  title,
-                  image,
-                  description: description.toLocaleDateString(),
-                  reward,
-                  details,
-                })}
-                  className="mb-2 bg-white border border-gray-200 rounded-lg text-blue-gray-900  p-4 lg:p-6 relative cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
                   <div
+                    className="ml-auto flex items-end  hover:border-MyPurple-400"
+                  >
                   
-                    className="flex items-center">
-                    <img
-                      src="/img/bookmark.png"
-                      alt=""
-                      className="ml-2 lg:ml-5 rounded-full w-8 h-8 lg:w-12 lg:h-12 mr-2 lg:mr-6"
-                    />
-                    <div>
-                      <Typography
-                        variant="h5" className=" pr-12 mt-2 lg:mt-0 mb-1 lg:mb-1">
-                        {title}
-                      </Typography>
-                      <h5 className="flex items-center ml-2 mb-1 lg:mb-2">
-                        Reward:  <GiftIcon className="ml-1 mr-1 h-4 w-4 rounded-sm text-MyPurple-400 " /> {reward}
-                      </h5>
-                      <Typography className="ml-2 lg:mb-4 text-justify font-normal">
-                        Submission date: {description.toLocaleDateString()}
-                      </Typography>
-                    </div>
-                  </div>
-
-                  <div className="ml-auto flex items-end mr-3 absolute inset-0 flex items-center justify-end">
-
-                    
-                      <button
+                  <button
                         className="mt-14 text-white bg-gray-400  font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                       >
                         Submitted
                       </button>
-                   
                   </div>
-                </div>
 
-              ))
-             }
-           <div className="mr-3 text-right">
-              <button
-                className="mt-4 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                onClick={visibleTasks === 3 ? loadMore : loadLess}
-              >
-                {visibleTasks === 3 ? "View more" : "View less"}
-              </button>
+                </div>
+              )
+              )}
+
+           
+              <div className="mt-5 flex justify-center">
+                <a
+                  className="text-purple-500 hover:underline flex items-center"
+                  onClick={visibleTasks === 3 ? loadMore : loadLess}
+                >
+                  <span>
+                    {visibleTasks === 3 ? "View more" : "View less"}
+                  </span>
+                  {visibleTasks === 3 && <ChevronDownIcon className="h-4 w-4 ml-1" />}
+                </a>
+              </div>
+
             </div>
 
-
           </div>
-
-        </div>
-      )}
+        )}
 
 
         {selectedTask === "Penality" && (
@@ -470,7 +559,7 @@ export function Home() {
           // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
- 
+
       </div>
 
     </div>

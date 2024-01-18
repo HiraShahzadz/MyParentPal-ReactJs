@@ -5,10 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCalendarAlt, faVenusMars, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { toast } from "react-hot-toast";
-import { Toaster } from "react-hot-toast";
+
 class ProfileSection extends Component {
   state = {
     name: "Aiman Abid",
@@ -176,9 +173,7 @@ class ProfileSection extends Component {
   render() {
     return (
       <div className="text-md mb-1 w-full rounded-lg text-center font-bold">
-        <DndProvider backend={HTML5Backend}>
-            <Toaster />
-          </DndProvider>
+       
         <form onSubmit={this.handleSubmit} className="flex flex-wrap">
           <div className="mb-1 w-full rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-lg font-bold text-black">
             About

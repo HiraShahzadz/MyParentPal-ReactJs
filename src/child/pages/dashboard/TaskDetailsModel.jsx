@@ -60,7 +60,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                         Time Remaining:
                                     </th>
                                     <td className="px-6 py-4">
-                                        <TimeLeftCalculator targetTime={new Date(selectedTaskDetails.description)} />
+                                        1 day 3 hours
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">

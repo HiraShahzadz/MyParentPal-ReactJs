@@ -3,6 +3,7 @@ import {
   Card,
   CardBody,
 } from "@material-tailwind/react";
+import { Link } from 'react-router-dom';
 import { CameraIcon } from '@heroicons/react/24/solid';
 import ProfileSection from './ProfileSection';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -182,7 +183,9 @@ export function Profile() {
               <div className="w-full mt-6 mb-1 pl-3 pr-10 flex justify-between items-center">
                 <div className="text-black text-left font-bold text-lg">Task Summary</div>
                 <div className="text-right">
-                  <a href="childDashboard/pages/dashboard/home" className="text-purple-500 hover:underline">View All</a>
+                <Link to="/childDashboard/home"> 
+                <a className="text-purple-500 hover:underline">View All</a>
+               </Link>
                 </div>
               </div>
               <div className="max-h-96 overflow-y-auto">
@@ -240,7 +243,7 @@ export function Profile() {
                     <div key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
                       <div className="flex">
-                        <img className="mt-2 h-6 w-6 " src="/img/bookmark.png" alt="" />
+                      <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
                         <div className="ml-3">
                           <span className="font-medium text-black">{title}</span>
                           <br></br>
@@ -290,7 +293,7 @@ export function Profile() {
                       <div key={id} href="" className="mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
                         <div className="flex">
-                          <img className="mt-2 h-6 w-6 " src="/img/bookmark.png" alt="" />
+                        <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
                           <div className="ml-3">
                             <span className="font-medium text-black">{title}</span>
                             <br></br>
