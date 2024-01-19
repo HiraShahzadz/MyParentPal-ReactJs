@@ -1,7 +1,7 @@
 const NotificationData = [
   {
     time: "12:00 am",
-    name: "Aiman Abid",
+    name: "Zafar Iqbal",
     description: " Assigned you a task",
     image: "/img/userc.png",
 
@@ -17,7 +17,7 @@ const NotificationData = [
     },
     {
       time: "7:00 am",
-      name: "Nida Javed",
+      name: "Zafar Iqbal",
       description: " Assigned you a task",
       image: "/img/userc.png",
 
@@ -25,7 +25,7 @@ const NotificationData = [
     },
     {
       time: "12 hours ago",
-      name: "Aiman Abid",
+      name: "Hira Shahzad",
       description: " Task rewarded",
       image: "/img/userc.png",
 
@@ -33,7 +33,7 @@ const NotificationData = [
     },
     {
       time: "9 hours ago",
-      name: "Hira Shahzad",
+      name: "Zafar Iqbal",
       description: " Accepted your reward request",
       image: "/img/userc.png",
 
@@ -65,7 +65,7 @@ const NotificationData = [
     },
     {
       time: "9 hours ago",
-      name: "Amna Sultan",
+      name: "Hira Shahzad",
       description: " Accepted your reward request",
       image: "/img/userc.png",
 
@@ -73,7 +73,7 @@ const NotificationData = [
     },
     {
       time: "9 hours ago",
-      name: "Ali Shahzad",
+      name: "Hira Shahzad",
       description: " Accepted your reward request",
       image: "/img/userc.png",
 
