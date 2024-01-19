@@ -11,14 +11,8 @@ import bgImage from "/img/bgcover.jpeg";
 import tasksData from "@/parent/data/tasksData";
 import MilstoneTags from "./MilstoneTags";
 import CheatTags from "@/parent/EvaluateTask/CheatTags";
+import ProfileTags from "@/parent/ChildProfiles/Profile/ProfileTags";
 export function MyProfile() {
-  const status = [
-    { label: "Skills" },
-    { label: "House Holds" },
-    { label: "Art & Craft" },
-    { label: "Religious" },
-    { label: "Cooking", image: "/img/blue.png", color: "blue-50" },
-  ];
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {
     setTaskDetailsToShow(task);
@@ -446,34 +440,7 @@ export function MyProfile() {
           </div>
         </CardBody>
         <CardBody>
-          <div className="ml-3.5 mr-3 mt-[-40px] rounded-lg border border-gray-200 p-7 shadow-lg">
-            <div className="text-left text-lg font-bold text-black">
-              Milstone Tags
-            </div>
-            <div className=" flex flex-wrap">
-              {status.map(({ label }, index) => (
-                <button className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-1 pl-3  outline-transparent">
-                  {label}
-                  <span
-                    onClick={() => deleteTags(label)}
-                    className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50 hover:bg-gray-500 hover:text-white"
-                  >
-                    X
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            <button className="m-2 mr-2 flex cursor-pointer rounded-md border-transparent bg-MyPurple-400 p-1 px-5 py-2 pl-3 text-sm font-semibold normal-case text-white shadow-sm shadow-white outline-transparent hover:bg-purple-400  hover:shadow-white">
-              Add
-              <span
-                onClick={() => deleteTags(label)}
-                className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50  pt-0.5 text-gray-600 hover:bg-gray-500 hover:text-white"
-              >
-                +
-              </span>
-            </button>
-          </div>
+          <ProfileTags />
         </CardBody>
       </Card>
     </>
