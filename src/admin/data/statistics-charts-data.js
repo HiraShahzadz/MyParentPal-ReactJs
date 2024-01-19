@@ -70,13 +70,14 @@ const dailySalesChart = {
 export const statisticsChartsData = [
   {
     color: "MuPurple",
-    title: "User Age Group",
+    title: "Geographic Usage",
     footer: "Updates in real time",
     chart: websiteViewsChart,
   },
   {
     color: "MyPurple",
-    title: "Geographic Usage",
+
+    title: "User Age Group",
     footer: "Updates in real time",
     chart: dailySalesChart,
   },

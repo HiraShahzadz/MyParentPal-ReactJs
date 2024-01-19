@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "../styles/styles.css";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 import {
   Card,
   CardBody,
@@ -17,6 +20,19 @@ import { featuresData, teamData, contactData } from "@/data";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
 export function Home() {
+  const location = useLocation();
+  const hash = location.hash;
+
+  // Scroll to the section based on the hash
+  React.useEffect(() => {
+    if (hash) {
+      const targetElement = document.querySelector(hash);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [hash]);
+
   const [step, setStep] = useState(1);
   const num = contactData;
   console.log(num);
@@ -44,10 +60,9 @@ export function Home() {
             alt="Cover Image"
           />
         </div>
-
-        <div className="max-w-8xl container relative mx-auto ">
-          <div className="flex flex-wrap items-center">
-            <div className="mr-auto w-3/4 px-4 text-left">
+        <div className="max-w-8xl container relative mx-auto">
+          <div className="md:mx-auto">
+            <div className="w-full px-4 text-left md:w-3/4 lg:w-3/5">
               <Typography
                 variant="h2"
                 color="white"
@@ -56,7 +71,7 @@ export function Home() {
                 Your Digital Co-Parent in Child Upbringing
               </Typography>
             </div>
-            <div className="mr-auto w-1/2 px-4 text-left">
+            <div className="lg:w-2.5/5 w-full px-4 text-left md:w-1/2">
               <Typography
                 variant="lead"
                 className="text-justify text-black opacity-60"
@@ -70,7 +85,11 @@ export function Home() {
           </div>
         </div>
       </div>
-      <section className="-mt-32 mb-10 bg-gray-50 px-4 pb-20 pt-4">
+      <Link to="/home#features" className="text-white"></Link>
+      <section
+        id="features"
+        className="-mt-32 mb-10 bg-gray-50 px-4 pb-20 pt-4"
+      >
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 ">
             {featuresData.map(({ color, title, icon, description }) => (
@@ -271,7 +290,11 @@ export function Home() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <div className="order-2 flex-auto items-center px-4 lg:order-2">
+            <Link to="/home#contact" className="text-white"></Link>
+            <div
+              id="contact"
+              className="order-2 flex-auto items-center px-4 lg:order-2"
+            >
               <form className="mx-auto w-full rounded-lg py-10 text-center lg:max-w-3xl">
                 <PageTitle heading="Contact Us">
                   Feel free to contact us.

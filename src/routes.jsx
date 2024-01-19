@@ -2,12 +2,14 @@ import { Home, Profile, SignIn, SignUp } from "@/pages";
 import {
   HomeIcon,
   ListBulletIcon,
+  ChatBubbleLeftIcon,
   InformationCircleIcon,
   StarIcon,
   EnvelopeIcon,
 } from "@heroicons/react/24/solid";
 import { MaterialTailwindControllerProvider } from "@/admin/context";
 import App from "@/admin/App";
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 
 export const routes = [
   {
@@ -19,31 +21,26 @@ export const routes = [
   {
     icon: ListBulletIcon,
     name: "features",
-    path: "/*",
-    element: (
-      <MaterialTailwindControllerProvider>
-        <App />
-      </MaterialTailwindControllerProvider>
-    ),
+    path: "/home#features",
+    element: <Home />,
   },
   {
-    icon: InformationCircleIcon,
-    name: "about us",
+    icon: ArrowRightOnRectangleIcon,
+    name: "Sign In",
     path: "/sign-in",
     element: <SignIn />,
   },
   {
-    icon: StarIcon,
-    name: "reviews",
+    icon: ArrowRightOnRectangleIcon,
+    name: "Sign Up",
     path: "/sign-up",
     element: <SignUp />,
   },
   {
-    icon: EnvelopeIcon,
+    icon: ChatBubbleLeftIcon,
     name: "contact us",
-    href: "https://www.material-tailwind.com/docs/react/installation",
-    target: "_blank",
-    element: "",
+    path: "/home#contact",
+    element: <Home />,
   },
 ];
 

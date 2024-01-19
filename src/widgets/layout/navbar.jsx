@@ -76,16 +76,7 @@ export function Navbar({ brandName, routes, action }) {
           <a
             href="https://www.material-tailwind.com/blocks?ref=mtkr"
             target="_blank"
-          >
-            <Button
-              variant="text"
-              size="sm"
-              style={{ color: "#b089bf" }}
-              fullWidth
-            >
-              Sign In
-            </Button>
-          </a>
+          ></a>
           {React.cloneElement(action, {
             className: "hidden lg:inline-block",
           })}
@@ -114,11 +105,7 @@ export function Navbar({ brandName, routes, action }) {
             href="https://www.material-tailwind.com/blocks/react?ref=mtkr"
             target="_blank"
             className="mb-2 block"
-          >
-            <Button variant="text" size="sm" fullWidth color="purple">
-              Sign In
-            </Button>
-          </a>
+          ></a>
           {React.cloneElement(action, {
             className: "w-full block",
           })}
@@ -134,11 +121,7 @@ Navbar.defaultProps = {
     <a
       href="https://www.creative-tim.com/product/material-tailwind-kit-react"
       target="_blank"
-    >
-      <button class="bg-customColor rounded-lg px-4 py-2 text-white">
-        Sign Up
-      </button>
-    </a>
+    ></a>
   ),
 };
 
