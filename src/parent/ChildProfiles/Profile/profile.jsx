@@ -464,17 +464,15 @@ export function MyProfile() {
               ))}
             </div>
 
-            <div className="flex items-center justify-center">
-              <MilstoneTags tags={tags} setTags={setTags} />
-            </div>
-            <div className="flex items-center justify-center">
-              <button
-                type="submit"
-                className="mr-2 mt-5 rounded-md bg-MyPurple-400 px-5 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
+            <button className="m-2 mr-2 flex cursor-pointer rounded-md border-transparent bg-MyPurple-400 p-1 px-5 py-2 pl-3 text-sm font-semibold normal-case text-white shadow-sm shadow-white outline-transparent hover:bg-purple-400  hover:shadow-white">
+              Add
+              <span
+                onClick={() => deleteTags(label)}
+                className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50  pt-0.5 text-gray-600 hover:bg-gray-500 hover:text-white"
               >
-                Add Tags
-              </button>
-            </div>
+                +
+              </span>
+            </button>
           </div>
         </CardBody>
       </Card>
