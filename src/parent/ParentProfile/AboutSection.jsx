@@ -1,14 +1,8 @@
 import React, { Component } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faCalendarAlt,
-  faVenusMars,
-  faEnvelope,
-  faLock,
-  faPhone,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUser, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { CheckIcon } from "@heroicons/react/24/solid";
 import { Button } from "@material-tailwind/react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
@@ -30,7 +24,9 @@ class AboutSection extends Component {
   updateField = (field) => (e) => {
     this.setState({ [field]: e.target.value });
   };
-
+  clearField = (field) => {
+    this.setState({ [field]: "" });
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     // Implement your logic here for handling form submission
@@ -115,14 +111,17 @@ class AboutSection extends Component {
           }}
         >
           <button
-            className="mb-2 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 focus:outline-none focus:ring-4 focus:ring-purple-300 sm:mx-2 sm:mb-0"
-            onClick={() => this.setState({ editField: "" })}
+            className=" mt-2 rounded-md bg-MyPurple-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
+            onClick={() => this.changeEditMode(fieldName)}
           >
             OK
           </button>
           <button
-            className="mb-2 rounded-lg bg-gray-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-4 focus:ring-purple-300 sm:mx-2 sm:mb-0"
-            onClick={() => this.changeEditMode(fieldName)}
+            className="mt-2 rounded-md bg-gray-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white"
+            onClick={() => {
+              this.clearField(fieldName);
+              this.setState({ editField: "" });
+            }}
             style={{ marginLeft: "5px" }}
           >
             X

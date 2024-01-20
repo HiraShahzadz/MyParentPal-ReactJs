@@ -133,6 +133,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
           placeholder="File Type"
           className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
           disabled={!isEditing}
+          required
         />
       </div>
     );
@@ -155,7 +156,6 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
           {renderEditableField("details", "Enter Description", "Description")}
           {renderEditableField("reward", "Enter Reward", "Reward")}
           {renderFileTypeField()}
-          {renderEditableField("time", "Select timer", "Timer")}
           <div className="flex">
             <div className="mt-3">
               <label
@@ -198,6 +198,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
         <div className="flex justify-end">
           <div className="mt-2 flex">
             <button
+              type="submit"
               onClick={handleSave}
               className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
             >

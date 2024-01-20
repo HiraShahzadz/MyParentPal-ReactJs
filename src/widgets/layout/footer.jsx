@@ -6,65 +6,61 @@ const year = new Date().getFullYear();
 export function Footer({ title, description, socials, menus, copyright }) {
   return (
     <footer className="relative px-4 pb-6 pt-8">
-      <div className="container mx-auto">
-        <div className="flex flex-wrap pt-6 text-center lg:text-left">
-          {/* First Column */}
-          <div className="mb-8 w-full px-4 md:mb-0 md:w-6/12 lg:w-4/12">
-            <Typography variant="h4" className="mb-4 text-white">
-              {title}
-            </Typography>
-            <Typography className="font-normal text-white">
-              {description}
-            </Typography>
-            <div className="mx-auto mb-8 mt-6 flex justify-center gap-2 md:mb-0 lg:justify-start">
-              {socials.map(({ color, name, path }) => (
-                <a
-                  key={name}
-                  href={path}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <IconButton color="white" className="rounded-full">
-                    <Typography color={color}>
+      <div className="flex flex-wrap pt-6 text-center lg:text-left">
+        <div className="w-full px-4 lg:w-6/12">
+          <Typography variant="h4" className="mb-4 text-white">
+            {title}
+          </Typography>
+          <Typography className="font-normal text-white">
+            {description}
+          </Typography>
+          <div className="mx-auto mb-8 mt-6 flex justify-center gap-2 md:mb-0 lg:justify-start">
+            {socials.map(({ color, name, path }) => (
+              <a
+                key={name}
+                href={path}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <IconButton color="white" className="rounded-full">
+                  <Typography color={color}>
                     <i className={`fa-brands fa-${name}`} />
-                    </Typography>
-                  </IconButton>
-                </a>
-              ))}
-            </div>
-          </div>
-          <div className="mx-auto ml-72 mt-12 grid w-max grid-cols-2 gap-24 pl-3 lg:mt-0">
-            {menus.map(({ name, items }) => (
-              <div key={name}>
-                <Typography
-                  variant="small"
-                  className="mb-2 block font-medium uppercase text-white"
-                >
-                  {name}
-                </Typography>
-                <ul className="mt-3">
-                  {items.map((item) => (
-                    <li key={item.name}>
-                      <Typography
-                        as="a"
-                        href={item.path}
-                        target="_blank"
-                        rel="noreferrer"
-                        variant="small"
-                        className="mb-2 block font-normal text-white hover:text-blue-gray-200"
-                      >
-                        {item.name}
-                      </Typography>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  </Typography>
+                </IconButton>
+              </a>
             ))}
           </div>
         </div>
+        <div className="mx-auto mt-12 grid w-max grid-cols-2 gap-24 lg:mt-0">
+          {menus.map(({ name, items }) => (
+            <div key={name}>
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium uppercase text-white"
+              >
+                {name}
+              </Typography>
+              <ul className="mt-3">
+                {items.map((item) => (
+                  <li key={item.name}>
+                    <Typography
+                      as="a"
+                      href={item.path}
+                      target="_blank"
+                      rel="noreferrer"
+                      variant="small"
+                      className="mb-2 block font-normal text-white hover:text-blue-gray-200"
+                    >
+                      {item.name}
+                    </Typography>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
       <hr className="my-6 border-gray-300" />
-
       <div className="flex flex-wrap items-center justify-center md:justify-between">
         <div className="mx-auto w-full px-4 text-center">
           <Typography variant="small" className="font-normal text-white">
@@ -95,11 +91,7 @@ Footer.defaultProps = {
       name: "instagram",
       path: "https://www.instagram.com/hs_art_ppt/",
     },
-    {
-      color: "pink",
-      name: "dribbble",
-      path: "https://www.dribbble.com",
-    },
+
     {
       color: "red",
       name: "youtube",
@@ -115,14 +107,14 @@ Footer.defaultProps = {
     {
       name: "useful links",
       items: [
-        { name: "About Us", path: "" },
+        { name: "Home", path: "#home" },
         {
-          name: "Reviews",
-          path: "",
+          name: "Features",
+          path: "#features",
         },
         {
           name: "Contact Us",
-          path: "",
+          path: "#contact",
         },
       ],
     },
