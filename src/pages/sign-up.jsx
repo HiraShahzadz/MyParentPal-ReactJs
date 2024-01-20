@@ -17,7 +17,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 
-
 export function SignUp() {
   const [parentid, setId] = useState("");
   const [email, setEmail] = useState("");
@@ -188,7 +187,7 @@ export function SignUp() {
             </div>
             <div className="custom-checkbox">
               <input
-              class="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
+                class="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
                 type="checkbox"
                 id="IagreetheTermsandConditions"
                 checked={isChecked}
@@ -248,7 +247,6 @@ export function SignUp() {
           </CardFooter>
         </Card>
       </div>
-      
     </>
   );
 }

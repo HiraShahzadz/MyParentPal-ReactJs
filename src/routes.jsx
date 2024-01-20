@@ -4,7 +4,6 @@ import {
   HomeIcon,
   ChatBubbleLeftIcon,
   ListBulletIcon,
-  ChatBubbleLeftIcon,
   InformationCircleIcon,
   StarIcon,
   EnvelopeIcon,

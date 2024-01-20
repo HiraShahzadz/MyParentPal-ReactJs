@@ -13,8 +13,7 @@ import {
   Input,
   Textarea,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+
 import { PageTitle, Footer } from "@/widgets/layout";
 import { FeatureCard } from "@/widgets/cards";
 import { featuresData, teamData, contactData } from "@/data";
