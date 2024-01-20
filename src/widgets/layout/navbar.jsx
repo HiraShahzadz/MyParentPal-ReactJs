@@ -106,10 +106,7 @@ export function Navbar({ brandName, routes, action }) {
 Navbar.defaultProps = {
   brandName: "MyParentPal",
   action: (
-    <a
-      href="https://www.creative-tim.com/product/material-tailwind-kit-react"
-      target="_blank"
-    >
+    <a target="_blank">
       <button class="bg-customColor rounded-lg px-4 py-2 text-white">
         Sign Up
       </button>
