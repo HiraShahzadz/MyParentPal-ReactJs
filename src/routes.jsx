@@ -4,8 +4,14 @@ import {
   HomeIcon,
   ChatBubbleLeftIcon,
   ListBulletIcon,
-  ArrowRightOnRectangleIcon,
+  ChatBubbleLeftIcon,
+  InformationCircleIcon,
+  StarIcon,
+  EnvelopeIcon,
 } from "@heroicons/react/24/solid";
+import { MaterialTailwindControllerProvider } from "@/admin/context";
+import App from "@/admin/App";
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 
 export const routes = [
   {
@@ -14,6 +20,7 @@ export const routes = [
     path: "/home",
     element: <Home />,
   },
+
   {
     icon: ListBulletIcon,
     name: "features",

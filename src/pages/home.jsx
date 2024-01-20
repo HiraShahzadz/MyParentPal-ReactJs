@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "../styles/styles.css";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 import {
   Card,
   CardBody,
@@ -57,7 +60,6 @@ export function Home() {
             alt="Cover Image"
           />
         </div>
-
         <div className="max-w-8xl container relative mx-auto">
           <div className="md:mx-auto">
             <div className="w-full px-4 text-left md:w-3/4 lg:w-3/5">

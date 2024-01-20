@@ -27,14 +27,12 @@ export const routes = [
       {
         icon: <TableCellsIcon {...icon} />,
         name: "Feedback and Queries",
-        path: "/tables",
+        path: "/feedback",
         element: <Tables />,
       },
     ],
   },
   {
-    title: "auth pages",
-    layout: "auth",
     pages: [
       {
         icon: <ArrowLeftOnRectangleIcon {...icon} />,
