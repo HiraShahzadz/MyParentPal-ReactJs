@@ -18,6 +18,7 @@ export const routes = [
     path: "/home",
     element: <Home />,
   },
+
   {
     icon: ListBulletIcon,
     name: "features",

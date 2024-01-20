@@ -63,6 +63,9 @@ export function SignIn() {
       } else if (message == "Child Login successful") {
         toast.success(message);
         //    navigate("/home"); //Navigate to Child dashboard
+      } else if (message == "Admin Login successful") {
+        toast.success(message);
+        //    navigate("/home"); //Navigate to Admin dashboard
       }
 
       setEmail("");
