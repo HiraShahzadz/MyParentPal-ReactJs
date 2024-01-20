@@ -93,7 +93,7 @@ export function DashboardNavbar() {
           >
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
-          <Link to="/dashboard/profile">
+          <Link to="/parentDashboard/parent/profile">
             <Button
               variant="text"
               color="blue-gray"
@@ -132,7 +132,7 @@ export function DashboardNavbar() {
                 shadow={false}
               ></CardHeader>
 
-              <Link to="/dashboard/notifications">
+              <Link to="/parentDashboard/parent/notifications">
                 {NotificationData.map(
                   ({ time, name, description, image, task }, index) => (
                     <div

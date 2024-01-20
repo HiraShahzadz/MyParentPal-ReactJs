@@ -280,6 +280,8 @@
   transition: background-color 0.3s;
   border-radius: 10px;
   white-space: nowrap; /* Prevent text from wrapping */
+  margin-right: 30px;
+  margin-right: 30px;
 }
 
 

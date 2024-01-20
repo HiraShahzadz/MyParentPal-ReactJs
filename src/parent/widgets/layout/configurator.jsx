@@ -158,11 +158,6 @@ export function Configurator() {
           </div>
           <hr />
         </div>
-        <div className="mt-10 text-center">
-          <Typography variant="h6" color="blue-gray">
-            Thank you using MyParentPal❤️
-          </Typography>
-        </div>
       </div>
     </aside>
   );

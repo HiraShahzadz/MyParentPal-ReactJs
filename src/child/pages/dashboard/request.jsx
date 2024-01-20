@@ -4,6 +4,11 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import {
   requestData
 } from "@/child/data";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+
 import {
 
   Card,
@@ -107,12 +112,16 @@ export function Reward_Request() {
     setApprovedRequests(approved);
     setRejectedRequests(rejected);
   };
-
+  async function sendrequest(event) {
+    toast.success("Request sent successfully!");
+  }
+  
   useEffect(() => {
     // Fetch request history data when component mounts
     fetchRequestHistory();
   }, []);
   return (
+    
     <div>
       <div className="p-4 bg-white mt-4 mb-8 flex flex-col lg:flex-row gap-4 rounded-lg">
         <div className="lg:w-1/2">
@@ -120,7 +129,7 @@ export function Reward_Request() {
             Reward Request
           </Typography>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={sendrequest}>
             <div className="mb-6">
               <label htmlFor="taskName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Task Name
@@ -174,10 +183,13 @@ export function Reward_Request() {
 
             <button
               type="submit"
+             
               className="text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
             >
               Submit
             </button>
+            
+
           </form>
         </div>
         <div className="lg:w-1/2 lg:flex lg:flex-col lg:justify-center lg:items-center">
@@ -354,6 +366,9 @@ export function Reward_Request() {
           </div>
         )}
       </div>
+      <DndProvider backend={HTML5Backend}>
+        <Toaster />
+      </DndProvider>
     </div>
 
 

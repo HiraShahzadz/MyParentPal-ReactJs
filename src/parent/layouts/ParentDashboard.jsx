@@ -6,11 +6,14 @@ import {
   DashboardNavbar,
   Configurator,
   Footer,
-} from "@/child/widgets/layout";
-import routes from "@/child/routes";
-import { useMaterialTailwindController, setOpenConfigurator } from "@/child/context";
+} from "@/parent/widgets/layout";
+import routes from "@/parent/routes";
+import {
+  useMaterialTailwindController,
+  setOpenConfigurator,
+} from "@/parent/context";
 
-export function Dashboard() {
+export function ParentDashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
 
@@ -18,9 +21,7 @@ export function Dashboard() {
     <div className="min-h-screen bg-blue-gray-50/50">
       <Sidenav
         routes={routes}
-        brandImg={
-          sidenavType === "dark" ? "/img/logo-w.png" : "/img/logo.png"
-        }
+        brandImg={sidenavType === "dark" ? "/img/logo-w.png" : "/img/logo.png"}
       />
       <div className="p-4 xl:ml-80">
         <DashboardNavbar />
@@ -37,7 +38,7 @@ export function Dashboard() {
         <Routes>
           {routes.map(
             ({ layout, pages }) =>
-              layout === "dashboard" &&
+              layout === "parentDashboard/parent" &&
               pages.map(({ path, element }) => (
                 <Route exact path={path} element={element} />
               ))
@@ -51,6 +52,6 @@ export function Dashboard() {
   );
 }
 
-Dashboard.displayName = "/src/layout/dashboard.jsx";
+ParentDashboard.displayName = "/src/parent/layout/ParentDashboard.jsx";
 
-export default Dashboard;
+export default ParentDashboard;

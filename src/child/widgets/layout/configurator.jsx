@@ -47,10 +47,8 @@ export function Configurator() {
   const [stars, setStars] = React.useState(0);
 
   const sidenavColors = {
-   
     "blue-gray": "from-blue-gray-800 to-blue-gray-900",
-    purple:"from-purple-300 to-purple-500",
-   
+    purple: "from-purple-300 to-purple-500",
   };
 
   React.useEffect(() => {
@@ -63,11 +61,11 @@ export function Configurator() {
 
   return (
     <aside
-      className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-2.5 shadow-lg transition-transform duration-300 ${
+      className={`fixed right-0 top-0 z-50 h-screen w-96 bg-white px-2.5 shadow-lg transition-transform duration-300 ${
         openConfigurator ? "translate-x-0" : "translate-x-96"
       }`}
     >
-      <div className="flex items-start justify-between px-6 pt-8 pb-6">
+      <div className="flex items-start justify-between px-6 pb-6 pt-8">
         <div>
           <Typography variant="h5" color="blue-gray">
             Dashboard Configurator
@@ -84,7 +82,7 @@ export function Configurator() {
           <XMarkIcon strokeWidth={2.5} className="h-5 w-5" />
         </IconButton>
       </div>
-      <div className="py-4 px-6">
+      <div className="px-6 py-4">
         <div className="mb-12">
           <Typography variant="h6" color="blue-gray">
             Sidenav Colors
@@ -111,7 +109,7 @@ export function Configurator() {
             Choose between 3 different sidenav types.
           </Typography>
           <div className="mt-3 flex items-center gap-2">
-          <Button
+            <Button
               variant={sidenavType === "dark"}
               onClick={() => setSidenavType(dispatch, "dark")}
               className={
@@ -159,14 +157,6 @@ export function Configurator() {
             />
           </div>
           <hr />
-          
-          
-        </div>
-        <div className="mt-10 text-center">
-          <Typography variant="h6" color="blue-gray">
-            Thank you using MyParentPal❤️
-          </Typography>
-          
         </div>
       </div>
     </aside>

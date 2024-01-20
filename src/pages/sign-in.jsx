@@ -13,7 +13,6 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { SimpleFooter } from "@/widgets/layout";
 import "./Checkbox.css";
 import "./InputField.css";
 import { Toaster } from "react-hot-toast";
@@ -48,7 +47,7 @@ export function SignIn() {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/v1/user/signin",
+        "http://localhost:8080/api/v1/user/signin",
         {
           email: email,
           password: password,
@@ -58,9 +57,9 @@ export function SignIn() {
       const message = response.data.message;
       toast.success(message);
       if (message == "Parent Login successful") {
-        navigate("/*"); //Navigate to Parent dashboard
+        navigate("/parentDashboard/parent/home/"); //Navigate to Parent dashboard
       } else if (message == "Child Login successful") {
-        navigate("/*"); //Navigate to Child dashboard
+        navigate("/childDashboard/home/"); //Navigate to Child dashboard
       }
 
       setEmail("");
@@ -135,7 +134,11 @@ export function SignIn() {
             </div>
 
             <div className="custom-checkbox">
-              <input type="checkbox" id="rememberMe" />
+              <input
+                class="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
+                type="checkbox"
+                id="rememberMe"
+              />
               <label htmlFor="rememberMe">Remember me</label>
             </div>
           </CardBody>
@@ -162,9 +165,6 @@ export function SignIn() {
             </Typography>
           </CardFooter>
         </Card>
-      </div>
-      <div className="container absolute bottom-6 left-2/4 z-10 mx-auto -translate-x-2/4 text-white">
-        <SimpleFooter />
       </div>
     </>
   );

@@ -16,7 +16,7 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { SimpleFooter } from "@/widgets/layout";
+
 
 export function SignUp() {
   const [parentid, setId] = useState("");
@@ -69,7 +69,7 @@ export function SignUp() {
       return toast.error("Please agree to the Terms and Conditions");
     }
     try {
-      await axios.post("http://localhost:8081/api/v1/user/save-parent", {
+      await axios.post("http://localhost:8080/api/v1/user/save-parent", {
         email: email,
         password: password,
         role: role,
@@ -189,6 +189,7 @@ export function SignUp() {
             </div>
             <div className="custom-checkbox">
               <input
+              class="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
                 type="checkbox"
                 id="IagreetheTermsandConditions"
                 checked={isChecked}
@@ -248,9 +249,7 @@ export function SignUp() {
           </CardFooter>
         </Card>
       </div>
-      <div className="container absolute bottom-6 left-2/4 z-10 mx-auto -translate-x-2/4 text-white">
-        <SimpleFooter />
-      </div>
+      
     </>
   );
 }

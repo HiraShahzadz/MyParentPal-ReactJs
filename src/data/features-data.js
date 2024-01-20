@@ -1,5 +1,4 @@
 import {
- 
   ListBulletIcon,
   GiftIcon,
   TrophyIcon,
@@ -26,9 +25,7 @@ export const featuresData = [
     icon: GiftIcon,
     description:
       "Encourage open communication by giving your child the power to choose and work towards the incentives they desire.",
-
   },
-
 ];
 
 export default featuresData;

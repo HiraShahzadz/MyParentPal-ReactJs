@@ -11,6 +11,7 @@ import bgImage from "/img/bgcover.jpeg";
 import tasksData from "@/parent/data/tasksData";
 import MilstoneTags from "./MilstoneTags";
 import CheatTags from "@/parent/EvaluateTask/CheatTags";
+import ProfileTags from "@/parent/ChildProfiles/Profile/ProfileTags";
 export function MyProfile() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {
@@ -154,7 +155,7 @@ export function MyProfile() {
             </label>
           </div>
 
-          <div className="mb-4 mt-10 flex flex-col rounded-lg bg-white md:flex-row">
+          <div className=" mt-10 flex flex-col rounded-lg bg-white md:flex-row">
             {/* Left side div */}
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
               <ProfileSection />
@@ -435,9 +436,11 @@ export function MyProfile() {
                   />
                 )}
               </div>
-              <MilstoneTags tags={tags} setTags={setTags} />
             </div>
           </div>
+        </CardBody>
+        <CardBody>
+          <ProfileTags />
         </CardBody>
       </Card>
     </>

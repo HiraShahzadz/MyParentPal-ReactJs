@@ -1,16 +1,12 @@
-import { Home, Profile, SignIn, SignUp } from "@/pages";
+import { Home, SignIn, SignUp } from "@/pages";
 
 import {
   HomeIcon,
-  InformationCircleIcon,
-  StarIcon,
-  UserCircleIcon,
+  ChatBubbleLeftIcon,
+  ListBulletIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
-import ParentApp from "./parent/ParentApp";
 
-import { MaterialTailwindControllerProvider } from "@/parent/context";
-import App from "@/admin/App";
 export const routes = [
   {
     icon: HomeIcon,
@@ -19,14 +15,10 @@ export const routes = [
     element: <Home />,
   },
   {
-    icon: UserCircleIcon,
-    name: "profile",
-    path: "/*",
-    element: (
-      <MaterialTailwindControllerProvider>
-        <ParentApp />
-      </MaterialTailwindControllerProvider>
-    ),
+    icon: ListBulletIcon,
+    name: "features",
+    path: "/home#features",
+    element: <Home />,
   },
 
   {
@@ -40,6 +32,12 @@ export const routes = [
     name: "Sign Up",
     path: "/sign-up",
     element: <SignUp />,
+  },
+  {
+    icon: ChatBubbleLeftIcon,
+    name: "contact us",
+    path: "/home#contact",
+    element: <Home />,
   },
 ];
 

@@ -17,6 +17,9 @@
 .custom-checkbox input:checked {
   background-color: #b089be; /* Replace with your color code */
 }
+.custom-checkbox input:checked {
+  color: #b089be; /* Change the text color on hover */
+}
 
 .custom-checkbox input:checked::before {
   content: "\2713"; /* Unicode character for checkmark */
