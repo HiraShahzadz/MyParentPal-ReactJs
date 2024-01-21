@@ -118,18 +118,21 @@ export function Tables() {
                       {date}
                     </td>
                     <td className={className}>
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                      <div
+                        style={{ display: "flex", alignItems: "center" }}
+                        className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]"
+                      >
                         <input
                           type="text"
                           value={responses[`${name}-${key}`] || ""}
                           onChange={(e) => handleResponseChange(name, e)}
                           placeholder="Type your response here..."
-                          className="flex-1 text-xs"
+                          className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-xs text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                           data-index={key}
                         />
                         <button
                           onClick={() => handleResponseSubmit(name)}
-                          className="ml-2 rounded-md bg-[#B089BE] px-3 py-1 text-white shadow-lg hover:bg-purple-400"
+                          className="rounded-md bg-[#B089BE] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                         >
                           Submit
                         </button>

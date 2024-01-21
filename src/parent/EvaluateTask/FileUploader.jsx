@@ -133,7 +133,7 @@ const FileUploader = () => {
         {isDragActive ? (
           <p>Drop the files here...</p>
         ) : (
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          <p>Drag and drop some files here, or click to select files</p>
         )}
       </div>
       <div className="grid gap-9 gap-x-6 gap-y-1 md:grid-cols-2 xl:grid-cols-3">

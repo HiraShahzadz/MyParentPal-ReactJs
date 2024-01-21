@@ -150,11 +150,19 @@ export function Configurator() {
             <Typography variant="h6" color="#b089be">
               Navbar Fixed
             </Typography>
-            <Switch
-              id="navbar-fixed"
-              value={fixedNavbar}
-              onChange={() => setFixedNavbar(dispatch, !fixedNavbar)}
-            />
+            <div className="">
+              <Switch
+                id="navbar-fixed"
+                value={fixedNavbar}
+                color="purple"
+                onChange={() => setFixedNavbar(dispatch, !fixedNavbar)}
+                className="border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
+                style={{
+                  backgroundColor: fixedNavbar ? "#B089BE" : "",
+                  color: fixedNavbar ? "#B089BE" : "",
+                }}
+              />
+            </div>
           </div>
           <hr />
         </div>

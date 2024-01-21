@@ -19,14 +19,6 @@ export function SkillTasks() {
         <div className="text-left text-lg font-bold text-black">
           Task Summary
         </div>
-        <div className="text-right">
-          <a
-            href="child/pages/dashboard/home"
-            className="text-black hover:underline"
-          >
-            View All
-          </a>
-        </div>
       </div>
       <h2 className="text-md mb-3 ml-3 mt-3 font-bold">Assigned Tasks</h2>
       <div className="max-h-96">

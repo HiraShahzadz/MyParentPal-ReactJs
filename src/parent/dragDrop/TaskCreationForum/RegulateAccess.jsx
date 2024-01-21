@@ -62,6 +62,7 @@ function RegulateAccess(props) {
               value="file-proof"
               onChange={handleChange}
               checked={selectedOption === "file-proof"}
+              required
             />
             <label
               htmlFor="push-everything"
@@ -104,6 +105,7 @@ function RegulateAccess(props) {
                 format="HH:mm"
                 hourPlaceholder="00"
                 minutePlaceholder="00"
+                required
                 clockIcon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

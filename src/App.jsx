@@ -4,14 +4,17 @@ import routes from "@/routes";
 import ParentApp from "./parent/ParentApp";
 import { ParentDashboard } from "@/parent/layouts";
 import { ChildDashboard } from "@/child/layouts";
+import { Dashboard } from "@/admin/layouts";
 import { MaterialTailwindControllerProvider as ParentProvider } from "@/parent/context";
 import { MaterialTailwindControllerProvider as ChildProvider } from "@/child/context";
+import { MaterialTailwindControllerProvider as AdminProvider } from "@/admin/context";
 
 function App() {
   const location = useLocation();
   const isDashboardRoute =
     location.pathname.startsWith("/parentDashboard/parent") ||
-    location.pathname.startsWith("/childDashboard");
+    location.pathname.startsWith("/childDashboard") ||
+    location.pathname.startsWith("/dashboard");
 
   return (
     <>
@@ -40,6 +43,14 @@ function App() {
             <ChildProvider>
               <ChildDashboard />
             </ChildProvider>
+          }
+        />
+        <Route
+          path="/dashboard/*"
+          element={
+            <AdminProvider>
+              <Dashboard />
+            </AdminProvider>
           }
         />
       </Routes>

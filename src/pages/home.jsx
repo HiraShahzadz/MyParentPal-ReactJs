@@ -18,7 +18,10 @@ import { PageTitle, Footer } from "@/widgets/layout";
 import { FeatureCard } from "@/widgets/cards";
 import { featuresData, teamData, contactData } from "@/data";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { toast } from "react-hot-toast";
+import { HTML5Backend } from "react-dnd-html5-backend";
 export function Home() {
   const location = useLocation();
   const hash = location.hash;
@@ -48,10 +51,15 @@ export function Home() {
   const toggleText = () => {
     setShowMoreText(!showMoreText);
   };
-
+  const handleSubmit = (event) => {
+    toast.success("Submitted");
+  };
   return (
     <>
       <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
+        <DndProvider backend={HTML5Backend}>
+          <Toaster />
+        </DndProvider>
         <div>
           <img
             src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg"
@@ -265,22 +273,31 @@ export function Home() {
               id="contact"
               className="order-2 flex-auto items-center px-4 lg:order-2"
             >
-              <form className="mx-auto w-full rounded-lg py-10 text-center lg:max-w-3xl">
+              <form
+                onSubmit={handleSubmit}
+                className="mx-auto w-full rounded-lg py-10 text-center lg:max-w-3xl"
+              >
                 <PageTitle heading="Contact Us">
                   Feel free to contact us.
                 </PageTitle>
                 <div className="mb-4 gap-64 ">
                   <input
                     size="lg"
+                    type="text"
                     placeholder="Full Name"
+                    pattern="[A-Za-z ]+"
+                    title="Please enter only letters"
                     className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
+                    required
                   />
                 </div>
                 <div className="mb-4 gap-4">
                   <input
                     size="lg"
+                    type="email"
                     placeholder="Email Address"
                     className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
+                    required
                   />
                 </div>
                 <div className="mb-4 gap-4">
@@ -289,10 +306,14 @@ export function Home() {
                     rows={8}
                     placeholder="Enter your query"
                     className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
+                    required
                   />
                 </div>
 
-                <button className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:bg-purple-400 hover:shadow-transparent">
+                <button
+                  type="submit"
+                  className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
+                >
                   Send Message
                 </button>
               </form>

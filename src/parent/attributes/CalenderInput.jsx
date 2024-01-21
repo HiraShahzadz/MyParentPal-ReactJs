@@ -33,6 +33,7 @@ function CalenderInput(props) {
         className="block w-full rounded-md border-0 py-2 pl-2 pr-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
         popperClassName={calendarVisible}
         showTimeSelect={false}
+        required
       />
       <span
         className="absolute right-0 top-2 cursor-pointer"

@@ -57,8 +57,6 @@ export function TaskCreation() {
   }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
     if (task.name.length < 3) {
       return toast.error("A task must have more than 3 characters");
     }
@@ -91,14 +89,13 @@ export function TaskCreation() {
   const [rewardname, setRewardname] = useState("");
   const [taskfiletype, setTaskfiletype] = useState([]);
   const [taskdate, setTaskdate] = useState("");
-  const [tasktime, setTasktime] = useState("12:00");
+  const [tasktime, setTasktime] = useState();
   const [tasktag, setTasktag] = useState("");
   const [taskassignee, setTaskassignee] = useState("");
   const [tasktype, setTasktype] = useState("");
   console.log("setStatus value:", status);
   //for saving in database
   async function save(event) {
-    event.preventDefault();
     if (
       !taskname ||
       !taskdescription ||
@@ -113,7 +110,7 @@ export function TaskCreation() {
 
     const currentDate = new Date();
 
-    if (taskDate < currentDate) {
+    if (taskDate < currentDate && taskDate === currentDate) {
       return toast.error("Task submission date cannot be in the past");
     }
     try {
@@ -191,7 +188,7 @@ export function TaskCreation() {
                               name="taskname"
                               id="taskname"
                               autoComplete="taskname"
-                              className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900  ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
                               placeholder="Task name"
                               required
                             />
@@ -216,7 +213,7 @@ export function TaskCreation() {
                             onChange={(event) => {
                               setTaskdescription(event.target.value);
                             }}
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900  ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
                             placeholder="Write a few sentences about task."
                             required
                           />
@@ -315,7 +312,11 @@ export function TaskCreation() {
                     />
                   </div>
                   <div className="mb-7">
-                    <TaskTime tasktime={tasktime} setTasktime={setTasktime} />
+                    <TaskTime
+                      tasktime={tasktime}
+                      setTasktime={setTasktime}
+                      taskdate={taskdate}
+                    />
                   </div>
                   <div>
                     <Tags />

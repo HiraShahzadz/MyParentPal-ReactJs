@@ -3,10 +3,8 @@ import TimePicker from "react-time-picker";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-function TaskTime({ tasktime, setTasktime }) {
+function TaskTime({ tasktime, setTasktime, taskdate }) {
   const [selectedTime, setSelectedTime] = useState(tasktime);
 
   useEffect(() => {
@@ -15,6 +13,18 @@ function TaskTime({ tasktime, setTasktime }) {
 
   const handleTimeChange = (time) => {
     setSelectedTime(time);
+
+    const taskDate = new Date(taskdate);
+    const currentDate = new Date();
+
+    if (
+      taskDate.getDate() === currentDate.getDate() &&
+      new Date(`2000-01-01 ${time}`) <= currentDate
+    ) {
+      toast.error(
+        "Task time should be greater than current time for today's tasks"
+      );
+    }
   };
 
   const StyledTimePicker = styled(TimePicker)`
@@ -50,6 +60,7 @@ function TaskTime({ tasktime, setTasktime }) {
         format="HH:mm"
         hourPlaceholder="00"
         minutePlaceholder="00"
+        required
         clockIcon={
           <svg
             xmlns="http://www.w3.org/2000/svg"

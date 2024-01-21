@@ -39,7 +39,6 @@ function formatNumber(number, decPlaces) {
 
   return number;
 }
-
 export function Configurator() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { openConfigurator, sidenavColor, sidenavType, fixedNavbar } =
@@ -52,30 +51,12 @@ export function Configurator() {
   };
 
   React.useEffect(() => {
-    // Fetch GitHub stars count
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://api.github.com/repos/creativetimofficial/material-tailwind-dashboard-react"
-        );
-        const data = await response.json();
-        setStars(formatNumber(data.stargazers_count, 1));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    const stars = fetch(
+      "https://api.github.com/repos/creativetimofficial/material-tailwind-dashboard-react"
+    )
+      .then((response) => response.json())
+      .then((data) => setStars(formatNumber(data.stargazers_count, 1)));
   }, []);
-
-  React.useEffect(() => {
-    setOpenConfigurator(dispatch, true);
-  }, [dispatch]);
-
-  // Set Navbar to be fixed by default
-  React.useEffect(() => {
-    setFixedNavbar(dispatch, true);
-  }, [dispatch]);
 
   return (
     <aside
@@ -168,11 +149,19 @@ export function Configurator() {
             <Typography variant="h6" color="#b089be">
               Navbar Fixed
             </Typography>
-            <Switch
-              id="navbar-fixed"
-              value={fixedNavbar}
-              onChange={() => setFixedNavbar(dispatch, !fixedNavbar)}
-            />
+            <div className="">
+              <Switch
+                id="navbar-fixed"
+                value={fixedNavbar}
+                color="purple"
+                onChange={() => setFixedNavbar(dispatch, !fixedNavbar)}
+                className="border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
+                style={{
+                  backgroundColor: fixedNavbar ? "#B089BE" : "",
+                  color: fixedNavbar ? "#B089BE" : "",
+                }}
+              />
+            </div>
           </div>
           <hr />
         </div>
@@ -180,3 +169,7 @@ export function Configurator() {
     </aside>
   );
 }
+
+Configurator.displayName = "/src/widgets/layout/configurator.jsx";
+
+export default Configurator;

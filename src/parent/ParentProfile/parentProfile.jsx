@@ -144,7 +144,14 @@ export function ParentProfile() {
             {/* Left side div */}
 
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
-              <AboutSection />
+              <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
+                <div className="text-center text-lg font-bold text-black">
+                  About
+                </div>
+                <div>
+                  <AboutSection />
+                </div>
+              </div>
             </div>
 
             {/* Right side div covering remaining space */}

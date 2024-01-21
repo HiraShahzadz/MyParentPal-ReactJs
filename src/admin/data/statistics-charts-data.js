@@ -24,6 +24,7 @@ const websiteViewsChart = {
     },
     xaxis: {
       ...chartsConfig.xaxis,
+
       categories: ["Punjab", "KPK", "Sindh", "Balochistan", "Islamabad"],
     },
   },

@@ -1,197 +1,166 @@
-import React, { Component } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faPhone } from "@fortawesome/free-solid-svg-icons";
-import { CheckIcon } from "@heroicons/react/24/solid";
 import { Button } from "@material-tailwind/react";
+import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faPhone } from "@fortawesome/free-solid-svg-icons";
 
-class AboutSection extends Component {
-  state = {
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    CNIC: "",
+function AboutSection() {
+  const [isFirstNameFocused, setIsFirstNameFocused] = useState(false);
+  const [isLastNameFocused, setIsLastNameFocused] = useState(false);
+  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
+  const [isCnicFocused, setIsCnicFocused] = useState(false);
+
+  const handleFirstNameFocus = () => {
+    setIsFirstNameFocused(true);
   };
 
-  changeEditMode = (field) => {
-    this.setState({ editField: field });
+  const handleFirstNameBlur = () => {
+    setIsFirstNameFocused(false);
   };
 
-  updateField = (field) => (e) => {
-    this.setState({ [field]: e.target.value });
-  };
-  clearField = (field) => {
-    this.setState({ [field]: "" });
-  };
-  handleSubmit = (e) => {
-    e.preventDefault();
-    // Implement your logic here for handling form submission
-    console.log("Form Submitted:", this.state);
-    toast.success("Information saved");
+  const handleLastNameFocus = () => {
+    setIsLastNameFocused(true);
   };
 
-  togglePasswordVisibility = () => {
-    this.setState((prevState) => ({ showPassword: !prevState.showPassword }));
+  const handleLastNameBlur = () => {
+    setIsLastNameFocused(false);
   };
 
-  renderField = (fieldName) => {
-    return this.state.editField === fieldName ? (
-      <div className="relative">
-        <div className="flex items-center">
-          {fieldName === "password" ? (
-            <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
-              <input
-                type={this.state.showPassword ? "text" : "password"}
-                value={this.state[fieldName]}
-                onChange={this.updateField(fieldName)}
-                onBlur={() => this.setState({ editField: "" })}
-                placeholder={
-                  fieldName === "firstName" && !this.state[fieldName]
-                    ? "Your first name"
-                    : "Task name"
-                }
-                name={fieldName}
-                id={fieldName}
-                autoComplete={fieldName}
-                className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-sm font-light text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                required
-              />
-            </div>
-          ) : (
-            <div className="flex rounded-md bg-white font-medium shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
-              <input
-                type="text"
-                value={this.state[fieldName]}
-                onChange={this.updateField(fieldName)}
-                onBlur={() => this.setState({ editField: "" })}
-                placeholder={
-                  fieldName === "firstName" && !this.state[fieldName]
-                    ? "Your first name"
-                    : fieldName === "lastName" && !this.state[fieldName]
-                    ? "Your last name"
-                    : fieldName === "phoneNumber" && !this.state[fieldName]
-                    ? "Your phone number"
-                    : fieldName === "CNIC" && !this.state[fieldName]
-                    ? "Your CNIC number"
-                    : "Task name"
-                }
-                name={fieldName}
-                id={fieldName}
-                autoComplete={fieldName}
-                className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                required
-              />
-            </div>
-          )}
-
-          {fieldName === "password" && (
-            <button
-              onClick={this.togglePasswordVisibility}
-              className="ml-2 focus:outline-none"
-            >
-              {this.state.showPassword ? (
-                <AiOutlineEyeInvisible />
-              ) : (
-                <AiOutlineEye />
-              )}
-            </button>
-          )}
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: "5px",
-          }}
-        >
-          <button
-            className=" mt-2 rounded-md bg-MyPurple-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
-            onClick={() => this.changeEditMode(fieldName)}
-          >
-            OK
-          </button>
-          <button
-            className="mt-2 rounded-md bg-gray-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white"
-            onClick={() => {
-              this.clearField(fieldName);
-              this.setState({ editField: "" });
-            }}
-            style={{ marginLeft: "5px" }}
-          >
-            X
-          </button>
-        </div>
-      </div>
-    ) : (
-      <div
-        onDoubleClick={() => this.changeEditMode(fieldName)}
-        className="text-left"
-      >
-        {this.state[fieldName] ||
-          (fieldName === "firstName"
-            ? "Your first name"
-            : fieldName === "lastName"
-            ? "Your last name"
-            : fieldName === "phoneNumber"
-            ? "Your phone number"
-            : fieldName === "CNIC"
-            ? "Your CNIC number"
-            : "")}
-      </div>
-    );
+  const handlePhoneFocus = () => {
+    setIsPhoneFocused(true);
   };
 
-  render() {
-    return (
-      <div className="text-md mb-1 w-full rounded-lg text-center font-bold">
-        <form onSubmit={this.handleSubmit} className="">
+  const handlePhoneBlur = () => {
+    setIsPhoneFocused(false);
+  };
+
+  const handleCnicFocus = () => {
+    setIsCnicFocused(true);
+  };
+
+  const handleCnicBlur = () => {
+    setIsCnicFocused(false);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    toast.success("Profile updated");
+  };
+
+  return (
+    <div>
+      <div>
+        <form onSubmit={handleSubmit} className="">
           <DndProvider backend={HTML5Backend}>
             <Toaster />
           </DndProvider>
-          <div className="mb-1 w-full rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-lg font-bold text-black">
-            About
+          <div className="ml-2 mt-1 pb-2">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
+              <div className="sm:col-span-full">
+                <div className="mt-3 flex items-center">
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="ml-2 mr-2 text-black"
+                  />
+                  <input
+                    type="text"
+                    name="task"
+                    id="task"
+                    pattern="[A-Za-z]+"
+                    title="Please enter only letters"
+                    autoComplete="task"
+                    onFocus={handleFirstNameFocus}
+                    onBlur={handleFirstNameBlur}
+                    className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md  border-0 py-1.5 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                    placeholder={isFirstNameFocused ? "" : "Your first name"}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="sm:col-span-full">
+                <div className="mt-3 flex items-center">
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="ml-2 mr-2 text-black"
+                  />
+                  <input
+                    type="text"
+                    name="task"
+                    id="task"
+                    pattern="[A-Za-z ]+"
+                    title="Please enter only letters"
+                    autoComplete="task"
+                    onFocus={handleLastNameFocus}
+                    onBlur={handleLastNameBlur}
+                    className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md  border-0 py-1.5 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                    placeholder={isLastNameFocused ? "" : "Your last name"}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="sm:col-span-full">
+                <div className="mt-3 flex items-center">
+                  <FontAwesomeIcon
+                    icon={faPhone}
+                    className="ml-2 mr-2 text-black"
+                  />
+                  <input
+                    type="text"
+                    name="task"
+                    id="task"
+                    pattern="\+\d{12}"
+                    title="Enter a valid phone no. (e.g., +929081675668)"
+                    autoComplete="task"
+                    onFocus={handlePhoneFocus}
+                    onBlur={handlePhoneBlur}
+                    className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md  border-0 py-1.5 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                    placeholder={isPhoneFocused ? "" : "Your phone number"}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="sm:col-span-full">
+                <div className="mt-3 flex items-center">
+                  <img
+                    className="ml-2 mr-2 h-4 w-4 text-black"
+                    src="/img/id-card.png"
+                    alt=""
+                  />
+                  <input
+                    type="text"
+                    name="task"
+                    id="task"
+                    pattern="\d{5}-\d{7}-\d"
+                    title="Enter a valid CNIC no. (e.g., 12345-6789012-3)"
+                    autoComplete="task"
+                    onFocus={handleCnicFocus}
+                    onBlur={handleCnicBlur}
+                    className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md  border-0 py-1.5 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                    placeholder={isCnicFocused ? "" : "Your CNIC"}
+                    required
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-          {/* Add icons related to each field */}
-          <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
-            <FontAwesomeIcon icon={faUser} className="mr-7" />
-            {this.renderField("firstName", "")}
-          </div>
-
-          <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
-            <FontAwesomeIcon icon={faUser} className="mr-7" />
-            {this.renderField("lastName", "")}
-          </div>
-
-          <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
-            <FontAwesomeIcon icon={faPhone} className="mr-6" />
-            {this.renderField("phoneNumber", "")}
-          </div>
-
-          <div className="mb-2 flex w-full items-center rounded-lg pb-4 pl-3 pr-10 pt-4 text-center text-sm font-medium leading-6 text-gray-900 hover:bg-gray-200">
-            <img className="mr-6 h-4 w-4" src="/img/id-card.png" alt="" />
-            {this.renderField("CNIC", "")}
-          </div>
-          <div className="flex items-center justify-center">
-            <Button
+          <div className="mt-4 flex items-center justify-center">
+            <button
               type="submit"
               className="mr-2 mt-2 rounded-md bg-MyPurple-400 px-5 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
             >
               Save
-            </Button>
-            <Button className="mt-2 rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white">
+            </button>
+            <button className="mt-2 rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white">
               Cancel
-            </Button>
+            </button>
           </div>
         </form>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default AboutSection;

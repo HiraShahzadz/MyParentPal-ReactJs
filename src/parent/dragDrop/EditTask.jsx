@@ -29,6 +29,16 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
   };
 
   const handleSave = () => {
+    // Check if all required fields are filled
+    if (
+      !editedDetails.title ||
+      !editedDetails.details ||
+      !editedDetails.reward
+    ) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
     setEditedDetails(
       { ...editedDetails, fileType: fileTypes.join(", ") },
       () => {
@@ -80,7 +90,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
           name={field}
           value={editedDetails[field]}
           onChange={(e) => handleInputChange(field, e.target.value)}
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
+          className="block w-full rounded-md border-0 py-1.5 text-gray-900  ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
           placeholder={placeholder}
           required
         />
@@ -131,7 +141,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
           value={fileTypes.join(", ")}
           readOnly={true}
           placeholder="File Type"
-          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
+          className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900  ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
           disabled={!isEditing}
           required
         />
