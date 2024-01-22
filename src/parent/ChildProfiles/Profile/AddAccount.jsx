@@ -97,7 +97,7 @@ function AddAccount(props) {
       } else {
         console.error("Other Error:", err.message);
       }
-      toast.error("User Registration Failed");
+      toast.error("Username already exists");
     }
   }
   return (
