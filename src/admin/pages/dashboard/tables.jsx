@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Card,
@@ -13,7 +12,10 @@ import {
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { authorsTableData, projectsTableData } from "@/admin/data";
-
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { toast } from "react-hot-toast";
+import { HTML5Backend } from "react-dnd-html5-backend";
 export function Tables() {
   const [responses, setResponses] = useState({});
 
@@ -29,7 +31,7 @@ export function Tables() {
     const responseText = responses[authorName];
     console.log(`Response for ${authorName}: ${responseText}`);
 
-    toast(`Response submitted for ${authorName}`, {
+    toast.success(`Response submitted for ${authorName}`, {
       className: "purple-progress-bar",
       style: { borderRadius: "10px" },
     });
@@ -37,6 +39,9 @@ export function Tables() {
 
   return (
     <div className="mb-8 mt-12 flex flex-col gap-12">
+      <DndProvider backend={HTML5Backend}>
+        <Toaster />
+      </DndProvider>
       <Card>
         <CardHeader
           variant="gradient"
@@ -129,7 +134,9 @@ export function Tables() {
                           placeholder="Type your response here..."
                           className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-xs text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                           data-index={key}
+                          required
                         />
+
                         <button
                           onClick={() => handleResponseSubmit(name)}
                           className="rounded-md bg-[#B089BE] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
