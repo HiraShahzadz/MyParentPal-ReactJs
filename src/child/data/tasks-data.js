@@ -11,7 +11,7 @@ import {
     {
       id: 1,
       title: "Clean Bedroom",
-      description: new Date("2024-1-17"),
+      description: new Date("2024-1-27"),
        reward: "Pencil Box",
        time:"10:00 pm",
        details:"Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
@@ -20,7 +20,7 @@ import {
     {
       id: 2,
       title: "Mopping",
-      description: new Date("2024-1-17"),
+      description: new Date("2024-1-26"),
        reward: "Paint colors",
        time:"8:00 pm",
        details:"Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
@@ -29,7 +29,7 @@ import {
     {
       id: 3,
       title: "Learn Lesson",
-      description: new Date("2024-1-18"),
+      description: new Date("2024-1-25"),
       reward: "Toys",
        time:"11:00 pm",
        details:"Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
@@ -38,7 +38,7 @@ import {
     {
       id: 4,
       title: "Wash dishes",
-      description: new Date("2024-1-19"),
+      description: new Date("2024-1-23"),
       reward:"Snacks",
        time:"11:00 pm",
        details:"Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
@@ -47,7 +47,7 @@ import {
     {
       id: 5,
       title: "Make bed",
-      description: new Date("2024-1-18"),
+      description: new Date("2024-1-23"),
       reward: "Geometry Box",
        time:"9:00 pm",
        details:"Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",
@@ -56,7 +56,7 @@ import {
     {
       id: 6,
       title: "Clean Bedroom",
-      description: new Date("2024-1-19"),
+      description: new Date("2024-1-23"),
       reward: "Book",
        time:"12pm",
        details:"Clean your bedroom, put every things in its place and attach a picture of room when you submit this task.You have to complete this task!",

@@ -51,32 +51,7 @@ export function Reward_Request() {
   };
 
   const [childName, setChildName] = useState('ChildName'); // Replace with actual child's name
-  const [parentName, setParentName] = useState('');
-
-  useEffect(() => {
-    const fetchParentFromDatabase = async () => {
-      try {
-        // Send a request to your backend API endpoint to retrieve the parent's name based on the child's name
-        const response = await fetch(`https://your-api-url.com/parents?childName=${childName}`, {
-          method: 'GET',
-          // Add headers or authentication tokens if required
-        });
-
-        const parentData = await response.json();
-
-        // Assuming the response contains the parent's name associated with the child's name
-        if (parentData && parentData.parentName) {
-          setParentName(parentData.parentName);
-        }
-      } catch (error) {
-        console.error('Error fetching parent data:', error);
-        // Handle errors if necessary
-      }
-    };
-
-    fetchParentFromDatabase();
-  }, [childName]);
-
+ 
   //
   const handleSubmit = (event) => {
     event.preventDefault();

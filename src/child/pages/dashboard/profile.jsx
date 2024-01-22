@@ -34,9 +34,6 @@ export function Profile() {
     setTaskDetailsToShow(null);
   };
 
-  async function SubmitChanges(event) {
-    toast.success("Profile Changes Request sent successfully!");
-  }
   
   const [formData, setFormData] = useState({
     email: '',
@@ -173,9 +170,9 @@ export function Profile() {
           <div className="flex flex-col md:flex-row mb-4 mt-10 bg-white mb-8 rounded-lg">
             {/* Left side div */}
             <div className="ml-5 mr-5 mt-5 mb-5 md:w-1/4 p-3 border border-gray-200 rounded-lg shadow-lg">
-             <form onClick={SubmitChanges}>
+            
               <ProfileSection />
-              </form>
+              
             </div>
 
             {/* Right side div covering remaining space */}

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import voiceIcon from '/img/voice.png'; // Import the image
-
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 const ChatForm = () => {
     const [typedMessage, setTypedMessage] = useState('');
     const [showSendButton, setShowSendButton] = useState(false);
@@ -17,17 +20,19 @@ const ChatForm = () => {
         event.preventDefault();
         console.log('Message sent:', typedMessage);
         setTypedMessage('');
+        toast.success("Message sent successfully!");
         setShowSendButton(false);
+        
     };
-
+   
     const startRecording = () => {
         setIsRecording(true);
-        // Start recording logic here (e.g., using Web Audio API)
+       
     };
 
     const stopRecording = () => {
         setIsRecording(false);
-        // Stop recording logic here
+       
     };
 
     useEffect(() => {
@@ -87,7 +92,7 @@ const ChatForm = () => {
                             <img
                                 src={voiceIcon} // Use the imported image source
                                 alt="Voice"
-                                className="w-8 h-8" 
+                                className="w-8 h-8"
                             />
                             <span className="sr-only">Recorder</span>
                         </button>
@@ -118,6 +123,9 @@ const ChatForm = () => {
                         <span className="sr-only">Add emoji</span>
                     </button>
                 )}
+                <DndProvider backend={HTML5Backend}>
+                    <Toaster />
+                </DndProvider>
             </div>
         </form>
     );
