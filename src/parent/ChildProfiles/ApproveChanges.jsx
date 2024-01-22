@@ -62,13 +62,13 @@ function ApproveChanges(props) {
                     htmlFor="about"
                     className="block font-medium leading-6 text-gray-900"
                   >
-                    Username
+                    Gender
                   </label>
                   <label
                     htmlFor="name"
                     className="block rounded-md border border-gray-300 bg-gray-100 p-2 text-gray-900 dark:text-white"
                   >
-                    Hira_Shahzad565
+                    Female
                   </label>
                 </div>
                 <div className="col-span-full">

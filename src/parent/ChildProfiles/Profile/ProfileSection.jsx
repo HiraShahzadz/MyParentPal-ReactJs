@@ -6,21 +6,25 @@ import {
   faVenusMars,
   faEnvelope,
   faLock,
+  faLockOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import DobInput from "@/parent/attributes/DobInput";
 
 function ProfileSection() {
   const [isNameFocused, setIsNameFocused] = useState(false);
-  const [isDobFocused, setIsDobFocused] = useState(false);
-  const [isGenderFocused, setIsGenderFocused] = useState(false);
-  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isUsernameFocused, setIsUsernameFocused] = useState(false);
   const [isPasswordFocused, setPasswordFocused] = useState(false);
   const [dob, setDob] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   const handleNameFocus = () => {
     setIsNameFocused(true);
   };
@@ -29,28 +33,12 @@ function ProfileSection() {
     setIsNameFocused(false);
   };
 
-  const handleDobFocus = () => {
-    setIsDobFocused(true);
+  const handleUsernameFocus = () => {
+    setIsUsernameFocused(true);
   };
 
-  const handleDobBlur = () => {
-    setIsDobFocused(false);
-  };
-
-  const handleGenderFocus = () => {
-    setIsGenderFocused(true);
-  };
-
-  const handleGenderBlur = () => {
-    setIsGenderFocused(false);
-  };
-
-  const handleEmailFocus = () => {
-    setIsEmailFocused(true);
-  };
-
-  const handleEmailBlur = () => {
-    setIsEmailFocused(false);
+  const handleUsernameBlur = () => {
+    setIsUsernameFocused(false);
   };
 
   const handlePasswordFocus = () => {
@@ -98,7 +86,7 @@ function ProfileSection() {
             </div>
             <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
               <div className="sm:col-span-full">
-                <div className="mt-3 flex items-center">
+                <div className="mt-6 flex items-center">
                   <FontAwesomeIcon
                     icon={faUser}
                     className="ml-2 mr-2 text-black"
@@ -113,7 +101,7 @@ function ProfileSection() {
                     onFocus={handleNameFocus}
                     onBlur={handleNameBlur}
                     className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md  border-0 py-1.5 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
-                    placeholder={isNameFocused ? "" : "Your name"}
+                    placeholder={isNameFocused ? "" : "Name"}
                     required
                   />
                 </div>
@@ -124,19 +112,7 @@ function ProfileSection() {
                     icon={faCalendarAlt}
                     className="ml-2 mr-2 text-black"
                   />
-                  <input
-                    type="date"
-                    name="dob"
-                    id="dob"
-                    autoComplete="task"
-                    onFocus={handleDobFocus}
-                    onBlur={handleDobBlur}
-                    onChange={(e) => setDob(e.target.value)}
-                    value={dob}
-                    className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md  border-0 py-1.5 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
-                    placeholder={isDobFocused ? "" : "Your date of birth"}
-                    required
-                  />
+                  <DobInput dob={dob} setDob={setDob} />
                 </div>
               </div>
               <div className="sm:col-span-full">
@@ -183,31 +159,40 @@ function ProfileSection() {
               <div className="sm:col-span-full">
                 <div className="mt-3 flex items-center">
                   <FontAwesomeIcon
-                    icon={faEnvelope}
+                    icon={faUser}
                     className="ml-2 mr-2 text-black"
                   />
                   <input
-                    type="email"
-                    name="email"
+                    type="username"
+                    name="text"
                     id="task"
                     autoComplete="task"
-                    onFocus={handleEmailFocus}
-                    onBlur={handleEmailBlur}
-                    className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md  border-0 py-1.5 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
-                    placeholder={isEmailFocused ? "" : "Your email"}
+                    onFocus={handleUsernameFocus}
+                    onBlur={handleUsernameBlur}
+                    className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md border-0  py-1.5 pl-3 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                    placeholder={isUsernameFocused ? "" : "Username"}
                     required
                   />
                 </div>
               </div>
               <div className="sm:col-span-full">
                 <div className="mt-3 flex items-center">
-                  <FontAwesomeIcon
-                    icon={faLock}
-                    className="ml-2 mr-2 text-black"
-                  />
+                  {showPassword ? (
+                    <FontAwesomeIcon
+                      icon={faLockOpen}
+                      onClick={togglePasswordVisibility}
+                      className="ml-2 mr-2 text-black"
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faLock}
+                      onClick={togglePasswordVisibility}
+                      className="ml-2 mr-2 text-black"
+                    />
+                  )}
 
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="task"
                     id="task"
                     autoComplete="task"
@@ -216,7 +201,7 @@ function ProfileSection() {
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     className="block w-full flex-1 overflow-hidden whitespace-nowrap rounded-md  border-0 py-1.5 text-sm font-medium text-gray-900 ring-1 ring-inset ring-transparent  placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
-                    placeholder={isPasswordFocused ? "" : "Your password"}
+                    placeholder={isPasswordFocused ? "" : "Password"}
                     required
                   />
                 </div>

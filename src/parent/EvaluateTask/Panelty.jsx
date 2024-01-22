@@ -5,7 +5,7 @@ import TaskTime from "../attributes/TaskTime";
 import CheatTags from "./CheatTags";
 import Time from "./Time";
 
-function Panelty() {
+function Panelty({ taskdate, setTaskdate, tasktime, setTasktime }) {
   const [selectedOption, setSelectedOption] = useState("");
   const handleChange = (event) => {
     setSelectedOption(event.target.value); // Update the selected option when a radio button is clicked
@@ -117,7 +117,7 @@ function Panelty() {
                 >
                   Submission Date
                 </label>
-                <CalenderInput />
+                <CalenderInput taskdate={taskdate} setTaskdate={setTaskdate} />
               </div>
               <div className="ml-10 mt-3">
                 <label
@@ -126,7 +126,11 @@ function Panelty() {
                 >
                   Submission Time
                 </label>
-                <Time />
+                <TaskTime
+                  tasktime={tasktime}
+                  setTasktime={setTasktime}
+                  setTaskdate={setTaskdate}
+                />
               </div>
             </div>
           </>

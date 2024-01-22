@@ -5,7 +5,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CalenderInput from "../attributes/CalenderInput";
 import TaskTime from "../attributes/TaskTime";
-import Time from "../EvaluateTask/Time";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -27,18 +26,40 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
   const handleEdit = () => {
     setIsEditing(true);
   };
-
+  const [taskdate, setTaskdate] = useState("");
+  const [tasktime, setTasktime] = useState();
   const handleSave = () => {
     // Check if all required fields are filled
     if (
       !editedDetails.title ||
       !editedDetails.details ||
-      !editedDetails.reward
+      !editedDetails.reward ||
+      !taskdate ||
+      !tasktime
     ) {
       toast.error("Please fill in all required fields");
       return;
     }
+    const taskDate = new Date(taskdate);
+    const currentDate = new Date();
 
+    // Extract the date part without considering the time
+    const taskDateWithoutTime = new Date(taskDate.toDateString());
+    const currentDateWithoutTime = new Date(currentDate.toDateString());
+
+    if (taskDateWithoutTime < currentDateWithoutTime) {
+      return toast.error("Task submission date cannot be in the past ");
+    }
+    const selectedTime = new Date(taskdate + " " + tasktime);
+
+    // Compare with the current time
+    const currentTime = new Date();
+
+    if (selectedTime <= currentTime) {
+      return toast.error(
+        "Task submission time cannot be in the past or present (1-24)"
+      );
+    }
     setEditedDetails(
       { ...editedDetails, fileType: fileTypes.join(", ") },
       () => {
@@ -174,7 +195,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
               >
                 Submission Date
               </label>
-              <CalenderInput />
+              <CalenderInput taskdate={taskdate} setTaskdate={setTaskdate} />
             </div>
             <div className="ml-10 mt-3">
               <label
@@ -183,7 +204,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
               >
                 Submission Time
               </label>
-              <Time />
+              <TaskTime tasktime={tasktime} setTasktime={setTasktime} />
             </div>
           </div>
         </p>

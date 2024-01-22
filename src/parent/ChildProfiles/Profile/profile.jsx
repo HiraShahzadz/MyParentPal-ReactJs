@@ -167,14 +167,6 @@ export function MyProfile() {
                 <div className="text-left text-lg font-bold text-black">
                   Task Summary
                 </div>
-                <div className="text-right">
-                  <a
-                    href="child/pages/dashboard/home"
-                    className="text-black hover:underline"
-                  >
-                    View All
-                  </a>
-                </div>
               </div>
               <h2 className="text-md mb-3 ml-3 mt-5 font-bold">
                 Assigned Tasks

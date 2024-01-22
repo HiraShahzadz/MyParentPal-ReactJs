@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MilstoneTags from "./MilstoneTags";
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { toast } from "react-hot-toast";
+import { HTML5Backend } from "react-dnd-html5-backend";
 function ProfileTags() {
   const status = [
     { label: "Skills" },
@@ -30,7 +34,7 @@ function ProfileTags() {
   const saveNewTag = () => {
     // You can handle saving the new tag logic here
     console.log("Saving new tag:", newTag);
-
+    toast.success("New tags added");
     // For simplicity, let's close the popup after saving
     closePopup();
   };
@@ -40,6 +44,9 @@ function ProfileTags() {
   };
   return (
     <div>
+      <DndProvider backend={HTML5Backend}>
+        <Toaster />
+      </DndProvider>
       <div className="ml-3.5 mr-3 mt-[-40px] rounded-lg border border-gray-200 p-7 shadow-lg">
         <div className="text-left text-lg font-bold text-black">
           Milstone Tags

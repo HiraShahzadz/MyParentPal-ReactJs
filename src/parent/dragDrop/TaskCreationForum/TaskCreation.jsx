@@ -57,6 +57,7 @@ export function TaskCreation() {
   }, []);
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     if (task.name.length < 3) {
       return toast.error("A task must have more than 3 characters");
     }
@@ -96,6 +97,7 @@ export function TaskCreation() {
   console.log("setStatus value:", status);
   //for saving in database
   async function save(event) {
+    event.preventDefault();
     if (
       !taskname ||
       !taskdescription ||
@@ -107,11 +109,24 @@ export function TaskCreation() {
       return toast.error("Please fill in all fields");
     }
     const taskDate = new Date(taskdate);
-
     const currentDate = new Date();
 
-    if (taskDate < currentDate && taskDate === currentDate) {
-      return toast.error("Task submission date cannot be in the past");
+    // Extract the date part without considering the time
+    const taskDateWithoutTime = new Date(taskDate.toDateString());
+    const currentDateWithoutTime = new Date(currentDate.toDateString());
+
+    if (taskDateWithoutTime < currentDateWithoutTime) {
+      return toast.error("Task submission date cannot be in the past ");
+    }
+    const selectedTime = new Date(taskdate + " " + tasktime);
+
+    // Compare with the current time
+    const currentTime = new Date();
+
+    if (selectedTime <= currentTime) {
+      return toast.error(
+        "Task submission time cannot be in the past or present (1-24)"
+      );
     }
     try {
       if (taskname.length > 3 && taskname.length < 15) {

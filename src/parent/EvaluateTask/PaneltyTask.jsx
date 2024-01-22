@@ -24,21 +24,45 @@ function PaneltyTask(props) {
     const selectedImage = e.target.files[0];
     setImage(selectedImage);
   };
-
+  const [taskdate, setTaskdate] = useState("");
+  const [tasktime, setTasktime] = useState();
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!taskdate || !tasktime) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    const taskDate = new Date(taskdate);
+    const currentDate = new Date();
 
+    // Extract the date part without considering the time
+    const taskDateWithoutTime = new Date(taskDate.toDateString());
+    const currentDateWithoutTime = new Date(currentDate.toDateString());
+
+    if (taskDateWithoutTime < currentDateWithoutTime) {
+      return toast.error("Task submission date cannot be in the past ");
+    }
+    const selectedTime = new Date(taskdate + " " + tasktime);
+
+    // Compare with the current time
+    const currentTime = new Date();
+
+    if (selectedTime <= currentTime) {
+      return toast.error(
+        "Task submission time cannot be in the past or present (1-24)"
+      );
+    }
     // Include logic to handle form submission with formData and image
     // This might involve sending a request to the backend or triggering notifications
 
     console.log("Form Data:", formData);
     console.log("Image File:", image);
-    props.onClose(false);
+
     toast.success("Task evaluadted");
+    props.onClose(false);
   };
   const handledecline = (event) => {
     event.preventDefault();
-
     props.onClose(false);
   };
 
@@ -106,7 +130,12 @@ function PaneltyTask(props) {
                 <FileUploader />
               </div>
               <div className="rounded-lg border border-gray-400 bg-gray-100 p-2">
-                <Panelty />
+                <Panelty
+                  taskdate={taskdate}
+                  setTaskdate={setTaskdate}
+                  tasktime={tasktime}
+                  setTasktime={setTasktime}
+                />
               </div>
             </form>
           </div>
