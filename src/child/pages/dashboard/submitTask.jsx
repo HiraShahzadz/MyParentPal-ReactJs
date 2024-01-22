@@ -38,25 +38,34 @@ const SubmitTask = () => {
   };
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [submittedFile, setSubmittedFile] = useState(""); // Initialize with an empty string
-
+  const handleFileSelection = (file) => {
+    setSelectedFile(file); // Update the selected file state
+  };
   const handleAddSubmissionClick = () => {
     setShowFileUploader(true);
     setSubmissionClicked(true);
   };
 
-  const handleSaveChangesClick = (newFile) => {
+  const handleSaveChangesClick = (file) => {
+    if (!file) {
+      toast.error("Please upload a file");
+      return;
+    }
+  
+    // Update the submitted file state
+    setSubmittedFile(file.name);
+  
     setShowFileUploader(false);
-   // Hide the FileUploader after saving changes
-  };
-
-  async function SubmitTask() {
     toast.success("Task submitted successfully!");
-  }
-  async function CancelSubmit() {
-    toast.error("Submission Cancelled!");
-  }
+  };
+  
+  
+  
+
+
   const handleCancelClick = () => {
     setShowFileUploader(false); // Hide the FileUploader when cancel is clicked
+    toast.error("Submission Cancelled!");
   };
   const [submissionClicked, setSubmissionClicked] = useState(false);
 
@@ -145,11 +154,11 @@ const SubmitTask = () => {
               <Typography variant="h5" color="black" className=" mt-3 mb-8">
                 Attach file here
               </Typography>
-              <FileUploader onSubmit={handleSaveChangesClick} onCancel={handleCancelClick} />
+              <FileUploader onSubmit={handleSaveChangesClick} onCancel={handleCancelClick}  />
               <div className="flex justify-center items-center mt-5">
                 <button
                   className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                  onClick={ SubmitTask} // You may adjust this if needed
+                  onClick={ handleSaveChangesClick} // You may adjust this if needed
                 >
                   Save Changes
                 </button>
