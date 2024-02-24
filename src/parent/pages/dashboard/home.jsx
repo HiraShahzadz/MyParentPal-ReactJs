@@ -12,7 +12,7 @@ export function ParentHome() {
   }, []);
 
   async function Load() {
-    const result = await axios.get("http://localhost:8080/api/v1/task/getall");
+    const result = await axios.get("http://localhost:8081/api/v1/task/getall");
     setTasks(result.data);
     console.log(result.data);
   }

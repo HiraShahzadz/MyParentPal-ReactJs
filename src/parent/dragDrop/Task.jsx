@@ -32,7 +32,7 @@ function Task({ task, tasks, setTasks }) {
   const [showModal, setShowModal] = useState(false);
   const [taskid, setId] = useState("");
   async function DeleteStudent(taskid) {
-    await axios.delete("http://localhost:8080/api/v1/task/delete/" + taskid);
+    await axios.delete("http://localhost:8081/api/v1/task/delete/" + taskid);
     toast("Task removed", { icon: "💀" });
 
     window.location.reload();
