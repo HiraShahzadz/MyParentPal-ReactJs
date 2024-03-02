@@ -75,7 +75,7 @@ export function SignUp() {
       });
 
       console.log("After Axios Request - Success");
-
+      navigate("/parentDashboard/parent/home/");
       toast.success("Sign Up Successfully");
 
       setEmail("");
