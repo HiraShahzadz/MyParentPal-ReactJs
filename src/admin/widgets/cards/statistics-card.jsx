@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Card,
   CardHeader,
@@ -66,10 +67,10 @@ StatisticsCard.propTypes = {
   ]),
   icon: PropTypes.node.isRequired,
   title: PropTypes.node.isRequired,
-  value: PropTypes.node.isRequired,
+  value: PropTypes.node, // Making value prop optional
   footer: PropTypes.node,
 };
 
-StatisticsCard.displayName = "/src/widgets/cards/statistics-card.jsx";
+StatisticsCard.displayName = "StatisticsCard";
 
 export default StatisticsCard;

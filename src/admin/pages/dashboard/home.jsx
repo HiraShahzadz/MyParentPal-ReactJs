@@ -12,11 +12,10 @@ import { statisticsCardsData, statisticsChartsData } from "@/admin/data";
 
 export function Home() {
   const [userCounts, setUserCounts] = useState({
-    totalUsers: "",
-    parentUsers: "",
-    childUsers: "",
+    totalUsers: 0,
+    parentUsers: 0,
+    childUsers: 0,
   });
-
   useEffect(() => {
     fetchUserCounts();
   }, []);
@@ -27,12 +26,17 @@ export function Home() {
         "http://localhost:8081/api/v1/user/count-users"
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch user counts");
+        throw new Error(`Failed to fetch user counts: ${response.status}`);
       }
       const data = await response.json();
-      setUserCounts(data);
+      setUserCounts({
+        totalUsers: data.totalUsers,
+        parentUsers: data.parentUsers,
+        childUsers: data.childUsers,
+      });
     } catch (error) {
       console.error("Error fetching user counts:", error);
+      // Handle error gracefully, e.g., display an error message to the user
     }
   };
 
