@@ -1,107 +1,153 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Card,
   CardHeader,
   CardBody,
 } from "@material-tailwind/react";
-import { ClockIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
+import { ClockIcon } from "@heroicons/react/24/outline";
 import { StatisticsCard } from "@/admin/widgets/cards";
 import { StatisticsChart } from "@/admin/widgets/charts";
-import {
-  statisticsCardsData,
-  statisticsChartsData,
-  ordersOverviewData,
-} from "@/admin/data";
-
-// Sample user data
-const userData = [
-  { id: 1, email: "user1@example.com", role: "Parent" },
-  { id: 2, email: "user2@example.com", role: "Child" },
-  { id: 3, email: "user3@example.com", role: "Child" },
-  { id: 4, email: "user4@example.com", role: "Parent" },
-  { id: 5, email: "user5@example.com", role: "Child" },
-  // Add more user data as needed
-];
-
-const UserTable = () => (
-  <div className="mb-6 md:col-span-1 md:mb-0">
-    <Card>
-      <CardHeader
-        variant="gradient"
-        style={{ background: "white" }}
-        className="mb-8 p-6"
-      >
-        <Typography variant="h6" style={{ color: "black" }}>
-          User Report
-        </Typography>
-      </CardHeader>
-
-      <CardBody className="overflow-x-scroll px-0 pb-2 pt-0">
-        <table className="w-full min-w-[640px] table-auto">
-          <thead>
-            <tr>
-              {["Id", "Email", "Role"].map((el) => (
-                <th
-                  key={el}
-                  className="border-b border-blue-gray-50 px-5 py-3 text-left"
-                >
-                  <Typography
-                    variant="small"
-                    className="text-[12px] font-bold uppercase text-black"
-                  >
-                    {el}{" "}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {userData.map(({ id, email, password, role }) => (
-              <tr key={id}>
-                <td className="border-b border-blue-gray-50 px-5 py-3">
-                  <Typography
-                    variant="small"
-                    className="text-xs font-medium text-blue-gray-600"
-                  >
-                    {id}
-                  </Typography>
-                </td>
-                <td className="border-b border-blue-gray-50 px-5 py-3">
-                  <Typography
-                    variant="small"
-                    className="text-xs font-medium text-blue-gray-600"
-                  >
-                    {email}
-                  </Typography>
-                </td>
-
-                <td className="border-b border-blue-gray-50 px-5 py-3">
-                  <Typography
-                    variant="small"
-                    className="text-xs font-medium text-blue-gray-600"
-                  >
-                    {role}
-                  </Typography>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </CardBody>
-    </Card>
-  </div>
-);
+import { statisticsCardsData, statisticsChartsData } from "@/admin/data";
 
 export function Home() {
+  const [userCounts, setUserCounts] = useState({
+    totalUsers: "",
+    parentUsers: "",
+    childUsers: "",
+  });
+
+  useEffect(() => {
+    fetchUserCounts();
+  }, []);
+
+  const fetchUserCounts = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8081/api/v1/user/count-users"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch user counts");
+      }
+      const data = await response.json();
+      setUserCounts(data);
+    } catch (error) {
+      console.error("Error fetching user counts:", error);
+    }
+  };
+
+  const UserTable = () => {
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+      fetchUserData();
+    }, []);
+
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8081/api/v1/user/get-all"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const data = await response.json();
+        const userDataWithId = data.map((user, index) => ({
+          ...user,
+          id: index + 1,
+        }));
+        setUserData(userDataWithId);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    return (
+      <div className="mb-6 md:col-span-1 md:mb-0">
+        <Card>
+          <CardHeader
+            variant="gradient"
+            style={{ background: "white" }}
+            className="mb-8 p-6"
+          >
+            <Typography variant="h6" style={{ color: "black" }}>
+              User Report
+            </Typography>
+          </CardHeader>
+
+          <CardBody className="overflow-x-scroll px-0 pb-2 pt-0">
+            <table className="w-full min-w-[640px] table-auto">
+              <thead>
+                <tr>
+                  {["Id", "Email/Username", "Role"].map((el) => (
+                    <th
+                      key={el}
+                      className="border-b border-blue-gray-50 px-5 py-3 text-left"
+                    >
+                      <Typography
+                        variant="small"
+                        className="text-[12px] font-bold uppercase text-black"
+                      >
+                        {el}{" "}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {userData.map(({ id, email, role }) => (
+                  <tr key={id}>
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <Typography
+                        variant="small"
+                        className="text-xs font-medium text-blue-gray-600"
+                      >
+                        {id}
+                      </Typography>
+                    </td>
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <Typography
+                        variant="small"
+                        className="text-xs font-medium text-blue-gray-600"
+                      >
+                        {email}
+                      </Typography>
+                    </td>
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <Typography
+                        variant="small"
+                        className="text-xs font-medium text-blue-gray-600"
+                      >
+                        {role}
+                      </Typography>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardBody>
+        </Card>
+      </div>
+    );
+  };
+
   return (
     <div className="mt-12 ">
       <div className="mb-12 grid gap-x-6 gap-y-10  md:grid-cols-2 xl:grid-cols-3">
-        {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
+        {statisticsCardsData.map(({ icon, title, footer, ...rest }, index) => (
           <StatisticsCard
             key={title}
             {...rest}
             title={title}
+            value={
+              index === 0
+                ? userCounts.totalUsers
+                : index === 1
+                ? userCounts.parentUsers
+                : index === 2
+                ? userCounts.childUsers
+                : ""
+            }
             icon={React.createElement(icon, {
               className: "w-6 h-6 text-white bg-MyPurple-400",
             })}
