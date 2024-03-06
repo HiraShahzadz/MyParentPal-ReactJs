@@ -2,10 +2,10 @@ import { UserIcon } from "@heroicons/react/24/solid";
 
 export const statisticsCardsData = [
   {
-    color: "MyPurple", // Updated color with hexadecimal value
+    color: "MyPurple",
     icon: UserIcon,
     title: "Total Users",
-    value: "25,000",
+    value: "", // Placeholder for total users count
     footer: {
       color: "purple-400",
       value: "+55%",
@@ -13,10 +13,10 @@ export const statisticsCardsData = [
     },
   },
   {
-    color: "MyPurple", // Updated color with hexadecimal value
+    color: "MyPurple",
     icon: UserIcon,
     title: "Parent User",
-    value: "8,000",
+    value: "", // Placeholder for parent users count
     footer: {
       color: "text-green-500",
       value: "+3%",
@@ -24,10 +24,10 @@ export const statisticsCardsData = [
     },
   },
   {
-    color: "MyPurple", // Updated color with hexadecimal value
+    color: "MyPurple",
     icon: UserIcon,
     title: "Child User",
-    value: "17,000",
+    value: "", // Placeholder for child users count
     footer: {
       color: "text-red-500",
       value: "-2%",
@@ -35,5 +35,3 @@ export const statisticsCardsData = [
     },
   },
 ];
-
-export default statisticsCardsData;

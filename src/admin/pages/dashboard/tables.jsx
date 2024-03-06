@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Card,
@@ -6,35 +6,73 @@ import {
   CardBody,
   Typography,
   Avatar,
-  Chip,
-  Tooltip,
-  Progress,
 } from "@material-tailwind/react";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
-import { authorsTableData, projectsTableData } from "@/admin/data";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
-import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
-export function Tables() {
-  const [responses, setResponses] = useState({});
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
-  const handleResponseChange = (authorName, event) => {
-    const newText = event.target.value;
-    setResponses((prevResponses) => ({
-      ...prevResponses,
-      [`${authorName}-${event.target.dataset.index}`]: newText,
-    }));
+export function Tables() {
+  const [queries, setQueries] = useState([]);
+
+  useEffect(() => {
+    fetchQueries();
+  }, []);
+
+  const fetchQueries = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8081/api/v1/user/get-all-queries"
+      );
+      setQueries(response.data);
+    } catch (error) {
+      console.error("Error fetching queries:", error);
+    }
   };
 
-  const handleResponseSubmit = (authorName) => {
-    const responseText = responses[authorName];
-    console.log(`Response for ${authorName}: ${responseText}`);
+  const handleResponseChange = (index, event) => {
+    const newText = event.target.value;
+    const updatedQueries = [...queries];
+    updatedQueries[index].response = newText;
+    setQueries(updatedQueries);
+  };
 
-    toast.success(`Response submitted for ${authorName}`, {
-      className: "purple-progress-bar",
-      style: { borderRadius: "10px" },
-    });
+  const handleResponseSubmit = async (index) => {
+    const query = queries[index];
+    const responseText = query.response;
+    if (!responseText) {
+      return toast.error("Empty response cannot be submitted");
+    }
+    if (query.status === "responded") {
+      return toast.error("Response already submitted for this query");
+    }
+    if (!responseText.trim()) {
+      toast.error("Response cannot be empty");
+      return;
+    }
+
+    try {
+      // Send the request to update the query response
+      await axios.put(
+        `http://localhost:8081/api/v1/user/update-query-status/${query.id}`,
+        {
+          status: true,
+        }
+      );
+
+      // Fetch updated queries data
+      const updatedResponse = await axios.get(
+        "http://localhost:8081/api/v1/user/get-all-queries"
+      );
+      setQueries(updatedResponse.data);
+
+      console.log(`Response for query ID ${query.id}: ${responseText}`);
+      toast.success(`Response submitted for ${query.name}`);
+    } catch (error) {
+      console.error("Error updating query response:", error);
+      toast.error("Failed to update query response");
+    }
   };
 
   return (
@@ -57,97 +95,117 @@ export function Tables() {
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
-                {["name", "query", "status", "date", "Response"].map((el) => (
-                  <th
-                    key={el}
-                    className="border-b border-blue-gray-50 px-5 py-3 text-left"
+                <th className="border-b border-blue-gray-50 px-5 py-3 text-left">
+                  <Typography
+                    variant="small"
+                    className="text-[11px] font-bold uppercase text-blue-gray-400"
                   >
-                    <Typography
-                      variant="small"
-                      className="text-[11px] font-bold uppercase text-blue-gray-400"
-                    >
-                      {el}
-                    </Typography>
-                  </th>
-                ))}
+                    Name
+                  </Typography>
+                </th>
+                <th className="border-b border-blue-gray-50 px-5 py-3 text-left">
+                  <Typography
+                    variant="small"
+                    className="text-[11px] font-bold uppercase text-blue-gray-400"
+                  >
+                    Email
+                  </Typography>
+                </th>
+                <th className="border-b border-blue-gray-50 px-5 py-3 text-left">
+                  <Typography
+                    variant="small"
+                    className="text-[11px] font-bold uppercase text-blue-gray-400"
+                  >
+                    Query
+                  </Typography>
+                </th>
+                <th className="border-b border-blue-gray-50 px-5 py-3 text-left">
+                  <Typography
+                    variant="small"
+                    className="text-[11px] font-bold uppercase text-blue-gray-400"
+                  >
+                    Date
+                  </Typography>
+                </th>
+                <th className="border-b border-blue-gray-50 px-5 py-3 text-left">
+                  <Typography
+                    variant="small"
+                    className="text-[11px] font-bold uppercase text-blue-gray-400"
+                  >
+                    Status
+                  </Typography>
+                </th>
+                <th className="border-b border-blue-gray-50 px-5 py-3 text-left">
+                  <Typography
+                    variant="small"
+                    className="text-[11px] font-bold uppercase text-blue-gray-400"
+                  >
+                    Response
+                  </Typography>
+                </th>
               </tr>
             </thead>
             <tbody>
-              {authorsTableData.map(({ img, name, online, date }, key) => {
-                const query = "Sample query text"; // Sample query text
-                const className = `py-3 px-5 ${
-                  key === authorsTableData.length - 1
-                    ? ""
-                    : "border-b border-blue-gray-50"
-                }`;
-
-                return (
-                  <tr key={name}>
-                    <td className={className}>
-                      <div className="flex items-center gap-4">
-                        <Avatar src={img} alt={name} size="sm" />
-                        <div>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-semibold"
-                          >
-                            {name}
-                          </Typography>
-                          <Typography className="text-xs font-normal text-blue-gray-500">
-                            {query}
-                          </Typography>
-                        </div>
-                      </div>
+              {queries.map(
+                (
+                  { _id, name, email, query, date, status, response },
+                  index
+                ) => (
+                  <tr key={_id}>
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <Typography className="text-xs font-medium text-blue-gray-600">
+                        {name}
+                      </Typography>
                     </td>
-                    <td className={className}>
-                      <Typography className="text-xs font-normal text-blue-gray-500">
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <Typography className="text-xs font-medium text-blue-gray-600">
+                        {email}
+                      </Typography>
+                    </td>
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <Typography className="text-xs font-medium text-blue-gray-600">
                         {query}
                       </Typography>
                     </td>
-                    <td className={className}>
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <Typography className="text-xs font-medium text-blue-gray-600">
+                        {date}
+                      </Typography>
+                    </td>
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
                       <div
-                        variant="gradient"
-                        color={online ? "purple" : "blue-gray"}
-                        value={online ? "responded" : "pending"}
-                        className={`rounded-lg py-1 text-center text-[11px] font-medium ${
-                          online
+                        className={`flex items-center justify-center rounded-lg py-1  text-[11px] font-medium ${
+                          status === "responded"
                             ? "bg-[#B089BE] text-[#ffffff]"
                             : "bg-gray-400 text-[#fff]"
                         }`}
+                        style={{ width: "95px", height: "23px" }}
                       >
-                        {online ? "Responded" : "Pending"}
+                        {status === "responded" ? "Responded" : "Pending"}
                       </div>
                     </td>
-                    <td className={className} style={{ fontSize: "12px" }}>
-                      {date}
-                    </td>
-                    <td className={className}>
-                      <div
-                        style={{ display: "flex", alignItems: "center" }}
-                        className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]"
-                      >
+
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <div style={{ display: "flex", alignItems: "center" }}>
                         <input
                           type="text"
-                          value={responses[`${name}-${key}`] || ""}
-                          onChange={(e) => handleResponseChange(name, e)}
+                          value={response || ""}
+                          onChange={(e) => handleResponseChange(index, e)}
                           placeholder="Type your response here..."
                           className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-xs text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                          data-index={key}
                           required
                         />
-
                         <button
-                          onClick={() => handleResponseSubmit(name)}
-                          className="rounded-md bg-[#B089BE] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                          onClick={() => handleResponseSubmit(index)}
+                          className="ml-2 rounded-md bg-[#B089BE] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                         >
                           Submit
                         </button>
                       </div>
                     </td>
                   </tr>
-                );
-              })}
+                )
+              )}
             </tbody>
           </table>
         </CardBody>

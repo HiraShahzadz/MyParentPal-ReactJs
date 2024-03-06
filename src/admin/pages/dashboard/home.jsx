@@ -74,7 +74,7 @@ export function Home() {
             style={{ background: "white" }}
             className="mb-8 p-6"
           >
-            <Typography variant="h6" style={{ color: "black" }}>
+            <Typography variant="h6" style={{ color: "#000000" }}>
               User Report
             </Typography>
           </CardHeader>
@@ -90,7 +90,7 @@ export function Home() {
                     >
                       <Typography
                         variant="small"
-                        className="text-[12px] font-bold uppercase text-black"
+                        className="text-[12px] font-bold uppercase text-blue-gray-600"
                       >
                         {el}{" "}
                       </Typography>

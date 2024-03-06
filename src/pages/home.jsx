@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/styles.css";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
@@ -25,6 +26,47 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 export function Home() {
   const location = useLocation();
   const hash = location.hash;
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [query, setQuery] = useState("");
+
+  async function save(event) {
+    event.preventDefault();
+
+    if (!name || !email || !query) {
+      return toast.error("Please fill in all fields");
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmail("");
+      return toast.error("Please enter a valid email address");
+    }
+
+    try {
+      await axios.post("http://localhost:8081/api/v1/user/save-query", {
+        name: name,
+        email: email,
+        query: query,
+      });
+
+      console.log("After Axios Request - Success");
+
+      toast.success("Query sent successfully!");
+
+      setName("");
+      setEmail("");
+      setQuery("");
+    } catch (err) {
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+      } else if (err.request) {
+        console.error("Network Error:", err.request);
+      } else {
+        console.error("Other Error:", err.message);
+      }
+    }
+  }
 
   // Scroll to the section based on the hash
   React.useEffect(() => {
@@ -284,34 +326,50 @@ export function Home() {
                   <input
                     size="lg"
                     type="text"
+                    id="name"
+                    value={name}
                     placeholder="Full Name"
                     pattern="[A-Za-z ]+"
                     title="Please enter only letters"
                     className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                     required
+                    onChange={(event) => {
+                      setName(event.target.value);
+                    }}
                   />
                 </div>
                 <div className="mb-4 gap-4">
                   <input
                     size="lg"
                     type="email"
+                    id="email"
+                    value={email}
                     placeholder="Email Address"
                     className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                     required
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                    }}
                   />
                 </div>
                 <div className="mb-4 gap-4">
                   <textarea
                     size="lg"
+                    id="query"
+                    value={query}
                     rows={8}
                     placeholder="Enter your query"
                     className="block w-full rounded-lg border border-gray-400  bg-white p-2.5 text-sm text-gray-900 focus:border-MyPurple-400 focus:outline-none focus:ring-MyPurple-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-MyPurple-400 dark:focus:ring-MyPurple-400"
                     required
+                    onChange={(event) => {
+                      setQuery(event.target.value);
+                    }}
                   />
                 </div>
 
                 <button
                   type="submit"
+                  onClick={save}
                   className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
                 >
                   Send Message
