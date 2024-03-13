@@ -51,13 +51,36 @@ export function Tables() {
       toast.error("Response cannot be empty");
       return;
     }
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/api/v1/user/send-mail",
+        {
+          toEmail: query.email,
+          body: responseText,
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Email sent successfully");
+        toast.success("Email sent successfully");
+      } else {
+        console.error("Failed to send email");
+        toast.error("Failed to send email");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("Failed to send email");
+    }
 
     try {
       // Send the request to update the query response
       await axios.put(
         `http://localhost:8081/api/v1/user/update-query-status/${query.id}`,
+        responseText, // Send only the response text as a string
         {
-          status: true,
+          headers: {
+            "Content-Type": "text/plain",
+          },
         }
       );
 
@@ -65,8 +88,8 @@ export function Tables() {
       const updatedResponse = await axios.get(
         "http://localhost:8081/api/v1/user/get-all-queries"
       );
-      setQueries(updatedResponse.data);
 
+      setQueries(updatedResponse.data);
       console.log(`Response for query ID ${query.id}: ${responseText}`);
       toast.success(`Response submitted for ${query.name}`);
     } catch (error) {
