@@ -1,4 +1,3 @@
-import { Button } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
@@ -6,8 +5,9 @@ import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faPhone } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
-function AboutSection() {
+function AboutSection({ profile }) {
   const [isFirstNameFocused, setIsFirstNameFocused] = useState(false);
   const [isLastNameFocused, setIsLastNameFocused] = useState(false);
   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
@@ -49,7 +49,46 @@ function AboutSection() {
     event.preventDefault();
     toast.success("Profile updated");
   };
+  const [id, setId] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [cnic, setCnic] = useState("");
 
+  async function update(event) {
+    event.preventDefault();
+    if (!firstName || !lastName || !phoneNo || !cnic) {
+      return toast.error("Please fill in all fields");
+    }
+    try {
+      await axios.put(
+        "http://localhost:8081/api/v1/user/editParent/" + profile.id,
+        {
+          id: profile.id,
+          email: profile.email,
+          password: profile.password,
+          firstName: firstName,
+          lastName: lastName,
+          phoneNo: phoneNo,
+          cnic: cnic,
+        }
+      );
+      toast.success("Parent profile is created Successfully");
+      setFirstName("");
+      setLastName("");
+      setPhoneNo("");
+      setCnic("");
+    } catch (err) {
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+      } else if (err.request) {
+        console.error("Network Error:", err.request);
+      } else {
+        console.error("Other Error:", err.message);
+      }
+      toast.error("Failed to save in information");
+    }
+  }
   return (
     <div>
       <div>
@@ -67,8 +106,12 @@ function AboutSection() {
                   />
                   <input
                     type="text"
-                    name="task"
-                    id="task"
+                    name="firstName"
+                    id="firstName"
+                    value={profile.firstName}
+                    onChange={(event) => {
+                      setFirstName(event.target.value);
+                    }}
                     pattern="[A-Za-z]+"
                     title="Please enter only letters"
                     autoComplete="task"
@@ -88,8 +131,12 @@ function AboutSection() {
                   />
                   <input
                     type="text"
-                    name="task"
-                    id="task"
+                    name="lastName"
+                    id="lastName"
+                    value={profile.lastName}
+                    onChange={(event) => {
+                      setLastName(event.target.value);
+                    }}
                     pattern="[A-Za-z ]+"
                     title="Please enter only letters"
                     autoComplete="task"
@@ -109,8 +156,12 @@ function AboutSection() {
                   />
                   <input
                     type="text"
-                    name="task"
-                    id="task"
+                    name="phoneNo"
+                    id="phoneNo"
+                    value={profile.phoneNo}
+                    onChange={(event) => {
+                      setPhoneNo(event.target.value);
+                    }}
                     pattern="\+\d{12}"
                     title="Enter a valid phone no. (e.g., +929081675668)"
                     autoComplete="task"
@@ -131,8 +182,12 @@ function AboutSection() {
                   />
                   <input
                     type="text"
-                    name="task"
-                    id="task"
+                    name="cnic"
+                    id="cnic"
+                    value={profile.cnic}
+                    onChange={(event) => {
+                      setCnic(event.target.value);
+                    }}
                     pattern="\d{5}-\d{7}-\d"
                     title="Enter a valid CNIC no. (e.g., 12345-6789012-3)"
                     autoComplete="task"
@@ -149,6 +204,7 @@ function AboutSection() {
           <div className="mt-4 flex items-center justify-center">
             <button
               type="submit"
+              onClick={update}
               className="mr-2 mt-2 rounded-md bg-MyPurple-400 px-5 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
             >
               Save

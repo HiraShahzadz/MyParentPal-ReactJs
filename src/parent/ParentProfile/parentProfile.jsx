@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardBody } from "@material-tailwind/react";
 import { CameraIcon } from "@heroicons/react/24/solid";
-
-import { tasksData } from "../data/tasksData";
-
+import axios from "axios";
 import bgImage from "/img/bgcover.jpeg";
 import AboutSection from "./AboutSection";
 import Feedback from "./Feedback";
@@ -98,6 +96,21 @@ export function ParentProfile() {
     });
   };
   const [showModal, setShowModal] = useState(false);
+  const [parentProfile, setParentProfile] = useState([]);
+  useEffect(() => {
+    loadParentProfile();
+  }, []);
+  async function loadParentProfile() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-parent"
+      );
+      setParentProfile(result.data);
+      console.log("Parent profile:", result.data);
+    } catch (error) {
+      console.error("Error loading parentProfile:", error);
+    }
+  }
   return (
     <>
       <div
@@ -144,14 +157,19 @@ export function ParentProfile() {
             {/* Left side div */}
 
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
-              <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
-                <div className="text-center text-lg font-bold text-black">
-                  About
-                </div>
-                <div>
-                  <AboutSection />
-                </div>
-              </div>
+              {parentProfile.map(
+                (profile) =>
+                  profile.role === "parent" && (
+                    <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
+                      <div className="text-center text-lg font-bold text-black">
+                        About
+                      </div>
+                      <div>
+                        <AboutSection profile={profile} />
+                      </div>
+                    </div>
+                  )
+              )}
             </div>
 
             {/* Right side div covering remaining space */}
