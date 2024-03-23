@@ -94,6 +94,7 @@ export function TaskCreation() {
   const [tasktag, setTasktag] = useState("");
   const [taskassignee, setTaskassignee] = useState("");
   const [tasktype, setTasktype] = useState("");
+  const [childId, setChildId] = useState("");
   console.log("setStatus value:", status);
   //for saving in database
   async function save(event) {
@@ -141,9 +142,9 @@ export function TaskCreation() {
           tasktag: tasktag,
           taskassignee: taskassignee,
           tasktype: tasktype,
+          childId: childId,
         });
         toast.success("Task Created");
-
         setTaskname("");
         setTaskdescription("");
         setStatus("");
@@ -154,6 +155,7 @@ export function TaskCreation() {
         setTasktag("");
         setTaskassignee("");
         setTasktype("");
+        setChildId("");
       }
       if (taskname.length <= 3) {
         return toast.error("A task must have more than 3 characters");
@@ -313,7 +315,10 @@ export function TaskCreation() {
 
                 <div className="flex flex-col">
                   <div className="mb-7">
-                    <Assignee />
+                    <Assignee
+                      setTaskassignee={setTaskassignee}
+                      setChildId={setChildId}
+                    />
                   </div>
 
                   <div className="mb-7">
@@ -334,7 +339,7 @@ export function TaskCreation() {
                     />
                   </div>
                   <div>
-                    <Tags />
+                    <Tags setTasktag={setTasktag} />
                   </div>
 
                   <div className="mb-20 space-y-10">
