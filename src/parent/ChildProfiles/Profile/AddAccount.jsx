@@ -15,11 +15,21 @@ function AddAccount(props) {
     password: "",
     dob: "",
     name: "",
+    image: "",
   });
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
     setImage(selectedImage);
+    // Convert image to Base64
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({
+        ...formData,
+        image: reader.result, // Store Base64 string
+      });
+    };
+    reader.readAsDataURL(selectedImage);
   };
 
   const handleSubmit = (event) => {
@@ -47,12 +57,12 @@ function AddAccount(props) {
   const [gender, setGender] = useState("");
   const [tags, setTags] = useState([]);
   const [role, setRole] = useState("child");
+  const [parentId, setParentId] = useState("");
   async function save(event) {
     event.preventDefault();
     if (!email || !password || !name || !dob || !gender || !tags) {
       return toast.error("Please fill in all fields");
     }
-
     const dobDate = new Date(dob);
 
     const currentDate = new Date();
@@ -71,6 +81,7 @@ function AddAccount(props) {
       );
     }
     try {
+      const base64Image = formData.image.split(",")[1];
       await axios.post("http://localhost:8081/api/v1/user/save-child", {
         name: name,
         email: email,
@@ -79,6 +90,8 @@ function AddAccount(props) {
         gender: gender,
         tags: tags,
         role: role,
+        img: base64Image,
+        parentId: parentId,
       });
 
       toast.success("Child Account is created Successfully");
@@ -89,6 +102,7 @@ function AddAccount(props) {
       setPassword("");
       setGender("");
       setTags([]);
+      setImage("");
     } catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);
