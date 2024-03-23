@@ -1,22 +1,54 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import ListTasks from "@/parent/dragDrop/ListTasks";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import FilterChildTask from "@/parent/dragDrop/FilterChildTask";
-import axios from "axios";
+
 export function ParentHome() {
+  const [childProfileData, setChildProfileData] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [selectedChildId, setSelectedChildId] = useState(null);
+
   useEffect(() => {
-    (async () => await Load())();
+    loadChildProfileData();
+    loadTasks();
   }, []);
 
-  async function Load() {
-    const result = await axios.get("http://localhost:8081/api/v1/task/getall");
-    setTasks(result.data);
-    console.log(result.data);
+  async function loadChildProfileData() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-child"
+      );
+      setChildProfileData(result.data);
+      console.log("Child profile data:", result.data);
+    } catch (error) {
+      console.error("Error loading child profile data:", error);
+    }
   }
-  console.log("tasks", tasks);
+
+  async function loadTasks() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/task/getall"
+      );
+      setTasks(result.data);
+      console.log("All tasks:", result.data);
+    } catch (error) {
+      console.error("Error loading tasks:", error);
+    }
+  }
+  // Filter tasks based on child IDs
+  const filteredTasks = tasks.filter(
+    (task) =>
+      childProfileData.some((child) => child.id === task.childId) &&
+      (selectedChildId ? task.childId === selectedChildId : true)
+  );
+
+  const filterTasksByChild = (childId) => {
+    setSelectedChildId(childId);
+  };
 
   return (
     <div className="mt-6">
@@ -56,10 +88,15 @@ export function ParentHome() {
           </div>
 
           <div className="mb-4 sm:col-span-2">
-            <FilterChildTask />
+            <FilterChildTask
+              childProfileData={childProfileData}
+              setChildProfileData={setChildProfileData}
+              filterTasks={filterTasksByChild}
+            />
           </div>
         </div>
-        <ListTasks tasks={tasks} setTasks={setTasks} />
+        {/* Pass the filtered tasks to the ListTasks component */}
+        <ListTasks tasks={filteredTasks} setTasks={setTasks} />
       </DndProvider>
     </div>
   );
