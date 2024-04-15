@@ -6,6 +6,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { GoogleLogin } from "react-google-login";
 import {
   Card,
   CardHeader,
@@ -27,7 +28,31 @@ export function SignUp() {
   const [role, setRole] = useState("parent");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
+  const handleGoogleSuccess = async (response) => {
+    try {
+      const { email, idToken } = response.profileObj; // Assuming Google response contains email and idToken
+      const userData = { email, idToken }; // Send user email and Google idToken to backend
 
+      // Send userData to backend
+      const response = await axios.post(
+        "http://localhost:8081/api/v1/user/save-parent-google",
+        userData
+      );
+      console.log("User signed up successfully:", response.data);
+      toast.success("Sign Up Successfully");
+      // Redirect user or perform other actions as needed
+    } catch (error) {
+      console.error("Error signing up:", error);
+      // Handle error
+    }
+  };
+
+  // Function to handle failed Google sign-in
+  const handleGoogleFailure = (error) => {
+    console.error("Google sign-in failed:", error);
+    toast.error("Sign Up Failed!");
+    // Here you can display an error message or perform any other action as needed
+  };
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -130,7 +155,7 @@ export function SignUp() {
               />
               <label
                 for="floating_filled"
-                class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-blue-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-MyPurple-400 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-blue-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-MyPurple-400 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
               >
                 Email
               </label>
@@ -155,7 +180,7 @@ export function SignUp() {
 
               <label
                 for="floating_filled"
-                class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-blue-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-MyPurple-400 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-blue-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-MyPurple-400 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
               >
                 Password
               </label>
@@ -180,7 +205,7 @@ export function SignUp() {
 
               <label
                 for="floating_filled"
-                class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-blue-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-MyPurple-400 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-blue-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-MyPurple-400 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
               >
                 Confirm Password
               </label>
@@ -207,29 +232,39 @@ export function SignUp() {
               Sign Up
             </Button>
             <br />
-            <Button
-              fullWidth
-              className="shadow-transparent hover:shadow-transparent"
-              style={{
-                backgroundColor: "#FFFFFF",
-                color: "#B089BE",
-                border: "1px solid rgba(128, 128, 128, 0.5)",
-                display: "flex",
-                alignItems: "center", // Align items vertically in the center
-                justifyContent: "center", // Center content horizontally
-              }}
-            >
-              <img
-                src="/src/widgets/layout/google.svg"
-                alt="Google Icon"
-                style={{
-                  height: "20px", // Set a fixed height
-                  width: "20px", // Set a fixed width
-                  marginRight: "12px", // Add some spacing
-                }}
-              />
-              Sign In with Google
-            </Button>
+            <GoogleLogin
+              clientId="654965562226-ujbv1vpns5sv89l08ueoq71u8pn7caq6.apps.googleusercontent.com"
+              render={(renderProps) => (
+                <Button
+                  fullWidth
+                  className="shadow-transparent hover:shadow-transparent"
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    color: "#B089BE",
+                    border: "1px solid rgba(128, 128, 128, 0.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                >
+                  <img
+                    src="/src/widgets/layout/google.svg"
+                    alt="Google Icon"
+                    style={{
+                      height: "20px",
+                      width: "20px",
+                      marginRight: "12px",
+                    }}
+                  />
+                  Sign In with Google
+                </Button>
+              )}
+              onSuccess={handleGoogleSuccess}
+              onFailure={handleGoogleFailure}
+              redirectUri="http://localhost:5173/oauth2/callback/google"
+            />
 
             <Typography variant="small" className="mt-6 flex justify-center">
               Already have an account?

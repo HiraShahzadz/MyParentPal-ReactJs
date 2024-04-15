@@ -62,7 +62,6 @@ export function Tables() {
 
       if (response.status === 200) {
         console.log("Email sent successfully");
-        toast.success("Email sent successfully");
       } else {
         console.error("Failed to send email");
         toast.error("Failed to send email");
@@ -91,7 +90,7 @@ export function Tables() {
 
       setQueries(updatedResponse.data);
       console.log(`Response for query ID ${query.id}: ${responseText}`);
-      toast.success(`Response submitted for ${query.name}`);
+      toast.success(`Response email sent to ${query.name}`);
     } catch (error) {
       console.error("Error updating query response:", error);
       toast.error("Failed to update query response");
