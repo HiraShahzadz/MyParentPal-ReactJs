@@ -1,7 +1,7 @@
+// statistics-charts-data.js
 import { chartsConfig } from "@/admin/configs";
-import defaultColors from "tailwindcss/colors";
 
-const websiteViewsChart = {
+export const websiteViewsChart = {
   type: "bar",
   height: 300,
   series: [
@@ -14,7 +14,7 @@ const websiteViewsChart = {
     ...chartsConfig,
     colors: "#fff",
     chart: {
-      background: "#B089BE", // Add this line to set the background color
+      background: "#B089BE",
     },
     plotOptions: {
       bar: {
@@ -24,26 +24,25 @@ const websiteViewsChart = {
     },
     xaxis: {
       ...chartsConfig.xaxis,
-
       categories: ["Punjab", "KPK", "Sindh", "Balochistan", "Islamabad"],
     },
   },
 };
 
-const dailySalesChart = {
+export const dailySalesChart = {
   type: "bar",
   height: 300,
   series: [
     {
       name: "Users",
-      data: [90, 50, 20, 22, 50, 20, 40, 70, 20],
+      data: [], // Will be dynamically populated with age group data
     },
   ],
   options: {
     ...chartsConfig,
     colors: "#fff",
     chart: {
-      background: "#B089BE", // Add this line to set the background color
+      background: "#B089BE",
     },
     plotOptions: {
       bar: {
@@ -70,14 +69,13 @@ const dailySalesChart = {
 
 export const statisticsChartsData = [
   {
-    color: "MuPurple",
+    color: "MyPurple",
     title: "Geographic Usage",
     footer: "Updates in real time",
     chart: websiteViewsChart,
   },
   {
     color: "MyPurple",
-
     title: "User Age Group",
     footer: "Updates in real time",
     chart: dailySalesChart,

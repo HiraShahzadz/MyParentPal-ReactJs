@@ -9,6 +9,7 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 import { StatisticsCard } from "@/admin/widgets/cards";
 import { StatisticsChart } from "@/admin/widgets/charts";
 import { statisticsCardsData, statisticsChartsData } from "@/admin/data";
+import { dailySalesChart } from "@/admin/data/statistics-charts-data";
 
 export function Home() {
   const [userCounts, setUserCounts] = useState({
@@ -16,6 +17,7 @@ export function Home() {
     parentUsers: 0,
     childUsers: 0,
   });
+
   useEffect(() => {
     fetchUserCounts();
   }, []);
@@ -36,7 +38,6 @@ export function Home() {
       });
     } catch (error) {
       console.error("Error fetching user counts:", error);
-      // Handle error gracefully, e.g., display an error message to the user
     }
   };
 
@@ -59,10 +60,60 @@ export function Home() {
         const userDataWithId = data.map((user, index) => ({
           ...user,
           id: index + 1,
+          age: user.role === "parent" ? "No Data" : calculateAge(user.dob),
         }));
         setUserData(userDataWithId);
+        updateChartAgeGroups(userDataWithId); // Moved here to ensure userData is set
       } catch (error) {
         console.error("Error fetching user data:", error);
+      }
+    };
+
+    const calculateAge = (dob) => {
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        age--;
+      }
+      return age;
+    };
+
+    const updateChartAgeGroups = (userData) => {
+      try {
+        const ageGroups = Array(9).fill(0);
+        userData.forEach((user) => {
+          const age = calculateAge(user.dob);
+          if (age >= 1 && age <= 10) {
+            ageGroups[0]++;
+          } else if (age >= 12 && age <= 20) {
+            ageGroups[1]++;
+          } else if (age >= 21 && age <= 30) {
+            ageGroups[2]++;
+          } else if (age >= 31 && age <= 40) {
+            ageGroups[3]++;
+          } else if (age >= 41 && age <= 50) {
+            ageGroups[4]++;
+          } else if (age >= 51 && age <= 60) {
+            ageGroups[5]++;
+          } else if (age >= 61 && age <= 70) {
+            ageGroups[6]++;
+          } else if (age >= 71 && age <= 80) {
+            ageGroups[7]++;
+          } else if (age >= 81 && age <= 90) {
+            ageGroups[8]++;
+          }
+        });
+        const updatedChart = { ...dailySalesChart };
+        updatedChart.series[0].data = ageGroups;
+        statisticsChartsData[1].chart = updatedChart;
+        window.dispatchEvent(new Event("resize"));
+      } catch (error) {
+        console.error("Error fetching age group data:", error);
       }
     };
 
@@ -83,7 +134,7 @@ export function Home() {
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
-                  {["Id", "Email/Username", "Role"].map((el) => (
+                  {["Id", "Email/Username", "Role", "Age"].map((el) => (
                     <th
                       key={el}
                       className="border-b border-blue-gray-50 px-5 py-3 text-left"
@@ -92,14 +143,14 @@ export function Home() {
                         variant="small"
                         className="text-[12px] font-bold uppercase text-blue-gray-600"
                       >
-                        {el}{" "}
+                        {el}
                       </Typography>
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {userData.map(({ id, email, role }) => (
+                {userData.map(({ id, email, role, age }) => (
                   <tr key={id}>
                     <td className="border-b border-blue-gray-50 px-5 py-3">
                       <Typography
@@ -123,6 +174,14 @@ export function Home() {
                         className="text-xs font-medium text-blue-gray-600"
                       >
                         {role}
+                      </Typography>
+                    </td>
+                    <td className="border-b border-blue-gray-50 px-5 py-3">
+                      <Typography
+                        variant="small"
+                        className="text-xs font-medium text-blue-gray-600"
+                      >
+                        {age}
                       </Typography>
                     </td>
                   </tr>
