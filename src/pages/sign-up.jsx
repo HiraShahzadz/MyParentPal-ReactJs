@@ -19,6 +19,7 @@ import {
 } from "@material-tailwind/react";
 
 export function SignUp() {
+  const [showTooltip, setShowTooltip] = useState(false);
   const [parentid, setId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -212,14 +213,25 @@ export function SignUp() {
             </div>
             <div className="custom-checkbox">
               <input
-                class="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
+                className="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
                 type="checkbox"
                 id="IagreetheTermsandConditions"
                 checked={isChecked}
                 onChange={() => setIsChecked(!isChecked)}
               />
-              <label htmlFor="IagreetheTermsandConditions">
+              <label
+                htmlFor="IagreetheTermsandConditions"
+                className="cursor-pointer"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              >
                 I agree the Terms and Conditions
+                {showTooltip && (
+                  <div className="bottom-30 h-15 absolute left-1/2 flex w-60 -translate-x-1/2 transform items-center justify-center rounded-md bg-gray-700 p-2 text-justify text-white shadow-md">
+                    By checking this box, you acknowledge that your location may
+                    be accessed.
+                  </div>
+                )}
               </label>
             </div>
           </CardBody>
