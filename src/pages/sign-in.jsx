@@ -24,10 +24,27 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false); // State for remember me
   const navigate = useNavigate(); // Hook for navigation
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("email");
+    const storedPassword = localStorage.getItem("password");
+    const storedRememberMe = localStorage.getItem("rememberMe");
+
+    if (storedEmail && storedPassword && storedRememberMe === "true") {
+      setEmail(storedEmail);
+      setPassword(storedPassword);
+      setRememberMe(true);
+    }
+  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleRememberMeChange = (event) => {
+    setRememberMe(event.target.checked);
   };
 
   async function signin(event) {
@@ -56,14 +73,24 @@ export function SignIn() {
 
       const message = response.data.message;
 
-      if (message == "Parent Login successful") {
+      if (message === "Parent Login successful") {
         navigate("/parentDashboard/parent/home/"); //Navigate to Parent dashboard
-      } else if (message == "Child Login successful") {
+      } else if (message === "Child Login successful") {
         navigate("/childDashboard/home/"); //Navigate to Child dashboard
         toast.success(message);
-      } else if (message == "Admin Login successful") {
+      } else if (message === "Admin Login successful") {
         toast.success(message);
         navigate("/dashboard/home/"); //Navigate to Admin dashboard
+      }
+
+      if (rememberMe) {
+        localStorage.setItem("email", email);
+        localStorage.setItem("password", password);
+        localStorage.setItem("rememberMe", "true");
+      } else {
+        localStorage.removeItem("email");
+        localStorage.removeItem("password");
+        localStorage.removeItem("rememberMe");
       }
 
       setEmail("");
@@ -139,9 +166,11 @@ export function SignIn() {
 
             <div className="custom-checkbox">
               <input
-                class="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
-                type="checkbox"
                 id="rememberMe"
+                checked={rememberMe}
+                onChange={handleRememberMeChange}
+                className="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
+                type="checkbox"
               />
               <label htmlFor="rememberMe">Remember me</label>
             </div>
