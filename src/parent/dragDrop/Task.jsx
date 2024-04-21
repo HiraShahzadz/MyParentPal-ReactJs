@@ -68,7 +68,21 @@ function Task({ task, tasks, setTasks }) {
     >
       <div className="flex">
         <img className=" mr-2 mt-1 h-4 w-4 " src="/img/task.png" alt="" />
-        <p className="text-black hover:underline">{task.taskname}</p>
+        <p
+          className="text-black hover:underline"
+          onClick={() =>
+            handleMoreInfoClick({
+              id: task.id,
+              title: task.title,
+              image: task.image,
+              description: task.description,
+              reward: task.points,
+              details: task.details,
+            })
+          }
+        >
+          {task.taskname}
+        </p>
         <div className="absolute right-1">
           <Menu placement="left-start">
             <MenuHandler>

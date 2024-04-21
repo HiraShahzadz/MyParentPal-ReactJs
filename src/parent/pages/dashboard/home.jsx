@@ -10,6 +10,7 @@ export function ParentHome() {
   const [childProfileData, setChildProfileData] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     loadChildProfileData();
@@ -39,32 +40,40 @@ export function ParentHome() {
       console.error("Error loading tasks:", error);
     }
   }
-  // Filter tasks based on child IDs
+
+  // Filter tasks based on child IDs and search input
   const filteredTasks = tasks.filter(
     (task) =>
       childProfileData.some((child) => child.id === task.childId) &&
-      (selectedChildId ? task.childId === selectedChildId : true)
+      (selectedChildId ? task.childId === selectedChildId : true) &&
+      (searchInput
+        ? task.taskname.toLowerCase().includes(searchInput.toLowerCase())
+        : true)
   );
 
   const filterTasksByChild = (childId) => {
     setSelectedChildId(childId);
   };
 
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
   return (
     <div className="mt-6">
       <DndProvider backend={HTML5Backend}>
         <Toaster />
-
-        <div className="relative mt-4 grid grid-cols-1 gap-x-2 gap-y-3 rounded-md sm:grid-cols-8">
+        <div className="relative mt-4 rounded-md sm:flex md:flex lg:flex">
           <div className="relative sm:col-span-2 sm:col-start-1">
             <div className="mt-2">
               <div className="relative">
                 <input
                   type="text"
-                  name="text"
-                  id="file"
+                  name="search"
+                  id="search"
                   placeholder="Search tasks"
-                  autoComplete="address-level2"
+                  value={searchInput}
+                  onChange={handleSearchInputChange}
                   className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">

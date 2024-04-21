@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 function FilterChildTask({
   childProfileData,
   setChildProfileData,
   filterTasks,
 }) {
+  const [selectedChild, setSelectedChild] = useState(null);
+
   const handleChildClick = (childId) => {
-    filterTasks(childId);
+    if (selectedChild === childId) {
+      // If the same child is clicked again, deselect it
+      setSelectedChild(null);
+      filterTasks(null);
+    } else {
+      // Otherwise, select the clicked child
+      setSelectedChild(childId);
+      filterTasks(childId);
+    }
   };
 
   return (
@@ -14,13 +24,18 @@ function FilterChildTask({
       {childProfileData.map(
         ({ id, img, role }) =>
           role === "child" && (
-            <img
-              key={id}
-              className="h-10 w-10 cursor-pointer rounded-full border-2 border-white object-cover hover:border-[#B089BE]"
-              src={img ? `data:image/jpeg;base64,${img}` : "/img/userc.png"}
-              alt=""
-              onClick={() => handleChildClick(id)}
-            />
+            <div key={id}>
+              <img
+                className={`h-10 w-10 cursor-pointer rounded-full object-cover hover:border-[#B089BE] ${
+                  selectedChild === id
+                    ? " border-2 border-MyPurple-400"
+                    : "border-2 border-white "
+                }`}
+                src={img ? `data:image/jpeg;base64,${img}` : "/img/userc.png"}
+                alt=""
+                onClick={() => handleChildClick(id)}
+              />
+            </div>
           )
       )}
     </div>
