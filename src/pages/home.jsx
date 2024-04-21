@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/styles.css";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
+import axios from "axios";
 import {
   Card,
   CardBody,
@@ -54,6 +54,17 @@ export function Home() {
   const handleSubmit = (event) => {
     toast.success("Submitted");
   };
+  useEffect(() => {
+    (async () => await Load())();
+  }, []);
+  const [parentFeedback, setParentFeedback] = useState([]);
+  async function Load() {
+    const result = await axios.get(
+      "http://localhost:8081/api/v1/feedback/getall"
+    );
+    setParentFeedback(result.data);
+    console.log(result.data);
+  }
   return (
     <>
       <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
@@ -175,18 +186,18 @@ export function Home() {
       <section className="bg-blue-red-50/50 relative top-0 h-full w-full bg-cover bg-center px-4 py-1">
         <div className="container mx-auto">
           <div className="mx-auto mb-10 mt-10 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
-            {contactData
-              .map(({ id, title, image, description }) => (
+            {parentFeedback
+              .map(({ id, name, image, description }) => (
                 <Card
                   key={id}
                   shadow={false}
                   className="bg-[#fff] text-center text-blue-gray-900 shadow-lg shadow-gray-700/20"
                 >
                   <div className="mx-auto mb-6 mt-6 grid h-14 w-14 place-items-center rounded-full bg-white shadow-lg shadow-gray-500/20">
-                    <img src={image} alt="" className="rounded-full" />
+                    <img src="/img/userc.png" alt="" className="rounded-full" />
                   </div>
                   <Typography variant="h5" color="blue-gray" className="mb-2">
-                    {title}
+                    {name}
                   </Typography>
                   <Typography className="px-8 py-4 text-justify font-normal">
                     {description}
