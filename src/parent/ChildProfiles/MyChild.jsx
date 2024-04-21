@@ -6,11 +6,14 @@ import AddAccount from "./Profile/AddAccount";
 import { Link } from "react-router-dom";
 import ApproveChanges from "./ApproveChanges";
 import axios from "axios";
+
 function MyChild() {
   const [showProfiles, setShowProfiles] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showRequest, setShowRequest] = useState(false);
   const [childProfileData, setChildProfileData] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+
   useEffect(() => {
     (async () => await Load())();
   }, []);
@@ -22,7 +25,7 @@ function MyChild() {
     setChildProfileData(result.data);
     console.log(result.data);
   }
-  console.log("tasks", childProfileData);
+
   const handleViewProfile = () => {
     setShowProfiles(false);
   };
@@ -30,6 +33,14 @@ function MyChild() {
   const handleShowRequest = (requests) => {
     setShowRequest(requests > 0);
   };
+
+  // Filter child profiles based on search input
+  const filteredChildProfiles = childProfileData.filter(
+    (profile) =>
+      profile.role === "child" &&
+      profile.name.toLowerCase().includes(searchInput.toLowerCase())
+  );
+
   return (
     <div>
       {showProfiles ? (
@@ -38,8 +49,12 @@ function MyChild() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search Child"
+                name="search"
+                id="search"
+                placeholder="Search Child User Name"
                 className="mb-8 mr-8 mt-8 w-60 rounded-md border-0 py-1.5 pl-3 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:w-96"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,56 +81,53 @@ function MyChild() {
             {showModal && <AddAccount onClose={setShowModal} />}
           </div>
           <div className="mb-12 grid gap-16 gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-4">
-            {childProfileData.map(
-              ({ img, name, email, requests, role }, index) =>
-                role === "child" && (
-                  <Card
-                    key={index}
-                    className="rounded-md bg-white p-2 hover:shadow-xl "
-                  >
+            {filteredChildProfiles.map(
+              ({ img, name, email, requests, role }, index) => (
+                <Card
+                  key={index}
+                  className="rounded-md bg-white p-2 hover:shadow-xl "
+                >
+                  <CardBody className="p-4">
                     <CardBody className="p-4">
-                      <CardBody className="p-4">
-                        <img
-                          className="mx-auto my-auto h-20 w-20 rounded-full object-cover"
-                          src={
-                            img
-                              ? `data:image/jpeg;base64,${img}`
-                              : "/img/user.png"
-                          }
-                          alt=""
-                        />
-                      </CardBody>
-                      <Typography className="mt-3 block text-center text-sm font-medium leading-6 text-gray-900">
-                        {name}
-                      </Typography>
-                      <Typography className="ml-1 text-center text-xs text-black  hover:underline">
-                        {email}
-                      </Typography>
-                      <div className=" items-center justify-center text-center">
-                        <Button
-                          onClick={handleViewProfile}
-                          className="mr-1 mt-3 rounded-md border border-MyPurple-400 bg-white px-3 py-2 text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-white hover:bg-MyPurple-400 hover:text-white hover:shadow-white"
-                        >
-                          View Profile
-                        </Button>
-                        <Button
-                          onClick={() => handleShowRequest(requests)}
-                          className={`mt-3 rounded-md  ${
-                            requests === 0 ? "bg-gray-400" : "bg-gray-500"
-                          } px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:text-white hover:shadow-white`}
-                        >
-                          <span className="mr-1 rounded-full bg-MyPurple-400 pl-1 pr-1">
-                            {requests}
-                          </span>
-                          Requests
-                        </Button>
-                      </div>
-                      {showRequest && (
-                        <ApproveChanges onClose={setShowRequest} />
-                      )}
+                      <img
+                        className="mx-auto my-auto h-20 w-20 rounded-full object-cover"
+                        src={
+                          img
+                            ? `data:image/jpeg;base64,${img}`
+                            : "/img/user.png"
+                        }
+                        alt=""
+                      />
                     </CardBody>
-                  </Card>
-                )
+                    <Typography className="mt-3 block text-center text-sm font-medium leading-6 text-gray-900">
+                      {name}
+                    </Typography>
+                    <Typography className="ml-1 text-center text-xs text-black  hover:underline">
+                      {email}
+                    </Typography>
+                    <div className=" items-center justify-center text-center">
+                      <Button
+                        onClick={handleViewProfile}
+                        className="mr-1 mt-3 rounded-md border border-MyPurple-400 bg-white px-3 py-2 text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-white hover:bg-MyPurple-400 hover:text-white hover:shadow-white"
+                      >
+                        View Profile
+                      </Button>
+                      <Button
+                        onClick={() => handleShowRequest(requests)}
+                        className={`mt-3 rounded-md  ${
+                          requests === 0 ? "bg-gray-400" : "bg-gray-500"
+                        } px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:text-white hover:shadow-white`}
+                      >
+                        <span className="mr-1 rounded-full bg-MyPurple-400 pl-1 pr-1">
+                          {requests}
+                        </span>
+                        Requests
+                      </Button>
+                    </div>
+                    {showRequest && <ApproveChanges onClose={setShowRequest} />}
+                  </CardBody>
+                </Card>
+              )
             )}
           </div>
         </>
