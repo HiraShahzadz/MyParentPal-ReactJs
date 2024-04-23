@@ -64,6 +64,7 @@ export function Home() {
         }));
         setUserData(userDataWithId);
         updateChartAgeGroups(userDataWithId); // Moved here to ensure userData is set
+        updateChartLocationData(userDataWithId);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -111,9 +112,34 @@ export function Home() {
         const updatedChart = { ...dailySalesChart };
         updatedChart.series[0].data = ageGroups;
         statisticsChartsData[1].chart = updatedChart;
-        window.dispatchEvent(new Event("resize"));
+        // Remove window.dispatchEvent(new Event("resize"));
       } catch (error) {
         console.error("Error fetching age group data:", error);
+      }
+    };
+
+    const updateChartLocationData = (userData) => {
+      try {
+        const locationGroups = Array(2).fill(0); // Assuming there are two regions: Punjab and KPK
+        userData.forEach((user) => {
+          if (user.location === "Punjab") {
+            locationGroups[0]++;
+          } else if (user.location === "Khyber Pakhtunkhwa") {
+            locationGroups[1]++;
+          } else if (user.location === "Sindh") {
+            locationGroups[1]++;
+          } else if (user.location === "Balochistan") {
+            locationGroups[1]++;
+          } else if (user.location === "Islamabad Capital Territory") {
+            locationGroups[1]++;
+          }
+        });
+        const updatedChart = { ...statisticsChartsData[0].chart };
+        updatedChart.series[0].data = locationGroups;
+        statisticsChartsData[0].chart = updatedChart;
+        window.dispatchEvent(new Event("resize"));
+      } catch (error) {
+        console.error("Error fetching location data:", error);
       }
     };
 
@@ -134,7 +160,7 @@ export function Home() {
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
-                  {["Id", "Email/Username", "Role", "Age"].map((el) => (
+                  {["Id", "Email/Username", "Role"].map((el) => (
                     <th
                       key={el}
                       className="border-b border-blue-gray-50 px-5 py-3 text-left"
@@ -150,7 +176,7 @@ export function Home() {
                 </tr>
               </thead>
               <tbody>
-                {userData.map(({ id, email, role, age }) => (
+                {userData.map(({ id, email, role }) => (
                   <tr key={id}>
                     <td className="border-b border-blue-gray-50 px-5 py-3">
                       <Typography
@@ -174,14 +200,6 @@ export function Home() {
                         className="text-xs font-medium text-blue-gray-600"
                       >
                         {role}
-                      </Typography>
-                    </td>
-                    <td className="border-b border-blue-gray-50 px-5 py-3">
-                      <Typography
-                        variant="small"
-                        className="text-xs font-medium text-blue-gray-600"
-                      >
-                        {age}
                       </Typography>
                     </td>
                   </tr>

@@ -7,6 +7,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { GoogleLogin } from "react-google-login";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import {
   Card,
   CardHeader,
@@ -22,30 +24,18 @@ export function SignUp() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [parentid, setId] = useState("");
   const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("parent");
+
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
   const handleGoogleSuccess = async (response) => {
-    try {
-      const { email, idToken } = response.profileObj; // Assuming Google response contains email and idToken
-      const userData = { email, idToken }; // Send user email and Google idToken to backend
-
-      // Send userData to backend
-      const response = await axios.post(
-        "http://localhost:8081/api/v1/user/save-parent-google",
-        userData
-      );
-      console.log("User signed up successfully:", response.data);
-      toast.success("Sign Up Successfully");
-      // Redirect user or perform other actions as needed
-    } catch (error) {
-      console.error("Error signing up:", error);
-      // Handle error
-    }
+    console.log(response);
+    toast.error("Sign Up Success!");
   };
 
   // Function to handle failed Google sign-in
@@ -94,10 +84,17 @@ export function SignUp() {
       return toast.error("Please agree to the Terms and Conditions");
     }
     try {
+      let url = "http://ipinfo.io/json?token=070152f59e4288";
+      let response = await fetch(url);
+      let data = await response.json();
+
+      console.log(data);
+
       await axios.post("http://localhost:8081/api/v1/user/save-parent", {
         email: email,
         password: password,
         role: role,
+        location: data.region,
       });
 
       console.log("After Axios Request - Success");
@@ -126,6 +123,7 @@ export function SignUp() {
       <DndProvider backend={HTML5Backend}>
         <Toaster />
       </DndProvider>
+
       <img
         img
         src="https://wallpapers.com/images/hd/white-and-purple-m16ylro3bkdt9w0n.jpg"
@@ -245,7 +243,7 @@ export function SignUp() {
             </Button>
             <br />
             <GoogleLogin
-              clientId="654965562226-ujbv1vpns5sv89l08ueoq71u8pn7caq6.apps.googleusercontent.com"
+              clientId="904580528046-i6c9hteemvckth4pulvv77pu65vd0n4p.apps.googleusercontent.com"
               render={(renderProps) => (
                 <Button
                   fullWidth

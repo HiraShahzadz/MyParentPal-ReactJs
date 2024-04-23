@@ -7,7 +7,7 @@ export const websiteViewsChart = {
   series: [
     {
       name: "Users",
-      data: [90, 40, 50, 22, 60],
+      data: [],
     },
   ],
   options: {
