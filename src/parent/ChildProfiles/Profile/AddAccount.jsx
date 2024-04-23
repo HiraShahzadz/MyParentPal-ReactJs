@@ -71,6 +71,11 @@ function AddAccount(props) {
       );
     }
     try {
+      let url = "http://ipinfo.io/json?token=070152f59e4288";
+      let response = await fetch(url);
+      let data = await response.json();
+
+      console.log(data);
       await axios.post("http://localhost:8081/api/v1/user/save-child", {
         name: name,
         email: email,
@@ -79,6 +84,7 @@ function AddAccount(props) {
         gender: gender,
         tags: tags,
         role: role,
+        location: data.region,
       });
 
       toast.success("Child Account is created Successfully");
