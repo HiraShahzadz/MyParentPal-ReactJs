@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/ChildHome.css"; // Reference your CSS file here
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from 'axios';
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import {
   tasksData,
 } from "@/child/data";
+
 import { GiftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import TaskDetailsModal from './TaskDetailsModel';
 import { isSameDay } from 'date-fns';
@@ -29,6 +31,7 @@ import {
   progress,
 } from "@material-tailwind/react";
 import TimeLeftCalculator from "./TimeLeftCalculator";
+import SubmitTask from "./submitTask";
 const icon = {
   className: "w-5 h-5 text-inherit",
 };
@@ -47,6 +50,12 @@ export function Home() {
   };
   const handleCloseCompletedTaskDetails = () => {
     setCompletedTaskDetailsToShow(null);
+  };
+  const [Details, setDetails] = useState(null);//submit task
+  const Click = (task) => {
+    
+    setDetails(task);
+   
   };
   const [date, setDate] = useState(new Date());
   const [selectedTask, setSelectedTask] = useState("Assigned");
@@ -112,7 +121,6 @@ export function Home() {
       }
       setShow(false); // Close the modal
     };
-
     return (
       <div
         className={`fixed top-0 left-0 z-50 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center ${show ? '' : 'hidden'
@@ -174,7 +182,26 @@ export function Home() {
   const handleClose = () => {
     setSubmitFormDetails(null);
   };
+  const [taskname, settaskname] = useState("");
+  const [taskdescription, settaskdescription] = useState("");
+  const [status, setstatus] = useState("");
+  const [rewardname, setrewardname] = useState("");
+  const [taskfiletype, settaskfiletype] = useState("");
+  const [taskdate, settaskdate] = useState("");
+  const [tasktime, settasktime] = useState("");
+  const [taskassignee, settaskassignee] = useState("");
+  const [tasktype, settasktype] = useState("");
+  const [taskss, settaskss] = useState([]);
+  useEffect(() => {
+    (async () => await Load())();
+  }, []);
 
+  async function Load() {
+    const result = await axios.get("http://localhost:8081/api/v1/task/getall");
+    settaskss(result.data);
+    console.log(result.data);
+  }
+  console.log("tasks", taskss);
   return (
     <div>
       <div className="mt-3 flex flex-col lg:flex-row">
@@ -299,29 +326,29 @@ export function Home() {
 
 
 
-            {tasksData
+            {taskss
               .sort((a, b) => a.description - b.description)
               .slice(0, visibleTasks)
-              .map(({ id, title, image, description, reward, details }) => (
+              .map(({ id, taskname, taskdescription, rewardname, taskdate, tasktag , taskfiletype}) => (
 
                 <div
                   onClick={() => handleMoreInfoClick({
                     id,
-                    title,
-                    image,
-                    description: description.toLocaleDateString(),
-                    reward,
-                    details,
+                    taskname,
+                    taskdescription,
+                    taskdate,
+                    rewardname,
+                    tasktag
                   })}
                   key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
                   <div className="flex">
                     <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
                     <div className="ml-3">
-                      <span className="font-medium text-black">{title}</span>
+                      <span className="font-medium text-black">{taskname}</span>
                       <br></br>
                      <div className="mt-2"></div>
-                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
+                      <span className="mt-2 mb-3  text-black">Submission date: {taskdate}</span><br></br>
                        Time Remaining: 1 day 3 hours
                       <span className="text-black">
 
@@ -329,7 +356,7 @@ export function Home() {
                       <div className="mt-1.5 flex">
                         <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
                         <span className="ml-1 text-xs text-black ">
-                          Reward: {reward}
+                          Reward: {rewardname}
                         </span>
                         <br></br>
                       </div>
@@ -340,17 +367,17 @@ export function Home() {
                   >
                   
                     <button
-                      onClick={() => handleMoreInfoClick({
+                      onClick={() => Click({
                         id,
-                        title,
-                        image,
-                        description: description.toLocaleDateString(),
-                        reward,
-                        details
+                        taskname,
+                        taskdescription,
+                        taskdate , 
+                        rewardname,
+                        taskfiletype
                       })}
                       className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
                     >
-                      more info
+                      Complete
                     </button>
                   </div>
 
@@ -389,7 +416,7 @@ export function Home() {
               .map(({ id, title, image, description, reward, details }) => (
 
                 <div
-                  onClick={() => handleMoreInfoClick({
+                  onClick={() => Click({
                     id,
                     title,
                     image,
@@ -423,19 +450,23 @@ export function Home() {
                     className="ml-auto flex items-end  hover:border-MyPurple-400"
                   >
                   
-                    <button
-                      onClick={() => handleMoreInfoClick({
-                        id,
-                        title,
-                        image,
-                        description: description.toLocaleDateString(),
-                        reward,
-                        details
-                      })}
-                      className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                    >
-                      more info
-                    </button>
+                   
+                 
+                        <button
+                         onClick={() => Click({
+                          id,
+                          title,
+                          image,
+                          description: description.toLocaleDateString(),
+                          reward,
+                          details
+                        })}
+                         className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                        >
+                          
+                          Complete
+                        </button>
+                    
                   </div>
 
                 </div>
@@ -552,6 +583,10 @@ export function Home() {
           // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
+        {Details && (
+       <submitTask Details={Details} />
+        )}
+        
         {CompletedtaskDetailsToShow && (
           <CompletedTaskDetailsModal
             selectedTaskDetails={CompletedtaskDetailsToShow}

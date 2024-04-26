@@ -1,17 +1,22 @@
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { Typography } from "@material-tailwind/react";
 import {
   ArrowDownTrayIcon,
   MusicalNoteIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 
-const FileUploader = () => {
+const FileUploader = ({ onSubmit, onCancel }) => {
+
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [hoveredFile, setHoveredFile] = useState(null);
-
+  const [isSaving, setIsSaving] = useState(false); // New state variable to track saving status
+  const [isVisible, setIsVisible] = useState(true);
   const onDrop = useCallback(
     (acceptedFiles) => {
       setFiles([...files, ...acceptedFiles]);
@@ -42,13 +47,42 @@ const FileUploader = () => {
   const handleMouseLeave = () => {
     setHoveredFile(null);
   };
-const handleFileSubmission = (file) => {
-    // Handle the submission logic
-    // For example, you can set the submitted file name to the state and call onSubmit
-    const fileName = file.name; // Get the submitted file name
-    setSelectedFile(file);
-    onSubmit(fileName); // Call onSubmit function with the file name
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("file", file); // Change key to 'file'
+    });
+
+    if (!files.length) {
+      return toast.error("Please add a file");
+    }
+    setIsSaving(true);
+
+    try {
+      // Send files to backend with formData as data payload
+      const response = await axios.post("http://localhost:8081/api/v1/task_submission/save", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Task save Successfully");
+      // Handle response if needed
+      console.log("Files uploaded successfully:", response.data);
+
+      // Clear files after successful upload
+      setFiles([]);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+    finally {
+      setIsSaving(false);
+      setIsVisible(false); // Set saving status to false after upload operation is finished
+    }
+
   };
+
+
+
   const renderFile = (file) => {
     const isImage = file.type.startsWith("image/");
     const isVideo = file.type.startsWith("video/");
@@ -116,6 +150,7 @@ const handleFileSubmission = (file) => {
             </div>
           )}
         </div>
+
       </div>
     );
   };
@@ -132,40 +167,59 @@ const handleFileSubmission = (file) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-    return (
-      <div className="flex flex-col items-center">
-        <div
-          {...getRootProps()}
-          className="mb-3 w-full h-48 border-dashed border-4 border-gray-400 rounded-lg flex justify-center items-center cursor-pointer mt-5"
-        >
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the files here...</p>
-          ) : (
-            <p>Drag 'n' drop some files here, or click to select files</p>
-          )}
-        </div>
-        <div className="grid gap-9 gap-x-6 gap-y-1 md:grid-cols-2 xl:grid-cols-3">
-          {files.map((file) => renderFile(file))}
-        </div>
-        {selectedFile && (
-          <div
-            className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75"
-            onClick={closeFile}
-          >
-            {/* Your code for rendering selectedFile */}
-          </div>
-        )}
-        {selectedImage && (
-          <div
-            className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75"
-            onClick={closeImage}
-          >
-            {/* Your code for rendering selectedImage */}
-          </div>
-        )}
-      </div>
-    );
+  const handleCancel = () => {
+    // Set visibility to false when cancel button is clicked
+    setIsVisible(false);
+   toast.error("Submission Cancelled!")
   };
-  
-  export default FileUploader;
+
+  return (
+    <div>
+    <div className="">
+      {isVisible && (
+        <div>
+          <Typography variant="h5" color="black" className=" ml-5 mb-3">
+            Attach file here
+          </Typography>
+          <div
+            {...getRootProps()}
+            className="p-2  mb-3 w-full h-60 border-dashed border-4 border-gray-400 rounded-lg flex justify-center items-center cursor-pointer mt-5"
+          >
+
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <p>Drop the files here...</p>
+            ) : (
+              <p>Drag 'n' drop some files here, or click to select files</p>
+            )}
+
+          </div>
+        </div>
+      )}
+       {isVisible && (
+      <div className="grid gap-9 gap-x-6 gap-y-1 md:grid-cols-2 xl:grid-cols-3">
+        {files.map((file) => renderFile(file))}
+      </div>
+       )}
+      {!isSaving && isVisible && (
+        <div className="flex justify-center items-center mt-2">
+          <button
+            className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+            onClick={handleSubmit}
+          >
+            Save Changes
+          </button>
+          <button
+            className="mt-5 ml-2 text-white bg-gray-500 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-red-900 sm:mx-2 mb-2 sm:mb-0"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+    </div>
+  </div >
+  );
+};
+
+export default FileUploader;

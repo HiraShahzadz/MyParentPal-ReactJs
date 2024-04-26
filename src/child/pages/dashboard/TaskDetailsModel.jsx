@@ -15,11 +15,11 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                         </button>
                     </div>
                     <Typography variant="h5" className="text-black text-lg text-justify center mb-4 ">
-                        <p> Task: {selectedTaskDetails.title}</p>
+                        <p> Task: {selectedTaskDetails.taskname}</p>
                     </Typography>
                     <br></br>
                     <p className="mb-2 flex justify-left font-semibold text-black text-lg">Description: </p>
-                    <p className="text-black text-md mb-10"> {selectedTaskDetails.details}</p>
+                    <p className="text-black text-md mb-10"> {selectedTaskDetails.taskdescription}</p>
 
                     <div className="rounded-lg mt-2 relative overflow-x-auto">
                         <table className="w-full rounded-lg border border-gray-100 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -44,7 +44,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                         Tags
                                     </th>
                                     <td className="px-6 py-4">
-                                        None
+                                        {selectedTaskDetails.tasktag}
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -52,7 +52,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                         Submission date:
                                     </th>
                                     <td className="px-6 py-4">
-                                        {selectedTaskDetails.description}
+                                        {selectedTaskDetails.taskdate}
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -68,7 +68,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                         Reward
                                     </th>
                                     <td className="px-6 py-4">
-                                        {selectedTaskDetails.reward}
+                                        {selectedTaskDetails.rewardname}
                                     </td>
                                 </tr>
                             </tbody>
