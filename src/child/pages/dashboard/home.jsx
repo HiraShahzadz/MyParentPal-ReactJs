@@ -52,11 +52,18 @@ export function Home() {
     setCompletedTaskDetailsToShow(null);
   };
   const [Details, setDetails] = useState(null);//submit task
-  const Click = (task) => {
-    
-    setDetails(task);
-   
+  const [DetailsToShow, setDetailsToShow] = useState(null);//taskdetailmodel
+  const MoreInfoClick = (task) => {
+    setTaskDetailsToShow(task);
   };
+
+  const handleCloseDetails = () => {
+    setTaskDetailsToShow(null);
+  };
+  const Click = (task) => {
+    setDetails(task);
+  };
+  
   const [date, setDate] = useState(new Date());
   const [selectedTask, setSelectedTask] = useState("Assigned");
   const [showNextArrow, setShowNextArrow] = useState(false);
@@ -197,7 +204,7 @@ export function Home() {
   }, []);
 
   async function Load() {
-    const result = await axios.get("http://localhost:8081/api/v1/task/getall");
+    const result = await axios.get("http://localhost:8081/api/v1/task/getTasks");
     settaskss(result.data);
     console.log(result.data);
   }
@@ -366,19 +373,22 @@ export function Home() {
                     className="ml-auto flex items-end  hover:border-MyPurple-400"
                   >
                   
-                    <button
-                      onClick={() => Click({
-                        id,
-                        taskname,
-                        taskdescription,
-                        taskdate , 
-                        rewardname,
-                        taskfiletype
-                      })}
-                      className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                    >
-                      Complete
-                    </button>
+                  <button className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0">
+  <Link to={{
+    pathname: "/childDashboard/submitTask",
+    state: {
+      id,
+      taskname,
+      taskdescription,
+      taskdate,
+      rewardname,
+      taskfiletype
+    }
+  }}>
+    Complete
+  </Link>
+</button>
+
                   </div>
 
                 </div>
@@ -576,6 +586,13 @@ export function Home() {
             <FontAwesomeIcon icon={faExclamationCircle} />
           </div>
         )}
+        {Details && (
+  <SubmitTask 
+  Details={Details}
+  selectedTaskDetails={DetailsToShow}
+  handleCloseTaskDetails={handleCloseDetails} />
+)}
+
         {taskDetailsToShow && (
           <TaskDetailsModal
             selectedTaskDetails={taskDetailsToShow}
@@ -583,9 +600,7 @@ export function Home() {
           // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
-        {Details && (
-       <submitTask Details={Details} />
-        )}
+       
         
         {CompletedtaskDetailsToShow && (
           <CompletedTaskDetailsModal
@@ -603,4 +618,3 @@ export function Home() {
 }
 
 export default Home;
-
