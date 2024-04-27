@@ -125,26 +125,37 @@ const SubmitTask = (Details) => {
                   <th scope="row" className="border-r px-6 py-4  text-md text-black font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     File Submitted
                   </th>
-                  {submission
-                    .map((submit) => (
-                      <td className="px-6 py-4 text-md text-gray border-r">
-                        {submit.fileName || 'No file submitted'} {/* Display submittedFile or a message */}
-                      </td>
-                    ))}
+                  {submission.length > 0 ? (
+                    <td className="px-6 py-4 text-md text-gray border-r">
+                      {submission[0].fileName || 'No file submitted'} {/* Display fileName of the first submission or a message */}
+                    </td>
+                  ) : (
+                    <td className="px-6 py-4 text-md text-gray border-r">
+                      No submission yet
+                    </td>
+                  )}
                 </tr>
 
               </tbody>
             </table>
-
-            <div className="flex justify-center items-center mt-5">
-              <button
-                className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                onClick={handleAddSubmissionClick}
-              >
-                Add Submission
-              </button>
-
+          
+              <Typography variant="h5" color="black" className="ml-4  mt-8 mb-3">
+                Write your message here
+              </Typography>
+              <div className=" mt-5 mb-3">
+              <ChatForm />
             </div>
+            {!submission.length > 0 && (
+              <div className="flex justify-center items-center mt-5">
+                <button
+                  className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                  onClick={handleAddSubmissionClick}
+                >
+                  Add Submission
+                </button>
+              </div>
+            )}
+
             {showFileUploader && (
               <div className="bg-white ">
 
