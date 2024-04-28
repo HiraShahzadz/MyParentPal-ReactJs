@@ -7,6 +7,7 @@ function App() {
       <Route path="/childDashboard/*" element={<ChildDashboard />} />
       <Route path="/auth/*" element={<Auth />} />
       <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
+      
     </Routes>
   );
 }
