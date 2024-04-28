@@ -22,6 +22,7 @@ import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
+
 export function Home() {
   const location = useLocation();
   const hash = location.hash;
@@ -65,6 +66,24 @@ export function Home() {
     setParentFeedback(result.data);
     console.log(result.data);
   }
+  const [parentProfile, setParentProfile] = useState([]);
+  useEffect(() => {
+    loadParents();
+  }, []);
+
+  async function loadParents() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-all"
+      );
+      setParentProfile(result.data);
+      console.log("Parents Profile:", result.data);
+    } catch (error) {
+      console.error("Error loading tasks:", error);
+    }
+  }
+  const profile = parentProfile.find((profile) => profile.img);
+
   return (
     <>
       <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
@@ -187,14 +206,29 @@ export function Home() {
         <div className="container mx-auto">
           <div className="mx-auto mb-10 mt-10 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
             {parentFeedback
-              .map(({ id, name, image, description }) => (
+              .filter((feedback) =>
+                parentProfile.some(
+                  (profile) =>
+                    profile.id === feedback.parentId &&
+                    profile.role === "parent"
+                )
+              )
+              .slice(step - 1, step + 2)
+              .map(({ id, name, description }) => (
                 <Card
                   key={id}
                   shadow={false}
                   className="bg-[#fff] text-center text-blue-gray-900 shadow-lg shadow-gray-700/20"
                 >
                   <div className="mx-auto mb-6 mt-6 grid h-14 w-14 place-items-center rounded-full bg-white shadow-lg shadow-gray-500/20">
-                    <img src="/img/userc.png" alt="" className="rounded-full" />
+                    <img
+                      src={
+                        profile.img
+                          ? `data:image/jpeg;base64,${profile.img}`
+                          : "/img/user.png"
+                      }
+                      className="h-14 w-14 rounded-full object-cover"
+                    />
                   </div>
                   <Typography variant="h5" color="blue-gray" className="mb-2">
                     {name}
@@ -203,8 +237,7 @@ export function Home() {
                     {description}
                   </Typography>
                 </Card>
-              ))
-              .slice(step - 1, step + 2)}
+              ))}
           </div>
         </div>
 
