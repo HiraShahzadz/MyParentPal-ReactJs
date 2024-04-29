@@ -13,6 +13,7 @@ function MyChild() {
   const [showRequest, setShowRequest] = useState(false);
   const [childProfileData, setChildProfileData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [selectedChild, setSelectedChild] = useState(null); // State to hold selected child's data
 
   useEffect(() => {
     (async () => await Load())();
@@ -26,7 +27,8 @@ function MyChild() {
     console.log(result.data);
   }
 
-  const handleViewProfile = () => {
+  const handleViewProfile = (child) => {
+    setSelectedChild(child); // Set selected child's data
     setShowProfiles(false);
   };
 
@@ -82,7 +84,23 @@ function MyChild() {
           </div>
           <div className="mb-12 grid gap-16 gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-4">
             {filteredChildProfiles.map(
-              ({ img, name, email, requests, role }, index) => (
+              (
+                {
+                  id,
+                  dob,
+                  gender,
+                  tags,
+                  image,
+                  img,
+                  parentId,
+                  name,
+                  email,
+                  password,
+                  role,
+                  requests,
+                },
+                index
+              ) => (
                 <Card
                   key={index}
                   className="rounded-md bg-white p-2 hover:shadow-xl "
@@ -107,7 +125,21 @@ function MyChild() {
                     </Typography>
                     <div className=" items-center justify-center text-center">
                       <Button
-                        onClick={handleViewProfile}
+                        onClick={() =>
+                          handleViewProfile({
+                            id,
+                            dob,
+                            gender,
+                            tags,
+                            image,
+                            img,
+                            parentId,
+                            name,
+                            email,
+                            password,
+                            role,
+                          })
+                        } // Pass child data to handleViewProfile
                         className="mr-1 mt-3 rounded-md border border-MyPurple-400 bg-white px-3 py-2 text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-white hover:bg-MyPurple-400 hover:text-white hover:shadow-white"
                       >
                         View Profile
@@ -132,7 +164,7 @@ function MyChild() {
           </div>
         </>
       ) : (
-        <MyProfile />
+        <MyProfile childData={selectedChild} />
       )}
     </div>
   );
