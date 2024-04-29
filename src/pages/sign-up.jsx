@@ -34,20 +34,15 @@ export function SignUp() {
 
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
-
   useGoogleOneTapLogin({
     onSuccess: (credentialResponse) => {
       console.log(credentialResponse);
-      const { credential } = credentialResponse;
-      const payload = credential ? decode(credential) : undefined;
-
       const { email, name, picture } = credentialResponse;
       toast.success(`Welcome, ${name}! Your email is ${email}`);
-      toast.success(payload);
-      if (payload) {
-        console.log("Payload is : ", payload);
-        toast.success(payload);
-      }
+
+      axios.post("http://localhost:8081/api/v1/user/save-parent", {
+        email: email,
+      });
     },
     onError: (error) => console.log(error),
     googleAccountConfigs: {
