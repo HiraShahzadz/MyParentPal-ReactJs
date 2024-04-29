@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { GoogleLogin } from "react-google-login";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { useGoogleOneTapLogin } from "react-google-one-tap-login";
 
 import {
   Card,
@@ -33,17 +34,27 @@ export function SignUp() {
 
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
-  const handleGoogleSuccess = async (response) => {
-    console.log(response);
-    toast.error("Sign Up Success!");
-  };
 
-  // Function to handle failed Google sign-in
-  const handleGoogleFailure = (error) => {
-    console.error("Google sign-in failed:", error);
-    toast.error("Sign Up Failed!");
-    // Here you can display an error message or perform any other action as needed
-  };
+  useGoogleOneTapLogin({
+    onSuccess: (credentialResponse) => {
+      console.log(credentialResponse);
+      const { credential } = credentialResponse;
+      const payload = credential ? decode(credential) : undefined;
+
+      const { email, name, picture } = credentialResponse;
+      toast.success(`Welcome, ${name}! Your email is ${email}`);
+      toast.success(payload);
+      if (payload) {
+        console.log("Payload is : ", payload);
+        toast.success(payload);
+      }
+    },
+    onError: (error) => console.log(error),
+    googleAccountConfigs: {
+      client_id:
+        "654965562226-ujbv1vpns5sv89l08ueoq71u8pn7caq6.apps.googleusercontent.com",
+    },
+  });
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -256,8 +267,6 @@ export function SignUp() {
                     alignItems: "center",
                     justifyContent: "center",
                   }}
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
                 >
                   <img
                     src="/src/widgets/layout/google.svg"
@@ -271,9 +280,6 @@ export function SignUp() {
                   Sign In with Google
                 </Button>
               )}
-              onSuccess={handleGoogleSuccess}
-              onFailure={handleGoogleFailure}
-              redirectUri="http://localhost:5173/oauth2/callback/google"
             />
 
             <Typography variant="small" className="mt-6 flex justify-center">
