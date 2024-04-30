@@ -35,21 +35,48 @@ export function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
   useGoogleOneTapLogin({
-    onSuccess: (credentialResponse) => {
-      console.log(credentialResponse);
-      const { email, name, picture } = credentialResponse;
-      toast.success(`Welcome, ${name}! Your email is ${email}`);
+    onSuccess: async (credentialResponse) => {
+      try {
+        console.log(credentialResponse);
+        const { email, name, picture } = credentialResponse;
 
-      axios.post("http://localhost:8081/api/v1/user/save-parent", {
-        email: email,
-      });
+        // Retrieve user's location
+        let url = "http://ipinfo.io/json?token=070152f59e4288";
+        let response = await fetch(url);
+        let data = await response.json();
+
+        console.log(data);
+
+        // Post user data including location to backend
+        const objectId = await axios.post(
+          "http://localhost:8081/api/v1/user/save-parent-google",
+          {
+            email: email,
+            role: role,
+            location: data.region,
+          }
+        );
+        navigate("/parentDashboard/parent/home/");
+        console.log(`Welcome, ${name}!`);
+        console.log(`Object Id is , ${objectId.data}!`);
+        // Optional: You can add further logic here if needed
+      } catch (error) {
+        console.log("Error in onSuccess:", error);
+        // Handle error gracefully
+        toast.error("An error occurred during sign-in");
+      }
     },
-    onError: (error) => console.log(error),
+    onError: (error) => {
+      console.log("Error in useGoogleOneTapLogin:", error);
+      // Handle error if there's an issue with One Tap login
+      toast.error("An error occurred with Google One Tap");
+    },
     googleAccountConfigs: {
       client_id:
         "654965562226-ujbv1vpns5sv89l08ueoq71u8pn7caq6.apps.googleusercontent.com",
     },
   });
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
