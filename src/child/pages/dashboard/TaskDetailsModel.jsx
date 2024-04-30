@@ -4,7 +4,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import TimeLeftCalculator from './TimeLeftCalculator';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleSubmitTask }) => {
+   
+    const navigate = useNavigate();
+    const id = selectedTaskDetails._id;
+    const taskname = selectedTaskDetails.taskname;
+    const taskdescription = selectedTaskDetails.taskdescription;
+    const taskdate= selectedTaskDetails.taskdate;
+    const rewardname = selectedTaskDetails.rewardname;
+    const filetype = selectedTaskDetails.taskfiletype;
+    const tasktime = selectedTaskDetails.tasktime;
+    const handleNavigation = () => {
+        // Navigate to the submit task route with taskDetails in the state
+        navigate('/childDashboard/submitTask',{state : {id : id, taskname : taskname, taskdescription : taskdescription, taskdate : taskdate, rewardname : rewardname, filetype : filetype, tasktime : tasktime}});
+      };
+    
+   
+   
     return (
         selectedTaskDetails && (
             <div className="fixed top-0 left-0 z-50 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
@@ -33,10 +50,10 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                             <tbody>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <th scope="row" className="border-r px-6 py-4  text-md text-black text-md font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Assigner
+                                        Submission type
                                     </th>
                                     <td className="px-6 py-4 text-gray text-md">
-                                        Aiman Abid
+                                       {selectedTaskDetails.taskfiletype}
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -52,7 +69,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                         Submission date:
                                     </th>
                                     <td className="px-6 py-4">
-                                        {selectedTaskDetails.taskdate}
+                                        {selectedTaskDetails.taskdate} at {selectedTaskDetails.tasktime}
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -76,14 +93,13 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
 
                     </div>
                     <div className="flex justify-center">
-                    <Link to="/childDashboard/submitTask">
-                        <button
+                          <button
+                          onClick={handleNavigation}
+                                className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                            >
+                                Complete
+                            </button>
                        
-                          className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                        >
-                          Complete
-                        </button>
-                      </Link>
                         <button
                             onClick={handleCloseTaskDetails}
                             className="mt-14 text-white bg-gray-400 hover:bg-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"

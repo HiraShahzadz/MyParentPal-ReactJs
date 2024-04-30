@@ -1,15 +1,17 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Typography } from "@material-tailwind/react";
+import { useLocation } from "react-router-dom";
 import {
   ArrowDownTrayIcon,
   MusicalNoteIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 
-const FileUploader = ({ onSubmit, onCancel }) => {
+const FileUploader = ({ taskId, filetype }) => {
+
 
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -47,39 +49,63 @@ const FileUploader = ({ onSubmit, onCancel }) => {
   const handleMouseLeave = () => {
     setHoveredFile(null);
   };
+  const [allowedTypes, setAllowedTypes] = useState([]);
+
+  useEffect(() => {
+    if (filetype && Array.isArray(filetype)) {
+      setAllowedTypes(filetype);
+    }
+  }, [filetype]);
+
   const handleSubmit = async () => {
     const formData = new FormData();
     files.forEach((file) => {
-      formData.append("file", file); // Change key to 'file'
+      formData.append("file", file);
     });
 
     if (!files.length) {
       return toast.error("Please add a file");
     }
+
+    let isFileTypeValid = files.some((file) => {
+      return allowedTypes.some((type) => {
+        if (
+          (type === "Picture" && (file.type === "image/jpeg" || file.type === "image/png")) ||
+          (type === "Audio" && (file.type === "audio/mpeg" || file.type === "audio/mp3")) ||
+          (type === "Video" && file.type === "video/mp4")
+        ) {
+          return true;
+        }
+        return false;
+      });
+    });
+
+    if (!isFileTypeValid) {
+      return toast.error("You have to upload "+ filetype + " to complete the task");
+    }
+
     setIsSaving(true);
 
     try {
-      // Send files to backend with formData as data payload
-      const response = await axios.post("http://localhost:8081/api/v1/task_submission/save", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      toast.success("Task save Successfully");
-      // Handle response if needed
-      console.log("Files uploaded successfully:", response.data);
-
-      // Clear files after successful upload
+      const response = await axios.post(
+        `http://localhost:8081/api/v1/task_submission/save?taskid=${taskId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success("Task saved successfully " + taskId);
       setFiles([]);
     } catch (error) {
       console.error("Error uploading files:", error);
-    }
-    finally {
+    } finally {
       setIsSaving(false);
-      setIsVisible(false); // Set saving status to false after upload operation is finished
+      setIsVisible(false);
     }
-
   };
+
 
 
 
@@ -170,55 +196,55 @@ const FileUploader = ({ onSubmit, onCancel }) => {
   const handleCancel = () => {
     // Set visibility to false when cancel button is clicked
     setIsVisible(false);
-   toast.error("Submission Cancelled!")
+    toast.error("Submission Cancelled!")
   };
 
   return (
     <div>
-    <div className="">
-      {isVisible && (
-        <div>
-          <Typography variant="h5" color="black" className=" ml-5 mb-3">
-            Attach file here
-          </Typography>
-          <div
-            {...getRootProps()}
-            className="p-2  mb-3 w-full h-60 border-dashed border-4 border-gray-400 rounded-lg flex justify-center items-center cursor-pointer mt-5"
-          >
+      <div className="">
+        {isVisible && (
+          <div>
+            <Typography variant="h5" color="black" className=" ml-5 mb-3">
+              Attach file here
+            </Typography>
+            <div
+              {...getRootProps()}
+              className="p-2  mb-3 w-full h-60 border-dashed border-4 border-gray-400 rounded-lg flex justify-center items-center cursor-pointer mt-5"
+            >
 
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here...</p>
-            ) : (
-              <p>Drag 'n' drop some files here, or click to select files</p>
-            )}
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <p>Drop the files here...</p>
+              ) : (
+                <p>Drag 'n' drop some files here, or click to select files</p>
+              )}
 
+            </div>
           </div>
-        </div>
-      )}
-       {isVisible && (
-      <div className="grid gap-9 gap-x-6 gap-y-1 md:grid-cols-2 xl:grid-cols-3">
-        {files.map((file) => renderFile(file))}
+        )}
+        {isVisible && (
+          <div className="grid gap-9 gap-x-6 gap-y-1 md:grid-cols-2 xl:grid-cols-3">
+            {files.map((file) => renderFile(file))}
+          </div>
+        )}
+        {!isSaving && isVisible && (
+          <div className="flex justify-center items-center mt-2">
+            <button
+              className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+              onClick={handleSubmit}
+            >
+              Save Changes
+            </button>
+            <button
+              className="mt-5 ml-2 text-white bg-gray-500 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-red-900 sm:mx-2 mb-2 sm:mb-0"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
-       )}
-      {!isSaving && isVisible && (
-        <div className="flex justify-center items-center mt-2">
-          <button
-            className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-            onClick={handleSubmit}
-          >
-            Save Changes
-          </button>
-          <button
-            className="mt-5 ml-2 text-white bg-gray-500 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-red-900 sm:mx-2 mb-2 sm:mb-0"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-        </div>
-      )}
-    </div>
-  </div >
+    </div >
   );
 };
 
