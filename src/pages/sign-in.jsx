@@ -49,6 +49,7 @@ export function SignIn() {
 
   async function signin(event) {
     event.preventDefault();
+
     if (!email || !password) {
       return toast.error("Please fill in all fields");
     }
@@ -62,6 +63,7 @@ export function SignIn() {
       setPassword("");
       return toast.error("Enter valid credentials");
     }
+
     try {
       const response = await axios.post(
         "http://localhost:8081/api/v1/user/signin",
@@ -70,17 +72,19 @@ export function SignIn() {
           password: password,
         }
       );
+      console.log(email, password);
+      console.log("Signin response:", response.data); // Log the response data for debugging
 
-      const message = response.data.message;
+      const { message } = response.data;
 
       if (message === "Parent Login successful") {
-        navigate("/parentDashboard/parent/home/"); //Navigate to Parent dashboard
+        navigate("/parentDashboard/parent/home/");
       } else if (message === "Child Login successful") {
-        navigate("/childDashboard/home/"); //Navigate to Child dashboard
+        navigate("/childDashboard/home/");
         toast.success(message);
       } else if (message === "Admin Login successful") {
+        navigate("/dashboard/home/");
         toast.success(message);
-        navigate("/dashboard/home/"); //Navigate to Admin dashboard
       }
 
       if (rememberMe) {
@@ -96,6 +100,8 @@ export function SignIn() {
       setEmail("");
       setPassword("");
     } catch (error) {
+      console.error("Signin error:", error); // Log the error for debugging
+
       if (error.response && error.response.status === 401) {
         toast.error("Wrong email or password");
         setEmail("");

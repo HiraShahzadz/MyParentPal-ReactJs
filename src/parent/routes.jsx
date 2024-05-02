@@ -15,7 +15,7 @@ import {
   ChildReport,
   Notifications,
 } from "@/parent/pages/dashboard";
-import { SignIn, SignUp } from "@/parent/pages/auth";
+import { SignIn } from "@/parent/pages/auth";
 import TaskCreation from "./dragDrop/TaskCreationForum/TaskCreation";
 import MyChild from "./ChildProfiles/MyChild";
 import { ParentProfile } from "./ParentProfile/parentProfile";
@@ -25,6 +25,10 @@ import TaskRequests from "./requests/TaskRequests";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
+};
+const clearLocalStorage = () => {
+  localStorage.clear(); // Clear all items from local storage
+  console.log("inside the function i am");
 };
 
 export const routes = [
@@ -92,7 +96,7 @@ export const routes = [
         icon: <ArrowLeftOnRectangleIcon {...icon} />,
         name: "Logout",
         path: "/sign-in",
-        element: <SignIn />,
+        element: <SignIn onClick={clearLocalStorage} />,
       },
     ],
   },

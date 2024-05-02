@@ -120,18 +120,18 @@ export function Home() {
 
     const updateChartLocationData = (userData) => {
       try {
-        const locationGroups = Array(2).fill(0); // Assuming there are two regions: Punjab and KPK
+        const locationGroups = Array(5).fill(0); // Assuming there are two regions: Punjab and KPK
         userData.forEach((user) => {
           if (user.location === "Punjab") {
             locationGroups[0]++;
           } else if (user.location === "Khyber Pakhtunkhwa") {
             locationGroups[1]++;
           } else if (user.location === "Sindh") {
-            locationGroups[1]++;
+            locationGroups[2]++;
           } else if (user.location === "Balochistan") {
-            locationGroups[1]++;
-          } else if (user.location === "Islamabad Capital Territory") {
-            locationGroups[1]++;
+            locationGroups[3]++;
+          } else if (user.location === "Islamabad") {
+            locationGroups[4]++;
           }
         });
         const updatedChart = { ...statisticsChartsData[0].chart };
