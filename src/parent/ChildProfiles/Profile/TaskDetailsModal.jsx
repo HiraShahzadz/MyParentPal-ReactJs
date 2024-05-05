@@ -1,18 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import TimeLeftCalculator from "./TimeLeftCalculator";
 import { Link } from "react-router-dom";
+
 const TaskDetailsModal = ({
+  childData,
   selectedTaskDetails,
   handleCloseTaskDetails,
-  handleSubmitTask,
 }) => {
+  const [timeRemaining, setTimeRemaining] = useState(null);
+  useEffect(() => {
+    if (
+      selectedTaskDetails &&
+      selectedTaskDetails.taskdate &&
+      selectedTaskDetails.tasktime
+    ) {
+      // Parse the task date
+      const submissionDate = new Date(selectedTaskDetails.taskdate);
+
+      // Parse the task time string into hours and minutes
+      const [hoursStr, minutesStr] = selectedTaskDetails.tasktime.split(":");
+      const taskHours = parseInt(hoursStr, 10);
+      const minutes = parseInt(minutesStr, 10);
+
+      // Set the time of the submission date to the specified time
+      submissionDate.setHours(taskHours);
+      submissionDate.setMinutes(minutes);
+
+      // Calculate the time difference
+      const currentTime = new Date();
+      const timeDifference = submissionDate - currentTime;
+
+      // Check if the deadline has passed
+      if (timeDifference < 0) {
+        const absoluteTimeDifference = Math.abs(timeDifference);
+        const days = Math.floor(absoluteTimeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (absoluteTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        setTimeRemaining(`${days} days and ${hours} hours passed`);
+      } else {
+        // Convert the time difference into days and hours
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        setTimeRemaining(`${days} days and ${hours} hours`);
+      }
+    }
+  }, [selectedTaskDetails]);
+
   return (
     selectedTaskDetails && (
       <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50">
-        <div className="w-200 rounded-lg bg-white p-6 shadow-lg">
+        <div className="m-96 w-screen rounded-lg bg-white p-6 shadow-lg">
           <div className="flex justify-end">
             <button
               className="focus:outline-none"
@@ -28,7 +71,7 @@ const TaskDetailsModal = ({
             variant="h5"
             className="center mb-4 text-justify text-lg text-black "
           >
-            <p> Task: {selectedTaskDetails.title}</p>
+            <p> Task: {selectedTaskDetails.taskname}</p>
           </Typography>
           <br></br>
           <p className="justify-left mb-2 flex text-lg font-semibold text-black">
@@ -36,11 +79,11 @@ const TaskDetailsModal = ({
           </p>
           <p className="text-md mb-10 text-black">
             {" "}
-            {selectedTaskDetails.details}
+            {selectedTaskDetails.taskdescription}
           </p>
 
           <div className="relative mt-2 overflow-x-auto rounded-lg">
-            <table className="w-full rounded-lg border border-gray-100 text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+            <table className="w-full rounded-lg border border-gray-100 text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
               <thead className="bg-[#b089be] text-xs uppercase text-gray-700 dark:bg-gray-100 dark:text-gray-400">
                 <tr>
                   <th
@@ -57,9 +100,11 @@ const TaskDetailsModal = ({
                     scope="row"
                     className="text-md text-md whitespace-nowrap  border-r px-6 py-4 font-medium text-black  dark:text-white"
                   >
-                    Assigner
+                    Assignee
                   </th>
-                  <td className="text-gray text-md px-6 py-4">Aiman Abid</td>
+                  <td className="text-gray text-md px-6 py-4">
+                    {childData.name}
+                  </td>
                 </tr>
                 <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
                   <th
@@ -68,7 +113,7 @@ const TaskDetailsModal = ({
                   >
                     Tags
                   </th>
-                  <td className="px-6 py-4">None</td>
+                  <td className="px-6 py-4">{selectedTaskDetails.tasktag}</td>
                 </tr>
                 <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
                   <th
@@ -77,9 +122,7 @@ const TaskDetailsModal = ({
                   >
                     Submission date:
                   </th>
-                  <td className="px-6 py-4">
-                    {selectedTaskDetails.description}
-                  </td>
+                  <td className="px-6 py-4">{selectedTaskDetails.taskdate}</td>
                 </tr>
                 <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
                   <th
@@ -89,10 +132,7 @@ const TaskDetailsModal = ({
                     Time Remaining:
                   </th>
                   <td className="px-6 py-4">
-                    1 day 10 hours
-                    <TimeLeftCalculator
-                      targetTime={new Date(selectedTaskDetails.description)}
-                    />
+                    {timeRemaining ? timeRemaining : "Calculating..."}
                   </td>
                 </tr>
                 <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
@@ -103,8 +143,7 @@ const TaskDetailsModal = ({
                     Reward
                   </th>
                   <td className="px-6 py-4">
-                    Laptop
-                    {selectedTaskDetails.reward}
+                    {selectedTaskDetails.rewardname}
                   </td>
                 </tr>
               </tbody>

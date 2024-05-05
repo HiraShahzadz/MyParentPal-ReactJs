@@ -126,7 +126,13 @@ function Task({ task, tasks, setTasks }) {
         )}
       </div>
       <div className="flex">
-        <p className="ml-0 mt-7 text-xs text-black ">{task.taskdate}</p>
+        <p className="mr-3 mt-7 text-xs text-black ">{task.taskdate}</p>
+        {task.taskTypeIs === "Penalty" && (
+          <div className="mt-6 rounded-full bg-[#f2d3ff]">
+            <p className="pl-3 pr-3 text-sm text-black">{task.taskTypeIs}</p>
+          </div>
+        )}
+
         <div className="absolute bottom-4 right-1">
           {childProfileData.map(({ id, img, role }, index) => {
             // Assuming task is defined and childId is accessible

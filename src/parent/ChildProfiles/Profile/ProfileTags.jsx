@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MilstoneTags from "./MilstoneTags";
@@ -6,14 +6,8 @@ import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
-function ProfileTags() {
-  const status = [
-    { label: "Skills" },
-    { label: "House Holds" },
-    { label: "Art & Craft" },
-    { label: "Religious" },
-    { label: "Cooking", image: "/img/blue.png", color: "blue-50" },
-  ];
+import axios from "axios";
+function ProfileTags({ childData }) {
   const cheattags = [
     { label: "Jungle Tidy-up" },
     { label: "Brainpower Boosts" },
@@ -22,6 +16,7 @@ function ProfileTags() {
   const [tags, setTags] = useState([]);
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [newTag, setNewTag] = useState("");
+
   const showPopup = () => {
     setPopupVisible(true);
   };
@@ -32,16 +27,46 @@ function ProfileTags() {
   };
 
   const saveNewTag = () => {
-    // You can handle saving the new tag logic here
+    update();
     console.log("Saving new tag:", newTag);
     toast.success("New tags added");
-    // For simplicity, let's close the popup after saving
+
     closePopup();
   };
+
   const deleteTags = (label) => {
     // Implement your tag deletion logic here
     console.log("Deleting tag:", label);
   };
+
+  async function update(event) {
+    event.preventDefault();
+    try {
+      await axios.put(
+        "http://localhost:8081/api/v1/user/editChild/" + childData.id,
+        {
+          id: childData.id,
+          email: childData.email,
+          password: childData.password,
+          name: childData.name,
+          tags: tags,
+          dob: childData.dob,
+          gender: childData.gender,
+          img: childData.image,
+        }
+      );
+    } catch (err) {
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+      } else if (err.request) {
+        console.error("Network Error:", err.request);
+      } else {
+        console.error("Other Error:", err.message);
+      }
+      toast.error("Failed to save in information");
+    }
+  }
+
   return (
     <div>
       <DndProvider backend={HTML5Backend}>
@@ -51,12 +76,15 @@ function ProfileTags() {
         <div className="text-left text-lg font-bold text-black">
           Milstone Tags
         </div>
-        <div className=" flex flex-wrap">
-          {status.map(({ label }, index) => (
-            <button className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-2 pl-3  outline-transparent">
-              {label}
+        <div className="flex flex-wrap">
+          {childData.tags.map((tag, index) => (
+            <button
+              key={index}
+              className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-2 pl-3 outline-transparent"
+            >
+              {tag}
               <span
-                onClick={() => deleteTags(label)}
+                onClick={() => deleteTags(tag)}
                 className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50 hover:bg-gray-500 hover:text-white"
               >
                 X
@@ -67,17 +95,20 @@ function ProfileTags() {
             onClick={showPopup}
             className="m-2 mr-2 flex cursor-pointer rounded-md border-transparent bg-MyPurple-400 p-1 px-2 py-2 pl-3 text-sm font-semibold normal-case text-white shadow-sm shadow-white outline-transparent hover:bg-purple-400  hover:shadow-white"
           >
-            <span className=" text-white-600 ml-2 h-6 w-6 pt-0.5 ">Add</span>
-            <span className=" ml-5 h-6 w-6 rounded-full bg-gray-50  pt-0.5 text-gray-600 hover:bg-gray-500 hover:text-white">
+            <span className="text-white-600 ml-2 h-6 w-6 pt-0.5 ">Add</span>
+            <span className="ml-5 h-6 w-6 rounded-full bg-gray-50  pt-0.5 text-gray-600 hover:bg-gray-500 hover:text-white">
               +
             </span>
           </button>
         </div>
 
         <div className="text-left text-lg font-bold text-black">Cheat Tags</div>
-        <div className=" flex flex-wrap">
+        <div className="flex flex-wrap">
           {cheattags.map(({ label }, index) => (
-            <button className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-1 pl-3  outline-transparent">
+            <button
+              key={index}
+              className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-1 pl-3 outline-transparent"
+            >
               {label}
               <span
                 onClick={() => deleteTags(label)}

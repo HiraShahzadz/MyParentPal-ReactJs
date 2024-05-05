@@ -87,13 +87,7 @@ export function ParentProfile() {
       modal.classList.add("hidden");
     });
   });
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+
   const [parentProfile, setParentProfile] = useState([]);
   useEffect(() => {
     loadParentProfile();
