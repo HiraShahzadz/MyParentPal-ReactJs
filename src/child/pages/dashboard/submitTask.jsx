@@ -11,7 +11,10 @@ import { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-const SubmitTask = (Details) => {
+const SubmitTask = () => {
+
+
+  const location = useLocation();
 
   // Your component logic goes here
   const images = [
@@ -50,6 +53,15 @@ const SubmitTask = (Details) => {
     setShowFileUploader(false);
     toast.error("Submission Cancelled!");
   };
+  //check which file type should be accepted
+  const [allowedTypes, setAllowedTypes] = useState([]);
+
+  useEffect(() => {
+    if (location.state.filetype && Array.isArray(location.state.filetype)) {
+      setAllowedTypes(location.state.filetype);
+    }
+    console.log("Allowed types:", allowedTypes);
+  }, [location.state.filetype]);
 
 
   const [submissionClicked, setSubmissionClicked] = useState(false);
@@ -67,20 +79,21 @@ const SubmitTask = (Details) => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }
 
+  }
+  console.log("submission", submission)
   return (
-    Details && (
+    <>
       <div className={`p-4 bg-white mt-4 flex flex-col lg:flex-row gap-4 rounded-lg ${submissionClicked ? 'h-full' : 'h-screen'}`}>
         <div className="lg:w-1/2">
           <Typography variant="h5" color="black" className=" mt-3 mb-8">
-            Submit Your Task
+            Submit Your Task            
           </Typography>
           <p variant="h5" className=" mb-3">
-            {Details.taskname}
+            {location.state.taskname}
           </p>
           <Typography variant="h6" className="mb-1 flex justify-left font-semibold">Description:</Typography>
-          <p className="text-md mb-5 flex justify-left">{Details.taskdescription}</p>
+          <p className="text-md mb-5 flex justify-left">{location.state.taskdescription}</p>
 
           {/* Table displaying task details */}
           <div className="rounded-lg mt-2 relative overflow-x-auto">
@@ -100,7 +113,7 @@ const SubmitTask = (Details) => {
                     Submission date:
                   </th>
                   <td className="px-6 py-4 "> {/* Added pb-8 class for bottom margin */}
-                    {Details.taskdate}
+                    {location.state.taskdate} at {location.state.tasktime}
                   </td>
                 </tr>
 
@@ -109,7 +122,7 @@ const SubmitTask = (Details) => {
                     Reward
                   </th>
                   <td className="px-6 py-4">
-                    {Details.rewardname}
+                    {location.state.rewardname}
                   </td>
                 </tr>
 
@@ -118,7 +131,7 @@ const SubmitTask = (Details) => {
                     Submission Required
                   </th>
                   <td className="px-6 py-4">
-                    {Details.taskfiletype}
+                    {location.state.filetype}
                   </td>
                 </tr>
                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -127,25 +140,40 @@ const SubmitTask = (Details) => {
                   </th>
                   {submission.length > 0 ? (
                     <td className="px-6 py-4 text-md text-gray border-r">
-                      {submission[0].fileName || 'No file submitted'} {/* Display fileName of the first submission or a message */}
+                      {submission.find(sub => sub.taskid === location.state.id)?.fileName || 'No file submitted'}
                     </td>
                   ) : (
                     <td className="px-6 py-4 text-md text-gray border-r">
                       No submission yet
                     </td>
                   )}
+
                 </tr>
 
               </tbody>
             </table>
-          
-              <Typography variant="h5" color="black" className="ml-4  mt-8 mb-3">
-                Write your message here
-              </Typography>
-              <div className=" mt-5 mb-3">
-              <ChatForm />
-            </div>
-            {!submission.length > 0 && (
+
+            {allowedTypes.includes("Text") && (
+              <>
+               
+                <div className="mt-5 mb-3">
+                  <ChatForm taskId={location.state.id}/>
+                </div>
+              </>
+            )}
+
+            {allowedTypes.includes("Text") && allowedTypes.length > 1 && !submission.some(sub => sub.taskid === location.state.id) && (
+              <div className="flex justify-center items-center mt-5">
+                <button
+                  className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                  onClick={handleAddSubmissionClick}
+                >
+                  Add Submission
+                </button>
+              </div>
+            )}
+
+            {!allowedTypes.includes("Text") && !submission.some(sub => sub.taskid === location.state.id) && (
               <div className="flex justify-center items-center mt-5">
                 <button
                   className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
@@ -157,14 +185,15 @@ const SubmitTask = (Details) => {
             )}
 
             {showFileUploader && (
-              <div className="bg-white ">
-
-                <FileUploader />
+              <div className="bg-white">
+                <FileUploader taskId={location.state.id} filetype={location.state.filetype} />
                 <DndProvider backend={HTML5Backend}>
                   <Toaster />
                 </DndProvider>
               </div>
             )}
+
+
           </div>
         </div>
 
@@ -196,8 +225,8 @@ const SubmitTask = (Details) => {
 
         </div>
       </div>
-    )
-  );
+    </>
+  )
 };
 
 export default SubmitTask;

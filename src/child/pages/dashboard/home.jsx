@@ -336,16 +336,19 @@ export function Home() {
             {taskss
               .sort((a, b) => a.description - b.description)
               .slice(0, visibleTasks)
-              .map(({ id, taskname, taskdescription, rewardname, taskdate, tasktag , taskfiletype}) => (
+              .map(({ id,_id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag , taskfiletype}) => (
 
                 <div
                   onClick={() => handleMoreInfoClick({
-                    id,
+                    _id,
                     taskname,
+                    childId,
                     taskdescription,
                     taskdate,
                     rewardname,
-                    tasktag
+                    tasktag,
+                    tasktime,
+                    taskfiletype
                   })}
                   key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 

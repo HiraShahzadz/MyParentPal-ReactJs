@@ -71,12 +71,6 @@ export function Reward_Request() {
         rewarddescription: rewarddescription,
         
       });
-      await axios.post("http://localhost:8081/api/v1/messages/send", {
-        taskname: taskname,
-        taskdescription: taskdescription,
-        desiredreward: desiredreward,
-        rewarddescription: rewarddescription,
-       });
       toast.success("Request Sent Successfully");
       settaskname("");
       settaskdescription("");
