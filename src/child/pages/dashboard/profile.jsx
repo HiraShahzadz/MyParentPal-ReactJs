@@ -8,6 +8,7 @@ import TaskDetailsModal from './TaskDetailsModel';
 import { GiftIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import bgImage from "/img/bgcover.jpeg";
+import { toast } from 'react-toastify';
 
 export function Profile() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
@@ -25,6 +26,7 @@ export function Profile() {
     password: "",
     dob: "",
     name: "",
+    image: "",
   });
   const [hiddenImages, setHiddenImages] = useState([]);
 
@@ -83,6 +85,7 @@ export function Profile() {
     };
     reader.readAsDataURL(selectedImage);
   };
+  console.log("Image File:", image);
 
   document.addEventListener("DOMContentLoaded", function () {
     const discardButton = document.querySelector(
@@ -114,25 +117,41 @@ export function Profile() {
       console.log("child profile:", result.data);
     } catch (error) {
       console.error("Error loading parentProfile:", error);
+      
     }
   }
   const myProfile = childProfile.find((profile) => profile);
 console.log();
   async function update(event) {
     event.preventDefault();
+    if (!email || !password || !name || !dob || !gender) {
+      return toast.error("Please fill in all fields");
+    }
+    // Validate Date of Birth
+    const currentDate = new Date();
+    const selectedDate = new Date(dob);
+    if (selectedDate > currentDate) {
+      toast.error("Date of birth cannot be in the future");
+      return;
+    }
+
+    // Validate Password
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/;
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        "Password should be at least 8 characters long, contain at least one uppercase letter, and one special character"
+      );
+      return;
+    }
     try {
       const base64Image = formData.image.split(",")[1];
-      await axios.put(
-        "http://localhost:8081/api/v1/user/editChild/" + myProfile.id,
+        await axios.post("http://localhost:8081/api/v1/profileUpdate/save/",
         {
-          id: myProfile.id,
           email: myProfile.email,
           password: myProfile.password,
           name: myProfile.name,
-          tags: myProfile.tags,
           dob: myProfile.dob,
-          gender: myProfile.gender,
-          img: base64Image,
+         img: base64Image,
         }
       );
     } catch (err) {
@@ -237,9 +256,8 @@ console.log();
               </div>
               ))}
             </div>
-            
-             {/* Right side div covering remaining space */}
-             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-2 shadow-lg md:flex-1">
+            {/* Right side div covering remaining space */}
+            <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-2 shadow-lg md:flex-1">
               <div className="mb-1 mt-6 flex w-full items-center justify-between pl-3 pr-10">
                 <div className="text-left text-lg font-bold text-black">
                   Task Summary
@@ -251,6 +269,8 @@ console.log();
                   Assigned Tasks
                 </h2>
                 <div className="mb-5 max-h-96 overflow-y-auto">
+                {myProfile && (
+  <>
                   {tasksData.filter((task) => task.childId === myProfile.id)
                     .length === 0 ? (
                     <div className="items-center justify-center">
@@ -324,12 +344,16 @@ console.log();
                         </div>
                       ))
                   )}
+                  </>
+                )}
                 </div>
 
                 <h2 className="text-md mb-3 ml-3 mt-3 font-bold">
                   Completed Tasks
                 </h2>
                 <div className="max-h-96 overflow-y-auto">
+                {myProfile && (
+  <>
                   {tasksData.filter(
                     (task) =>
                       task.status === "Completed" &&
@@ -406,12 +430,16 @@ console.log();
                         </div>
                       ))
                   )}
+                  </>
+                )}
                 </div>
 
                 <h2 className="text-md mb-3 ml-3 mt-3 font-bold">
                   Pending Tasks
                 </h2>
                 <div className="mb-5 max-h-96 overflow-y-auto">
+                {myProfile && (
+  <>
                   {tasksData.filter(
                     (task) =>
                       task.status === "Todo" && task.childId === myProfile.id
@@ -485,11 +513,13 @@ console.log();
                         </div>
                       ))
                   )}
+                  </>
+                )}
                 </div>
 
                 {taskDetailsToShow && (
                   <TaskDetailsModal
-                    childData={childData}
+                    childData={myProfile}
                     selectedTaskDetails={taskDetailsToShow}
                     handleCloseTaskDetails={handleCloseTaskDetails}
                     // handleSubmitTask={/* Pass your handleSubmitTask function here */}

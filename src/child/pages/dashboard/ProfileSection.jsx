@@ -62,8 +62,10 @@ function ProfileSection({ childData, updatePhoto }) {
     setDob(childData.dob);
     setGender(childData.gender);
   }, [childData]);
-  async function update(event) {
+  
+  async function save(event) {
     event.preventDefault();
+
     if (!email || !password || !name || !dob || !gender) {
       return toast.error("Please fill in all fields");
     }
@@ -83,22 +85,18 @@ function ProfileSection({ childData, updatePhoto }) {
       );
       return;
     }
+
     try {
-      await axios.put(
-        "http://localhost:8081/api/v1/user/editChild/" + childData.id,
-        {
-          id: childData.id,
-          email: email,
-          password: password,
-          name: name,
-          tags: childData.tags,
-          dob: dob,
-          gender: gender,
-          img: childData.image,
-        }
-      );
-      toast.success("Parent profile is created Successfully");
-    } catch (err) {
+      await axios.post("http://localhost:8081/api/v1/profile/save", {
+        name: name,
+        email: email,
+        password: password,
+        dob: dob,
+        img: childData.image,
+      });
+      toast.success("Request Sent Successfully");
+    }
+    catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);
       } else if (err.request) {
@@ -106,19 +104,24 @@ function ProfileSection({ childData, updatePhoto }) {
       } else {
         console.error("Other Error:", err.message);
       }
-      toast.error("Failed to save in information");
+
+      toast.error("Failed to send request");
     }
   }
+
+
+
+
+
+
   const handleCancel = () => {
     setEmail(childData.email);
     setPassword(childData.password);
     setName(childData.name);
     setDob(childData.dob);
-    setGender(childData.gender);
   };
   const handleSave = (event) => {
-    update(event);
-    updatePhoto(event);
+    save(event);
   };
 
   return (
@@ -174,9 +177,6 @@ function ProfileSection({ childData, updatePhoto }) {
                       id="male"
                       name="gender"
                       value="male"
-                      onChange={(event) => {
-                        setGender(event.target.value);
-                      }}
                       checked={gender === "male"}
                       type="radio"
                       className="h-4 w-4 border-gray-900 text-[#B089BE] focus:ring-[#B089BE]"
@@ -194,9 +194,6 @@ function ProfileSection({ childData, updatePhoto }) {
                       id="female"
                       name="gender"
                       value="female"
-                      onChange={(event) => {
-                        setGender(event.target.value);
-                      }}
                       checked={gender === "female"}
                       type="radio"
                       className="h-4 w-4 border-gray-900 text-[#B089BE] focus:ring-[#B089BE]"
