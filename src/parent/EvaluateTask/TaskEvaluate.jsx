@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardBody } from "@material-tailwind/react";
 import { GiftIcon } from "@heroicons/react/24/solid";
-
 import PenaltyTask from "./PenaltyTask";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
@@ -17,6 +16,8 @@ export function TaskEvaluate() {
   const [tasksData, setTasksData] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [Tasktag, setTasktag] = useState(null);
+  const [filteredTasks, setFilteredTasks] = useState([]);
 
   useEffect(() => {
     loadChildProfileData();
@@ -47,12 +48,43 @@ export function TaskEvaluate() {
     }
   }
 
-  // Filter tasks based on child IDs
-  const filteredTasks = tasksData.filter(
-    (task) =>
-      childProfileData.some((child) => child.id === task.childId) &&
-      (selectedChildId ? task.childId === selectedChildId : true)
-  );
+  useEffect(() => {
+    if (selectedChildId !== null && Tasktag !== null) {
+      const filtered = tasksData.filter(
+        (task) =>
+          task.childId === selectedChildId &&
+          task.tasktag &&
+          task.tasktag.includes(Tasktag) &&
+          isTaskChildIdInProfileData(task.childId)
+      );
+      setFilteredTasks(filtered);
+    } else if (selectedChildId !== null) {
+      const filtered = tasksData.filter(
+        (task) =>
+          task.childId === selectedChildId &&
+          isTaskChildIdInProfileData(task.childId)
+      );
+      setFilteredTasks(filtered);
+    } else if (Tasktag !== null) {
+      const filtered = tasksData.filter(
+        (task) =>
+          task.tasktag &&
+          task.tasktag.includes(Tasktag) &&
+          isTaskChildIdInProfileData(task.childId)
+      );
+      setFilteredTasks(filtered);
+    } else {
+      const filtered = tasksData.filter((task) =>
+        isTaskChildIdInProfileData(task.childId)
+      );
+      setFilteredTasks(filtered);
+    }
+  }, [selectedChildId, Tasktag, tasksData, childProfileData]);
+
+  // Helper function to check if task's child ID exists in childProfileData
+  const isTaskChildIdInProfileData = (taskId) => {
+    return childProfileData.some((child) => child.id === taskId);
+  };
 
   const filterTasksByChild = (childId) => {
     setSelectedChildId(childId);
@@ -62,7 +94,7 @@ export function TaskEvaluate() {
     setSelectedTask(task);
     setShowModal(true);
   };
-
+  console.log("han ggg:" + Tasktag);
   return (
     <div className="mb-4 mt-9 flex flex-col gap-12">
       <DndProvider backend={HTML5Backend}>
@@ -76,11 +108,15 @@ export function TaskEvaluate() {
             </div>
           </div>
           <div className="mt-4 flex">
-            <Tags />
+            <Tags
+              childProfileData={childProfileData}
+              setTasktag={setTasktag}
+              selectedChildId={selectedChildId}
+            />
+
             <div className="ml-3">
               <ChildSelection
                 childProfileData={childProfileData}
-                setChildProfileData={setChildProfileData}
                 filterTasks={filterTasksByChild}
               />
             </div>
@@ -93,66 +129,75 @@ export function TaskEvaluate() {
                 Completed Tasks
               </h2>
               <div className="max-h-96">
-                {filteredTasks.map((task, index) => (
-                  <div
-                    key={task.id}
-                    href=""
-                    className="mb-2 items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50 sm:flex"
-                  >
-                    <div className="flex">
-                      <img
-                        className="mt-0.5 h-6 w-6 "
-                        src="/img/task.png"
-                        alt=""
-                      />
-                      <div className="ml-3">
-                        <span className="font-medium text-black">
-                          {task.taskname}
-                        </span>
-                        <br></br>
-                        <span className="mt-2 text-black">
-                          Submission date: {task.taskdate}
-                        </span>
-                        <span className="text-black"></span>
-                        <div className="mt-1.5 flex">
-                          <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                {filteredTasks
+                  .filter((task) => task.status === "Completed")
+                  .map((task) => (
+                    <div
+                      key={task.id}
+                      href=""
+                      className="mb-2 items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50 sm:flex"
+                    >
+                      <div className="flex">
+                        <img
+                          className="mt-0.5 h-6 w-6 "
+                          src="/img/task.png"
+                          alt=""
+                        />
+                        <div className="ml-3">
+                          <span className="font-medium text-black">
+                            {task.taskname}
+                          </span>
+                          <br></br>
+                          <span className="mt-2 text-black">
+                            Submission date: {task.taskdate}
+                          </span>
+                          <span className="text-black"></span>
+                          <div className="mt-1.5 flex">
+                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
 
-                          <span className="ml-1 mt-0.5 text-xs text-black ">
-                            Reward: {task.rewardname}
-                          </span>
-                        </div>
-                        <div className="mt-1.5 flex">
-                          {childProfileData.map(
-                            (child) =>
-                              child.id === task.childId && (
-                                <img
-                                  className="mt-0.5 h-5 w-5 rounded-full object-cover"
-                                  src={
-                                    child.img
-                                      ? `data:image/jpeg;base64,${child.img}`
-                                      : "/img/userc.png"
-                                  }
-                                  alt=""
-                                />
-                              )
-                          )}
-                          <span className="ml-1 mt-1 text-xs text-black ">
-                            {task.taskassignee}
-                          </span>
+                            <span className="ml-1 mt-0.5 text-xs text-black ">
+                              Reward: {task.rewardname}
+                            </span>
+                          </div>
+                          <div className="mt-1.5 flex">
+                            {childProfileData.map(
+                              (child) =>
+                                child.id === task.childId && (
+                                  <>
+                                    <img
+                                      className="mt-0.5 h-5 w-5 rounded-full object-cover"
+                                      src={
+                                        child.img
+                                          ? `data:image/jpeg;base64,${child.img}`
+                                          : "/img/userc.png"
+                                      }
+                                      alt=""
+                                    />
+                                    <span className="ml-1 mt-1 text-xs text-black ">
+                                      {child.name}
+                                    </span>
+                                  </>
+                                )
+                            )}
+                          </div>
+                          <div className="mr-28 mt-2 rounded-full bg-[#f2d3ff]">
+                            <p className="pl-3 pr-3 text-sm text-black">
+                              {task.taskTypeIs}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                      <button
-                        onClick={() => handleEvaluateTask(task)}
-                        className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                      >
-                        Evaluate now
-                      </button>
+                      <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                        <button
+                          onClick={() => handleEvaluateTask(task)}
+                          className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                        >
+                          Evaluate now
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>

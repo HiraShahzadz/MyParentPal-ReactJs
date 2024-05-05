@@ -109,6 +109,12 @@ export function TaskCreation() {
     ) {
       return toast.error("Please fill in all fields");
     }
+    if (!taskassignee || !childId) {
+      return toast.error("Please select task assignee");
+    }
+    if (!tasktag) {
+      return toast.error("Please select task tag");
+    }
     const taskDate = new Date(taskdate);
     const currentDate = new Date();
 
@@ -168,7 +174,63 @@ export function TaskCreation() {
       return toast.error("Task creation is faild");
     }
   }
+  const [childProfileData, setChildProfileData] = useState([]);
+  const [tasksData, setTasksData] = useState([]);
+  const [selectedChildId, setSelectedChildId] = useState(null);
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [filteredTasks, setFilteredTasks] = useState([]);
 
+  useEffect(() => {
+    loadChildProfileData();
+    loadTasks();
+  }, []);
+
+  async function loadChildProfileData() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-child"
+      );
+      setChildProfileData(result.data);
+      console.log("Child profile data:", result.data);
+    } catch (error) {
+      console.error("Error loading child profile data:", error);
+    }
+  }
+
+  async function loadTasks() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/task/getall"
+      );
+      setTasksData(result.data);
+      console.log("All tasks:", result.data);
+    } catch (error) {
+      console.error("Error loading tasks:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (selectedChildId && selectedTag) {
+      const filtered = tasksData.filter(
+        (task) =>
+          task.childId === selectedChildId &&
+          task.tags &&
+          task.tags.includes(selectedTag)
+      );
+      setFilteredTasks(filtered);
+    } else if (selectedChildId) {
+      const filtered = tasksData.filter(
+        (task) => task.childId === selectedChildId
+      );
+      setFilteredTasks(filtered);
+    } else {
+      setFilteredTasks(tasksData);
+    }
+  }, [selectedChildId, selectedTag, tasksData]);
+
+  const filterTasksByChild = (childId) => {
+    setSelectedChildId(childId);
+  };
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-9">
@@ -318,6 +380,8 @@ export function TaskCreation() {
                     <Assignee
                       setTaskassignee={setTaskassignee}
                       setChildId={setChildId}
+                      childProfileData={childProfileData}
+                      filterTasks={filterTasksByChild}
                     />
                   </div>
 
@@ -339,7 +403,11 @@ export function TaskCreation() {
                     />
                   </div>
                   <div>
-                    <Tags setTasktag={setTasktag} />
+                    <Tags
+                      childProfileData={childProfileData}
+                      setTasktag={setTasktag}
+                      selectedChildId={selectedChildId}
+                    />
                   </div>
 
                   <div className="mb-20 space-y-10">

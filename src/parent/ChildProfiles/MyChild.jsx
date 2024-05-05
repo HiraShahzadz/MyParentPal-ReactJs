@@ -145,7 +145,7 @@ function MyChild() {
                         View Profile
                       </Button>
                       <Button
-                        onClick={() => handleShowRequest(requests)}
+                        onClick={() => handleShowRequest(1)}
                         className={`mt-3 rounded-md  ${
                           requests === 0 ? "bg-gray-400" : "bg-gray-500"
                         } px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:text-white hover:shadow-white`}

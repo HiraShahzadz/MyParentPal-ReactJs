@@ -1,23 +1,32 @@
 import React, { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function ChildSelection({
-  childProfileData,
-  setChildProfileData,
-  filterTasks,
-}) {
-  const [selectedStatus, setSelectedStatus] = useState(
-    childProfileData.length > 0
-      ? childProfileData[0]
-      : { img: "", name: "Select Child" }
-  );
+function ChildSelection({ childProfileData, filterTasks }) {
+  const [selectedAssignee, setSelectedAssignee] = useState({
+    img: "",
+    name: "Select Child",
+  });
+
   const handleChildClick = (childId) => {
-    filterTasks(childId);
+    if (selectedAssignee.id === childId) {
+      // Deselect the child if it's already selected
+      setSelectedAssignee({ img: "", name: "Select Child" });
+      filterTasks(null); // Pass null to indicate deselection
+    } else {
+      // Otherwise, select the clicked child
+      const selectedChild = childProfileData.find(
+        (child) => child.id === childId
+      );
+      setSelectedAssignee(selectedChild);
+      filterTasks(childId);
+    }
   };
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -25,13 +34,13 @@ function ChildSelection({
           <img
             className="h-5 w-5 rounded-full  object-cover"
             src={
-              selectedStatus.img
-                ? `data:image/jpeg;base64,${selectedStatus.img}`
+              selectedAssignee.img
+                ? `data:image/jpeg;base64,${selectedAssignee.img}`
                 : "/img/userc.png"
             }
-            alt=""
+            alt="assignee"
           />
-          {selectedStatus.name}
+          {selectedAssignee.name}
           <ChevronDownIcon
             className="-mr-1 h-5 w-5 text-gray-400"
             aria-hidden="true"
@@ -54,9 +63,6 @@ function ChildSelection({
               <Menu.Item onClick={() => handleChildClick(id)}>
                 {({ active }) => (
                   <a
-                    onClick={() => {
-                      setSelectedStatus({ id, name, img });
-                    }}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "flex px-4 py-2 text-sm "

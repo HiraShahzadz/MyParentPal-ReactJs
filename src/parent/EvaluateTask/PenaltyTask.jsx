@@ -68,6 +68,7 @@ function PaneltyTask(props) {
           taskfiletype,
           taskdate,
           tasktime,
+          rewardname: props.task.rewardname,
           childId: props.task.childId,
           taskTypeIs,
           taskId: props.task._id,
