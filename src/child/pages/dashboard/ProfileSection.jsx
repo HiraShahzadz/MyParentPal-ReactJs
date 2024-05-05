@@ -71,7 +71,22 @@ function ProfileSection({ childData, updatePhoto }) {
     }
     // Validate Date of Birth
     const currentDate = new Date();
+    const dobDate = new Date(dob);
     const selectedDate = new Date(dob);
+
+    let age = currentDate.getFullYear() - dobDate.getFullYear();
+    const monthDiff = currentDate.getMonth() - dobDate.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && currentDate.getDate() < dobDate.getDate())
+    ) {
+      age--;
+    }
+
+    // Check if the child's age is within the required range
+    if (age < 7 || age >= 18) {
+      return toast.error("Child's age must be between 7 and 18 years old");
+    }
     if (selectedDate > currentDate) {
       toast.error("Date of birth cannot be in the future");
       return;

@@ -58,7 +58,16 @@ const FileUploader = ({ taskId, filetype }) => {
   }, [filetype]);
 
   const handleSubmit = async () => {
-    const formData = new FormData();
+
+  const totalSize = files.reduce((acc, file) => acc + file.size, 0); // Calculate total size of all files
+  const totalSizeInMB = totalSize / (1024 * 1024); // Convert total size to MB
+  if (totalSizeInMB > 1000) {
+     toast.error("file size cannot exceed 1000 MB");
+     setFiles([]);
+     return;
+  }
+
+  const formData = new FormData();
     files.forEach((file) => {
       formData.append("file", file);
     });
@@ -72,7 +81,7 @@ const FileUploader = ({ taskId, filetype }) => {
         if (
           (type === "Picture" && (file.type === "image/jpeg" || file.type === "image/png")) ||
           (type === "Audio" && (file.type === "audio/mpeg" || file.type === "audio/mp3")) ||
-          (type === "Video" && file.type === "video/mp4")
+          (type === "Video" && (file.type === "video/mp4" || file.type === "video/quicktime")) // Include .mov files
         ) {
           return true;
         }
@@ -81,7 +90,9 @@ const FileUploader = ({ taskId, filetype }) => {
     });
 
     if (!isFileTypeValid) {
-      return toast.error("You have to upload "+ filetype + " to complete the task");
+      toast.error("You have to upload "+ filetype + " to complete the task");
+      setFiles([]);
+      return;
     }
 
     setIsSaving(true);
@@ -96,7 +107,7 @@ const FileUploader = ({ taskId, filetype }) => {
           },
         }
       );
-      toast.success("Task saved successfully " + taskId);
+      toast.success("Task saved successfully ");
       setFiles([]);
     } catch (error) {
       console.error("Error uploading files:", error);

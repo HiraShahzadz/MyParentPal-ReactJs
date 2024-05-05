@@ -63,7 +63,7 @@ export function Home() {
   const Click = (task) => {
     setDetails(task);
   };
-  
+
   const [date, setDate] = useState(new Date());
   const [selectedTask, setSelectedTask] = useState("Assigned");
   const [showNextArrow, setShowNextArrow] = useState(false);
@@ -334,9 +334,20 @@ export function Home() {
 
 
             {taskss
+              .filter((task) => task.status === "Todo").length === 0 ? (
+                <div className="items-center justify-center">
+                  <p className="text-center text-sm">
+                    No task is completed yet
+                  </p>
+                  <div className="flex items-center justify-center">
+                    <FontAwesomeIcon icon={faExclamationCircle} />
+                  </div>
+                </div>
+              ) : (
+             taskss
               .sort((a, b) => a.description - b.description)
               .slice(0, visibleTasks)
-              .map(({ id,_id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag , taskfiletype}) => (
+              .map(({ id, _id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag, taskfiletype }) => (
 
                 <div
                   onClick={() => handleMoreInfoClick({
@@ -357,9 +368,9 @@ export function Home() {
                     <div className="ml-3">
                       <span className="font-medium text-black">{taskname}</span>
                       <br></br>
-                     <div className="mt-2"></div>
+                      <div className="mt-2"></div>
                       <span className="mt-2 mb-3  text-black">Submission date: {taskdate}</span><br></br>
-                       Time Remaining: 1 day 3 hours
+                      Time Remaining: 1 day 3 hours
                       <span className="text-black">
 
                       </span>
@@ -375,28 +386,21 @@ export function Home() {
                   <div
                     className="ml-auto flex items-end  hover:border-MyPurple-400"
                   >
-                  
-                  <button className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0">
-  <Link to={{
-    pathname: "/childDashboard/submitTask",
-    state: {
-      id,
-      taskname,
-      taskdescription,
-      taskdate,
-      rewardname,
-      taskfiletype
-    }
-  }}>
-    Complete
-  </Link>
-</button>
+
+                    <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                      <button
+                        onClick={() => handleMoreInfoClick(task)}
+                        className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                      >
+                        more info
+                      </button>
+                    </div>
 
                   </div>
 
                 </div>
               )
-              )}
+              ))}
 
             <div className="mt-5 flex justify-center">
               <a
@@ -417,43 +421,57 @@ export function Home() {
         )}
 
         {selectedTask === "Pending" && (
-            <div className="ml-4 mr-4 mb-2">
+          <div className="ml-4 mr-4 mb-2">
             <br></br>
             <br></br>
 
 
 
-            {tasksData
+            {taskss
+              .filter((task) => task.status === "Todo").length === 0 ? (
+                <div className="items-center justify-center">
+                  <p className="text-center text-sm">
+                    No task is assigned yet
+                  </p>
+                  <div className="flex items-center justify-center">
+                    <FontAwesomeIcon icon={faExclamationCircle} />
+                  </div>
+                </div>
+              ) : (
+             taskss
               .sort((a, b) => a.description - b.description)
               .slice(0, visibleTasks)
-              .map(({ id, title, image, description, reward, details }) => (
+              .map(({ id, _id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag, taskfiletype }) => (
 
                 <div
-                  onClick={() => Click({
-                    id,
-                    title,
-                    image,
-                    description: description.toLocaleDateString(),
-                    reward,
-                    details,
+                  onClick={() => handleMoreInfoClick({
+                    _id,
+                    taskname,
+                    childId,
+                    taskdescription,
+                    taskdate,
+                    rewardname,
+                    tasktag,
+                    tasktime,
+                    taskfiletype
                   })}
                   key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
                   <div className="flex">
                     <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
                     <div className="ml-3">
-                      <span className="font-medium text-black">{title}</span>
+                      <span className="font-medium text-black">{taskname}</span>
                       <br></br>
-                     <div className="mt-2"></div>
-                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
-                       Time Remaining: 1 day 3 hours
+                      <div className="mt-2"></div>
+                      <span className="mt-2 mb-3  text-black">Submission date: {taskdate}</span><br></br>
+                      Time Remaining: 1 day 3 hours
                       <span className="text-black">
 
                       </span>
                       <div className="mt-1.5 flex">
                         <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
                         <span className="ml-1 text-xs text-black ">
-                          Reward: {reward}
+                          Reward: {rewardname}
                         </span>
                         <br></br>
                       </div>
@@ -462,29 +480,21 @@ export function Home() {
                   <div
                     className="ml-auto flex items-end  hover:border-MyPurple-400"
                   >
-                  
-                   
-                 
-                        <button
-                         onClick={() => Click({
-                          id,
-                          title,
-                          image,
-                          description: description.toLocaleDateString(),
-                          reward,
-                          details
-                        })}
-                         className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                        >
-                          
-                          Complete
-                        </button>
-                    
+
+                    <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                      <button
+                        onClick={() => handleMoreInfoClick(task)}
+                        className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                      >
+                        more info
+                      </button>
+                    </div>
+
                   </div>
 
                 </div>
               )
-              )}
+             ) )}
 
             <div className="mt-5 flex justify-center">
               <a
@@ -511,37 +521,52 @@ export function Home() {
 
             <div>
 
-              {tasksData
-                .sort((a, b) => a.description - b.description)
-                .slice(0, visibleTasks)
-                .map(({ id, title, image, description, reward, details }) => (
+            {taskss
+              .filter((task) => task.status === "Completed").length === 0 ? (
+                <div className="items-center justify-center">
+                  <p className="text-center text-sm">
+                    No task is completed yet
+                  </p>
+                  <div className="flex items-center justify-center">
+                    <FontAwesomeIcon icon={faExclamationCircle} />
+                  </div>
+                </div>
+              ) : (
+             taskss
+              .filter((task) => task.status === "Completed")
+              .sort((a, b) => a.description - b.description)
+              .slice(0, visibleTasks)
+              .map(({ id, _id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag, taskfiletype }) => (
 
-                  <div
-                    onClick={() => handleSubmittedClick({
-                      id,
-                      title,
-                      image,
-                      description: description.toLocaleDateString(),
-                      reward,
-                      details,
-                    })}
-                         key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
+                <div
+                  onClick={() => handleMoreInfoClick({
+                    _id,
+                    taskname,
+                    childId,
+                    taskdescription,
+                    taskdate,
+                    rewardname,
+                    tasktag,
+                    tasktime,
+                    taskfiletype
+                  })}
+                  key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
 
                   <div className="flex">
                     <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
                     <div className="ml-3">
-                      <span className="font-medium text-black">{title}</span>
+                      <span className="font-medium text-black">{taskname}</span>
                       <br></br>
-                     <div className="mt-2"></div>
-                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
-                      
+                      <div className="mt-2"></div>
+                      <span className="mt-2 mb-3  text-black">Submission date: {taskdate}</span><br></br>
+                      Time Remaining: 1 day 3 hours
                       <span className="text-black">
 
                       </span>
                       <div className="mt-1.5 flex">
                         <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
                         <span className="ml-1 text-xs text-black ">
-                          Reward: {reward}
+                          Reward: {rewardname}
                         </span>
                         <br></br>
                       </div>
@@ -550,19 +575,22 @@ export function Home() {
                   <div
                     className="ml-auto flex items-end  hover:border-MyPurple-400"
                   >
-                  
-                  <button
-                        className="mt-14 text-white bg-gray-400  font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+
+                    <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                      <button
+                        onClick={() => handleMoreInfoClick(task)}
+                        className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
                       >
-                        Submitted
+                        more info
                       </button>
+                    </div>
+
                   </div>
 
                 </div>
               )
-              )}
+              ))}
 
-           
               <div className="mt-5 flex justify-center">
                 <a
                   className="text-purple-500 hover:underline flex items-center"
@@ -590,11 +618,11 @@ export function Home() {
           </div>
         )}
         {Details && (
-  <SubmitTask 
-  Details={Details}
-  selectedTaskDetails={DetailsToShow}
-  handleCloseTaskDetails={handleCloseDetails} />
-)}
+          <SubmitTask
+            Details={Details}
+            selectedTaskDetails={DetailsToShow}
+            handleCloseTaskDetails={handleCloseDetails} />
+        )}
 
         {taskDetailsToShow && (
           <TaskDetailsModal
@@ -603,8 +631,8 @@ export function Home() {
           // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
-       
-        
+
+
         {CompletedtaskDetailsToShow && (
           <CompletedTaskDetailsModal
             selectedTaskDetails={CompletedtaskDetailsToShow}

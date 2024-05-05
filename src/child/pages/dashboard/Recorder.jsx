@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { Typography } from "@material-tailwind/react";
 
 const ChatForm = ({ taskId }) => {
+    
     const [typedMessage, setTypedMessage] = useState('');
     const [showSendButton, setShowSendButton] = useState(true);
     const [messageSent, setMessageSent] = useState(false);
@@ -81,7 +82,7 @@ const ChatForm = ({ taskId }) => {
 
     return (
         <div>
-            {submission.length > 0 ? (
+            {submission.some(sub => sub.taskid === taskId && sub.typedMessage) ? (
                 <div className="text-green-500">
                     <Typography variant="h5" color="black" className="ml-4 mt-8 mb-3">
                         Message you sent
