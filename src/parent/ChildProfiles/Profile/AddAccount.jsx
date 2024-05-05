@@ -68,7 +68,7 @@ function AddAccount(props) {
     const currentDate = new Date();
 
     // Calculate the age of the child
-    const age = currentDate.getFullYear() - dobDate.getFullYear();
+    let age = currentDate.getFullYear() - dobDate.getFullYear();
     const monthDiff = currentDate.getMonth() - dobDate.getMonth();
     if (
       monthDiff < 0 ||

@@ -67,14 +67,28 @@ function ProfileSection({ childData, updatePhoto }) {
     if (!email || !password || !name || !dob || !gender) {
       return toast.error("Please fill in all fields");
     }
-    // Validate Date of Birth
+    const dobDate = new Date(dob);
+
     const currentDate = new Date();
-    const selectedDate = new Date(dob);
-    if (selectedDate > currentDate) {
-      toast.error("Date of birth cannot be in the future");
-      return;
+
+    // Calculate the age of the child
+    let age = currentDate.getFullYear() - dobDate.getFullYear();
+    const monthDiff = currentDate.getMonth() - dobDate.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && currentDate.getDate() < dobDate.getDate())
+    ) {
+      age--;
     }
 
+    // Check if the child's age is within the required range
+    if (age < 7 || age >= 18) {
+      return toast.error("Child's age must be between 7 and 18 years old");
+    }
+
+    if (dobDate > currentDate) {
+      return toast.error("Date of Birth cannot be in the future");
+    }
     // Validate Password
     const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/;
     if (!passwordRegex.test(password)) {

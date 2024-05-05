@@ -33,14 +33,22 @@ const TaskDetailsModal = ({
       const currentTime = new Date();
       const timeDifference = submissionDate - currentTime;
 
-      // Convert the time difference into days and hours
-      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-
-      // Set the time remaining state
-      setTimeRemaining(`${days} days and ${hours} hours`);
+      // Check if the deadline has passed
+      if (timeDifference < 0) {
+        const absoluteTimeDifference = Math.abs(timeDifference);
+        const days = Math.floor(absoluteTimeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (absoluteTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        setTimeRemaining(`${days} days and ${hours} hours passed`);
+      } else {
+        // Convert the time difference into days and hours
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        setTimeRemaining(`${days} days and ${hours} hours`);
+      }
     }
   }, [selectedTaskDetails]);
 
@@ -75,7 +83,7 @@ const TaskDetailsModal = ({
           </p>
 
           <div className="relative mt-2 overflow-x-auto rounded-lg">
-            <table className="w-full rounded-lg border border-gray-100 text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+            <table className="w-full rounded-lg border border-gray-100 text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
               <thead className="bg-[#b089be] text-xs uppercase text-gray-700 dark:bg-gray-100 dark:text-gray-400">
                 <tr>
                   <th

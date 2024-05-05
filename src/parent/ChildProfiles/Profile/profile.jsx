@@ -7,6 +7,10 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import TaskDetailsModal from "./TaskDetailsModal";
 import { GiftIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { toast } from "react-hot-toast";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import bgImage from "/img/bgcover.jpeg";
 import tasksData from "@/parent/data/tasksData";
 import ProfileTags from "@/parent/ChildProfiles/Profile/ProfileTags";
@@ -260,11 +264,7 @@ export function MyProfile({ childData }) {
                     </div>
                   ) : (
                     tasksData
-                      .filter(
-                        (task) =>
-                          task.status === "Todo" &&
-                          task.childId === childData.id
-                      )
+                      .filter((task) => task.childId === childData.id)
                       .map((task) => (
                         <div
                           key={task.id}
@@ -306,6 +306,11 @@ export function MyProfile({ childData }) {
                                 <span className="ml-1 mt-1 text-xs text-black ">
                                   {childData.name}
                                 </span>
+                              </div>
+                              <div className="mr-28 mt-2 rounded-full bg-[#f2d3ff]">
+                                <p className="pl-3 pr-3 text-sm text-black">
+                                  {task.taskTypeIs}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -389,6 +394,11 @@ export function MyProfile({ childData }) {
                                   {childData.name}
                                 </span>
                               </div>
+                              <div className="mr-28 mt-2 rounded-full bg-[#f2d3ff]">
+                                <p className="pl-3 pr-3 text-sm text-black">
+                                  {task.taskTypeIs}
+                                </p>
+                              </div>
                             </div>
                           </div>
 
@@ -467,6 +477,11 @@ export function MyProfile({ childData }) {
                                 <span className="ml-1 mt-1 text-xs text-black ">
                                   {childData.name}
                                 </span>
+                              </div>
+                              <div className="mr-28 mt-2 rounded-full bg-[#f2d3ff]">
+                                <p className="pl-3 pr-3 text-sm text-black">
+                                  {task.taskTypeIs}
+                                </p>
                               </div>
                             </div>
                           </div>
