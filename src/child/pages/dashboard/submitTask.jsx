@@ -87,7 +87,7 @@ const SubmitTask = () => {
       <div className={`p-4 bg-white mt-4 flex flex-col lg:flex-row gap-4 rounded-lg ${submissionClicked ? 'h-full' : 'h-screen'}`}>
         <div className="lg:w-1/2">
           <Typography variant="h5" color="black" className=" mt-3 mb-8">
-            Submit Your Task             {location.state.id}
+            Submit Your Task            
           </Typography>
           <p variant="h5" className=" mb-3">
             {location.state.taskname}
@@ -155,9 +155,7 @@ const SubmitTask = () => {
 
             {allowedTypes.includes("Text") && (
               <>
-                <Typography variant="h5" color="black" className="ml-4 mt-8 mb-3">
-                  Write your message here
-                </Typography>
+               
                 <div className="mt-5 mb-3">
                   <ChatForm taskId={location.state.id}/>
                 </div>
