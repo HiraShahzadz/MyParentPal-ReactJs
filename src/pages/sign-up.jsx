@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { GoogleLogin } from "react-google-login";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useGoogleOneTapLogin } from "react-google-one-tap-login";
-
 import {
   Card,
   CardHeader,
@@ -37,7 +36,6 @@ export function SignUp() {
   useGoogleOneTapLogin({
     onSuccess: async (credentialResponse) => {
       try {
-        console.log(credentialResponse);
         const { email, name, picture } = credentialResponse;
 
         // Retrieve user's location
@@ -56,10 +54,10 @@ export function SignUp() {
             location: data.region,
           }
         );
+        localStorage.setItem("email", email);
         navigate("/parentDashboard/parent/home/");
         console.log(`Welcome, ${name}!`);
         console.log(`Object Id is , ${objectId.data}!`);
-        // Optional: You can add further logic here if needed
       } catch (error) {
         console.log("Error in onSuccess:", error);
         // Handle error gracefully
@@ -129,6 +127,8 @@ export function SignUp() {
         role: role,
         location: data.region,
       });
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
 
       console.log("After Axios Request - Success");
       navigate("/parentDashboard/parent/home/");

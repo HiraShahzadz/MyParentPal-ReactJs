@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from "react";
 import ListTasks from "@/parent/dragDrop/ListTasks";
 import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import FilterChildTask from "@/parent/dragDrop/FilterChildTask";
+import { Button } from "@material-tailwind/react";
 import axios from "axios";
 export function ParentHome() {
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
-    (async () => await Load())();
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    } else {
+      (async () => await Load())();
+    }
   }, []);
 
   async function Load() {
@@ -17,11 +27,25 @@ export function ParentHome() {
     console.log(result.data);
   }
   console.log("tasks", tasks);
+  const handleLogout = () => {
+    // Clear email and password from localStorage
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
+    // Redirect to sign-in page
+    navigate("/sign-in");
+  };
 
   return (
     <div className="mt-6">
       <DndProvider backend={HTML5Backend}>
         <Toaster />
+        <Button
+          fullWidth
+          className="bg-MyPurple-400 shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
+          onClick={handleLogout}
+        >
+          LOG OUT
+        </Button>
 
         <div className="relative mt-4 grid grid-cols-1 gap-x-2 gap-y-3 rounded-md sm:grid-cols-8">
           <div className="relative sm:col-span-2 sm:col-start-1">

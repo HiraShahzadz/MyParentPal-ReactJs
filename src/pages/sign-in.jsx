@@ -1,35 +1,74 @@
-import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
-
+import { toast } from "react-hot-toast";
+import { GoogleLogin } from "react-google-login";
+import { useGoogleOneTapLogin } from "react-google-one-tap-login";
 import {
   Card,
   CardHeader,
   CardBody,
   CardFooter,
+  Typography,
   Input,
   Checkbox,
   Button,
-  Typography,
 } from "@material-tailwind/react";
-import "./Checkbox.css";
-import "./InputField.css";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { toast } from "react-hot-toast";
+import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
+import "./Checkbox.css";
+import "./InputField.css";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false); // State for remember me
-  const navigate = useNavigate(); // Hook for navigation
+  const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
+
+  useGoogleOneTapLogin({
+    onSuccess: async (credentialResponse) => {
+      try {
+        const { email, name, picture } = credentialResponse;
+        // Retrieve user's location
+        let url = "http://ipinfo.io/json?token=070152f59e4288";
+        let response = await fetch(url);
+        let data = await response.json();
+        console.log(data);
+        // Post user data including location to backend
+        const objectId = await axios.post(
+          "http://localhost:8081/api/v1/user/save-parent-google",
+          {
+            email: email,
+            role: role, // Assuming 'role' is defined elsewhere
+            location: data.region,
+          }
+        );
+        localStorage.setItem("email", email);
+        navigate("/parentDashboard/parent/home/");
+        console.log(`Welcome, ${name}!`);
+        console.log(`Object Id is, ${objectId.data}!`);
+      } catch (error) {
+        console.log("Error in onSuccess:", error);
+        toast.error("An error occurred during sign-in");
+      }
+    },
+    onError: (error) => {
+      console.log("Error in useGoogleOneTapLogin:", error);
+      toast.error("An error occurred with Google One Tap");
+    },
+    googleAccountConfigs: {
+      client_id:
+        "654965562226-ujbv1vpns5sv89l08ueoq71u8pn7caq6.apps.googleusercontent.com",
+    },
+  });
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("email");
-    const storedPassword = localStorage.getItem("password");
+    const storedEmail = localStorage.getItem("emailRemembered");
+    const storedPassword = localStorage.getItem("passwordRemembered");
     const storedRememberMe = localStorage.getItem("rememberMe");
 
     if (storedEmail && storedPassword && storedRememberMe === "true") {
@@ -72,11 +111,10 @@ export function SignIn() {
           password: password,
         }
       );
-      console.log(email, password);
-      console.log("Signin response:", response.data); // Log the response data for debugging
 
       const { message } = response.data;
-
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
       if (message === "Parent Login successful") {
         navigate("/parentDashboard/parent/home/");
       } else if (message === "Child Login successful") {
@@ -88,19 +126,19 @@ export function SignIn() {
       }
 
       if (rememberMe) {
-        localStorage.setItem("email", email);
-        localStorage.setItem("password", password);
+        localStorage.setItem("emailRemembered", email);
+        localStorage.setItem("passwordRemembered", password);
         localStorage.setItem("rememberMe", "true");
       } else {
-        localStorage.removeItem("email");
-        localStorage.removeItem("password");
+        localStorage.removeItem("emailRemembered");
+        localStorage.removeItem("passwordRemembered");
         localStorage.removeItem("rememberMe");
       }
 
       setEmail("");
       setPassword("");
     } catch (error) {
-      console.error("Signin error:", error); // Log the error for debugging
+      console.error("Signin error:", error);
 
       if (error.response && error.response.status === 401) {
         toast.error("Wrong email or password");

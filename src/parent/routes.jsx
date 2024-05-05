@@ -9,6 +9,7 @@ import {
   UserGroupIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
+import { Button } from "@material-ui/core";
 
 import {
   ParentHome,
@@ -27,7 +28,8 @@ const icon = {
   className: "w-5 h-5 text-inherit",
 };
 const clearLocalStorage = () => {
-  localStorage.clear(); // Clear all items from local storage
+  localStorage.removeItem("email");
+  localStorage.removeItem("password"); // Clear all items from local storage
   console.log("inside the function i am");
 };
 
@@ -90,7 +92,7 @@ export const routes = [
   },
   {
     title: "auth pages",
-    layout: "auth",
+    layout: "/localhost:5173",
     pages: [
       {
         icon: <ArrowLeftOnRectangleIcon {...icon} />,
