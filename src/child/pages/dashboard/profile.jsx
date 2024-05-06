@@ -1,21 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardBody } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import { CameraIcon } from "@heroicons/react/24/solid";
 import ProfileSection from "./ProfileSection";
+import { PencilIcon } from "@heroicons/react/24/solid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import TaskDetailsModal from "./TaskDetailsModel";
-import defaultImage from "/img/women1.jpg";
-import { requestData } from "@/child/data";
+import TaskDetailsModal from './TaskDetailsModel';
 import { GiftIcon } from "@heroicons/react/24/solid";
-import { tasksData } from "@/child/data";
-import { Typography } from "@material-tailwind/react";
-import bgImage from "/img/bgcover.jpeg"; // Import the image
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { toast } from "react-hot-toast";
-import { Toaster } from "react-hot-toast";
+import axios from "axios";
+import bgImage from "/img/bgcover.jpeg";
+import { toast } from 'react-toastify';
 
 export function Profile() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
@@ -27,28 +20,20 @@ export function Profile() {
     setTaskDetailsToShow(null);
   };
 
+  const [image, setImage] = useState(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     dob: "",
     name: "",
+    image: "",
   });
   const [hiddenImages, setHiddenImages] = useState([]);
-  const [image, setImage] = useState(defaultImage);
-  const [editing, setEditing] = useState(false);
 
-  const handleImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    if (selectedImage) {
-      setImage(URL.createObjectURL(selectedImage));
-      setEditing(false); // Save the image
-    }
+  const handleImageClick = (index) => {
+    // Set the index of the clicked image to the hiddenImages state
+    setHiddenImages([...hiddenImages, index]);
   };
-
-  const handleImageClick = () => {
-    setEditing(true);
-  };
-
   function DiscardChangesModal({ show, setShow }) {
     // Function to handle confirmation of discarding changes
     const handleDiscardChanges = (confirmDiscard) => {
@@ -87,16 +72,21 @@ export function Profile() {
       </div>
     );
   }
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // Include logic to handle form submission with selectedParent data
-    // This might involve sending a request to the backend or triggering notifications
-
-    console.log("Form Data:", formData);
-    console.log("Image File:", image);
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    setImage(selectedImage);
+    // Convert image to Base64
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({
+        ...formData,
+        image: reader.result, // Store Base64 string
+      });
+    };
+    reader.readAsDataURL(selectedImage);
   };
+  console.log("Image File:", image);
+
   document.addEventListener("DOMContentLoaded", function () {
     const discardButton = document.querySelector(
       '[data-modal-toggle="popup-modal"]'
@@ -114,20 +104,90 @@ export function Profile() {
       modal.classList.add("hidden");
     });
   });
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const [showModal, setShowModal] = useState(false);
+  const [childProfile, setChildProfile] = useState([]);
+  useEffect(() => {
+    loadParentProfile();
+  }, []);
+  async function loadParentProfile() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/getChildId"
+      );
+      setChildProfile(result.data);
+      console.log("child profile:", result.data);
+    } catch (error) {
+      console.error("Error loading parentProfile:", error);
+      
+    }
+  }
+  const myProfile = childProfile.find((profile) => profile);
+console.log();
+  async function update(event) {
+    event.preventDefault();
+    if (!email || !password || !name || !dob || !gender) {
+      return toast.error("Please fill in all fields");
+    }
+    // Validate Date of Birth
+    const currentDate = new Date();
+    const selectedDate = new Date(dob);
+    if (selectedDate > currentDate) {
+      toast.error("Date of birth cannot be in the future");
+      return;
+    }
+
+    // Validate Password
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/;
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        "Password should be at least 8 characters long, contain at least one uppercase letter, and one special character"
+      );
+      return;
+    }
+    try {
+      const base64Image = formData.image.split(",")[1];
+        await axios.post("http://localhost:8081/api/v1/profileUpdate/save/",
+        {
+          email: myProfile.email,
+          password: myProfile.password,
+          name: myProfile.name,
+          dob: myProfile.dob,
+         img: base64Image,
+        }
+      );
+    } catch (err) {
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+      } else if (err.request) {
+        console.error("Network Error:", err.request);
+      } else {
+        console.error("Other Error:", err.message);
+      }
+      toast.error("Failed to save in information");
+    }
+  }
+  const [tasksData, setTasksData] = useState([]);
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  async function loadTasks() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/task/getall"
+      );
+      setTasksData(result.data);
+      console.log("All tasks:", result.data);
+    } catch (error) {
+      console.error("Error loading tasks:", error);
+    }
+  }
+
   return (
     <>
       <div
         className="relative mt-3 h-72 w-full overflow-hidden rounded-xl"
         style={{
-          backgroundImage: `url(${bgImage})`,
+          backgroundImage: `url('${bgImage}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -148,334 +208,328 @@ export function Profile() {
                 className="hidden"
                 onChange={handleImageChange}
               />
+              <div className=" absolute -right-2 bottom-8 z-10 flex rounded-md border border-gray-300 bg-white p-1 pl-1 pr-3 text-sm font-medium text-black shadow-sm">
+                <PencilIcon class="text-inheri h-5 w-5 pr-1" />
+                <span>Edit</span>
+              </div>
               <div className="relative mb-5 ml-10 mt-[-70px] flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 bg-gray-100">
-                {editing || !image ? (
-                  <label htmlFor="upload-image" className="cursor-pointer">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="upload-image"
-                      className="hidden"
-                      onChange={handleImageChange}
-                    />
-                    <CameraIcon className="h-10 w-10 text-gray-400" />
-                  </label>
-                ) : (
+                {image ? (
                   <div className="h-full w-full">
                     <img
-                      src={image}
+                      src={URL.createObjectURL(image)}
                       alt="Selected"
                       className="h-full w-full rounded-full object-cover"
-                      onClick={handleImageClick}
                     />
                   </div>
+                ) : (
+                  <>
+                  {childProfile.map((childData)=> (
+                    <>
+                      <div className="relative flex items-center justify-center">
+                        <div className="relative flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 bg-gray-100">
+                          <img
+                            src={
+                              childData.img
+                                ? `data:image/jpeg;base64,${childData.img}`
+                                : "/img/user.png"
+                            }
+                            className="h-full w-full rounded-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    </>
+                    ))}
+                  </>
                 )}
               </div>
             </label>
           </div>
 
-          <div className="mb-4 mb-8 mt-10 flex flex-col rounded-lg bg-white md:flex-row">
+          <div className=" mt-10 flex flex-col rounded-lg bg-white md:flex-row">
             {/* Left side div */}
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
-              <ProfileSection />
+            {childProfile.map((childData)=> (
+              <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
+                <div>
+                  <ProfileSection childData={childData} updatePhoto={update} />
+                </div>
+              </div>
+              ))}
             </div>
-
             {/* Right side div covering remaining space */}
-            <div className="mb-5 ml-5 mr-5 mt-2 mt-5 rounded-lg border border-gray-200 p-2 shadow-lg md:flex-1">
+            <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-2 shadow-lg md:flex-1">
               <div className="mb-1 mt-6 flex w-full items-center justify-between pl-3 pr-10">
                 <div className="text-left text-lg font-bold text-black">
                   Task Summary
                 </div>
-                <div className="text-right">
-                  <Link to="/childDashboard/home">
-                    <a className="text-purple-500 hover:underline">View All</a>
-                  </Link>
-                </div>
               </div>
+
               <div className="max-h-96 overflow-y-auto">
-                <h2 className="text-md mb-3 ml-3 mt-5 font-bold text-black">
-                  Task Rewarded
-                </h2>
-
-                {tasksData
-                  .filter((task) => task.id === 1 || task.id === 2)
-                  .map(({ id, title, image, description, reward, details }) => (
-                    <div
-                      key={id}
-                      href=""
-                      className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
-                    >
-                      <div className="flex">
-                        <img
-                          className="mt-2 h-6 w-6 "
-                          src="/img/task.png"
-                          alt=""
-                        />
-                        <div className="ml-3">
-                          <span className="font-medium text-black">
-                            {title}
-                          </span>
-                          <br></br>
-                          <span className="mt-2 text-black">
-                            Submission date: {description.toLocaleDateString()}
-                          </span>
-                          <span className="text-black"></span>
-                          <div className="mt-1.5 flex">
-                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-                            <span className="ml-1 text-xs text-black ">
-                              Reward: {reward}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                        <button
-                          onClick={() =>
-                            handleMoreInfoClick({
-                              id,
-                              title,
-                              image,
-                              description: description.toLocaleDateString(),
-                              reward,
-                              details,
-                            })
-                          }
-                          className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
-                        >
-                          more info
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-
-                <h2 className="text-md mb-3 ml-3 mt-5 font-bold text-black">
+                <h2 className="text-md mb-3 ml-3 mt-3 font-bold">
                   Assigned Tasks
                 </h2>
-                <div className="">
-                  {tasksData.map(
-                    ({ id, title, image, description, reward, details }) => (
-                      <div
-                        key={id}
-                        href=""
-                        className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
-                      >
-                        <div className="flex">
-                          <img
-                            className="mt-2 h-6 w-6 "
-                            src="/img/task.png"
-                            alt=""
-                          />
-                          <div className="ml-3">
-                            <span className="font-medium text-black">
-                              {title}
-                            </span>
-                            <br></br>
-                            <span className="mt-2 text-black">
-                              Submission date:{" "}
-                              {description.toLocaleDateString()}
-                            </span>
-                            <span className="text-black"></span>
-                            <div className="mt-1.5 flex">
-                              <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-                              <span className="ml-1 text-xs text-black ">
-                                Reward: {reward}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                          <button
-                            onClick={() =>
-                              handleMoreInfoClick({
-                                id,
-                                title,
-                                image,
-                                description: description.toLocaleDateString(),
-                                reward,
-                                details,
-                              })
-                            }
-                            className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
-                          >
-                            more info
-                          </button>
-                        </div>
+                <div className="mb-5 max-h-96 overflow-y-auto">
+                {myProfile && (
+  <>
+                  {tasksData.filter((task) => task.childId === myProfile.id)
+                    .length === 0 ? (
+                    <div className="items-center justify-center">
+                      <p className="text-center text-sm">
+                        No task is assigned yet
+                      </p>
+                      <div className="flex items-center justify-center">
+                        <FontAwesomeIcon icon={faExclamationCircle} />
                       </div>
-                    )
-                  )}
-                  <h2 className="text-md mb-5 ml-3 mt-5 font-bold text-black">
-                    Completed Tasks
-                  </h2>
-                  <div className="max-h-96 overflow-y-auto">
-                    <p className="text-center text-sm">
-                      Content for Completed Task goes here
-                    </p>
-                    <div className="flex items-center justify-center">
-                      <FontAwesomeIcon icon={faExclamationCircle} />
                     </div>
-                    {tasksData
-                      .filter((task) => task.status === "completed")
-                      .map(
-                        ({
-                          id,
-                          title,
-                          image,
-                          description,
-                          points,
-                          details,
-                          rewardImage,
-                        }) => (
-                          <div
-                            key={id}
-                            href=""
-                            className="mb-2 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
-                          >
-                            <div className="flex">
-                              <img
-                                className="mt-2 h-6 w-6 "
-                                src="/img/task.png"
-                                alt=""
-                              />
-                              <div className="ml-3">
-                                <span className="font-medium text-black">
-                                  {title}
+                  ) : (
+                    tasksData
+                      .filter(
+                        (task) =>
+                          task.status === "Todo" &&
+                          task.childId === myProfile.id
+                      )
+                      .map((task) => (
+                        <div
+                          key={task.id}
+                          href=""
+                          className="mb-2 flex items-center rounded-md border  p-3 text-sm hover:bg-blue-gray-50"
+                        >
+                          <div className="flex">
+                            <img
+                              className="mt-0.5 h-6 w-6 "
+                              src="/img/task.png"
+                              alt=""
+                            />
+                            <div className="ml-3">
+                              <span className="font-medium text-black">
+                                {task.taskname}
+                              </span>
+                              <br></br>
+                              <span className="mt-2 text-black">
+                                Submission date: {task.taskdate}
+                              </span>
+                              <span className="text-black"></span>
+                              <div className="mt-1.5 flex">
+                                <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                                <span className="ml-1 mt-0.5 text-xs text-black ">
+                                  Reward: {task.rewardname}
                                 </span>
-                                <br></br>
-                                <span className="mt-2 text-black">
-                                  Submission date:{" "}
-                                  {description.toLocaleDateString()}
+                              </div>
+                              <div className="mt-1.5 flex">
+                                <img
+                                  className="mt-0.5 h-5 w-5 rounded-full object-cover"
+                                  src={
+                                    myProfile.img
+                                      ? `data:image/jpeg;base64,${myProfile.img}`
+                                      : "/img/user.png"
+                                  }
+                                  alt=""
+                                />
+                                <span className="ml-1 mt-1 text-xs text-black ">
+                                  {myProfile.name}
                                 </span>
-                                <span className="text-black"></span>
-                                <div className="mt-1.5 flex">
-                                  <img
-                                    className="h-3 w-3"
-                                    src="/img/coin.png"
-                                    alt=""
-                                  />
-                                  <span className="ml-1 text-xs text-black ">
-                                    Reward: {points}
-                                  </span>
-                                </div>
                               </div>
                             </div>
-
-                            <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                              <button
-                                onClick={() =>
-                                  handleMoreInfoClick({
-                                    id,
-                                    title,
-                                    image,
-                                    description:
-                                      description.toLocaleDateString(),
-                                    points,
-                                    details,
-                                    rewardImage,
-                                  })
-                                }
-                                className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
-                              >
-                                more info
-                              </button>
-                            </div>
                           </div>
-                        )
-                      )}
-                  </div>
 
-                  <h2 className="text-md mb-5 ml-3 mt-5 font-bold text-black">
-                    Pending Tasks
-                  </h2>
-                  <div className="mb-5 max-h-96 overflow-y-auto">
-                    <p className="text-center text-sm">
-                      Content for pending Task goes here
-                    </p>
-                    <div className="flex items-center justify-center">
-                      <FontAwesomeIcon icon={faExclamationCircle} />
-                    </div>
-                    {tasksData
-                      .filter((task) => task.status === "pending")
-                      .map(
-                        ({
-                          id,
-                          title,
-                          image,
-                          description,
-                          points,
-                          details,
-                          rewardImage,
-                        }) => (
-                          <div
-                            key={id}
-                            href=""
-                            className="mb-2 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
-                          >
-                            <div className="flex">
-                              <img
-                                className="mt-2 h-6 w-6 "
-                                src="/img/bookmark.png"
-                                alt=""
-                              />
-                              <div className="ml-3">
-                                <span className="font-medium text-black">
-                                  {title}
-                                </span>
-                                <br></br>
-                                <span className="mt-2 text-black">
-                                  Submission date:{" "}
-                                  {description.toLocaleDateString()}
-                                </span>
-                                <span className="text-black"></span>
-                                <div className="mt-1.5 flex">
-                                  <img
-                                    className="h-3 w-3"
-                                    src="/img/coin.png"
-                                    alt=""
-                                  />
-                                  <span className="ml-1 text-xs text-black ">
-                                    Reward: {points}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                              <button
-                                onClick={() =>
-                                  handleMoreInfoClick({
-                                    id,
-                                    title,
-                                    image,
-                                    description:
-                                      description.toLocaleDateString(),
-                                    points,
-                                    details,
-                                    rewardImage,
-                                  })
-                                }
-                                className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
-                              >
-                                more info
-                              </button>
-                            </div>
+                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                            <button
+                              onClick={() => handleMoreInfoClick(task)}
+                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                            >
+                              more info
+                            </button>
                           </div>
-                        )
-                      )}
-                  </div>
-                  {taskDetailsToShow && (
-                    <TaskDetailsModal
-                      selectedTaskDetails={taskDetailsToShow}
-                      handleCloseTaskDetails={handleCloseTaskDetails}
-                      // handleSubmitTask={/* Pass your handleSubmitTask function here */}
-                    />
+                        </div>
+                      ))
                   )}
+                  </>
+                )}
                 </div>
+
+                <h2 className="text-md mb-3 ml-3 mt-3 font-bold">
+                  Completed Tasks
+                </h2>
+                <div className="max-h-96 overflow-y-auto">
+                {myProfile && (
+  <>
+                  {tasksData.filter(
+                    (task) =>
+                      task.status === "Completed" &&
+                      task.childId === myProfile.id
+                  ).length === 0 ? (
+                    <div className="items-center justify-center">
+                      <p className="text-center text-sm">
+                        No task is completed yet
+                      </p>
+                      <div className="flex items-center justify-center">
+                        <FontAwesomeIcon icon={faExclamationCircle} />
+                      </div>
+                    </div>
+                  ) : (
+                    tasksData
+                      .filter(
+                        (task) =>
+                          task.status === "Completed" &&
+                          task.childId === myProfile.id
+                      )
+                      .map((task) => (
+                        <div
+                          key={task.id}
+                          href=""
+                          className="mb-2 flex items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50"
+                        >
+                          <div className="flex">
+                            <img
+                              className="mt-0.5 h-6 w-6 "
+                              src="/img/task.png"
+                              alt=""
+                            />
+                            <div className="ml-3">
+                              <span className="font-medium text-black">
+                                {task.taskname}
+                              </span>
+                              <br></br>
+                              <span className="mt-2 text-black">
+                                Submission date: {task.taskdate}
+                              </span>
+                              <span className="text-black"></span>
+                              <div className="mt-1.5 flex">
+                                <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                                <span className="ml-1 mt-0.5 text-xs text-black ">
+                                  Reward: {task.rewardname}
+                                </span>
+                              </div>
+                              <div className="mt-1.5 flex">
+                                <img
+                                  className="mt-0.5 h-5 w-5 rounded-full object-cover"
+                                  src={
+                                    myProfile.img
+                                      ? `data:image/jpeg;base64,${myProfile.img}`
+                                      : "/img/user.png"
+                                  }
+                                  alt=""
+                                />
+                                <span className="ml-1 mt-1 text-xs text-black ">
+                                  {myProfile.name}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                            <button
+                              onClick={() => handleMoreInfoClick(task)}
+                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                            >
+                              more info
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                  )}
+                  </>
+                )}
+                </div>
+
+                <h2 className="text-md mb-3 ml-3 mt-3 font-bold">
+                  Pending Tasks
+                </h2>
+                <div className="mb-5 max-h-96 overflow-y-auto">
+                {myProfile && (
+  <>
+                  {tasksData.filter(
+                    (task) =>
+                      task.status === "Todo" && task.childId === myProfile.id
+                  ).length === 0 ? (
+                    <div className="items-center justify-center">
+                      <p className="text-center text-sm">No task is pending</p>
+                      <div className="flex items-center justify-center">
+                        <FontAwesomeIcon icon={faExclamationCircle} />
+                      </div>
+                    </div>
+                  ) : (
+                    tasksData
+                      .filter(
+                        (task) =>
+                          task.status === "Todo" &&
+                          task.childId === myProfile.id
+                      )
+                      .map((task) => (
+                        <div
+                          key={task.id}
+                          href=""
+                          className="mb-2 flex items-center rounded-md border  p-3 text-sm hover:bg-blue-gray-50"
+                        >
+                          <div className="flex">
+                            <img
+                              className="mt-0.5 h-6 w-6 "
+                              src="/img/task.png"
+                              alt=""
+                            />
+                            <div className="ml-3">
+                              <span className="font-medium text-black">
+                                {task.taskname}
+                              </span>
+                              <br></br>
+                              <span className="mt-2 text-black">
+                                Submission date: {task.taskdate}
+                              </span>
+                              <span className="text-black"></span>
+                              <div className="mt-1.5 flex">
+                                <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                                <span className="ml-1 mt-0.5 text-xs text-black ">
+                                  Reward: {task.rewardname}
+                                </span>
+                              </div>
+                              <div className="mt-1.5 flex">
+                                <img
+                                  className="mt-0.5 h-5 w-5 rounded-full object-cover"
+                                  src={
+                                    myProfile.img
+                                      ? `data:image/jpeg;base64,${myProfile.img}`
+                                      : "/img/user.png"
+                                  }
+                                  alt=""
+                                />
+                                <span className="ml-1 mt-1 text-xs text-black ">
+                                  {myProfile.name}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                            <button
+                              onClick={() => handleMoreInfoClick(task)}
+                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                            >
+                              more info
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                  )}
+                  </>
+                )}
+                </div>
+
+                {taskDetailsToShow && (
+                  <TaskDetailsModal
+                    childData={myProfile}
+                    selectedTaskDetails={taskDetailsToShow}
+                    handleCloseTaskDetails={handleCloseTaskDetails}
+                    // handleSubmitTask={/* Pass your handleSubmitTask function here */}
+                  />
+                )}
               </div>
             </div>
           </div>
         </CardBody>
+        
       </Card>
     </>
   );

@@ -94,6 +94,7 @@ export function TaskCreation() {
   const [tasktag, setTasktag] = useState("");
   const [taskassignee, setTaskassignee] = useState("");
   const [tasktype, setTasktype] = useState("");
+  const [childId, setChildId] = useState("");
   console.log("setStatus value:", status);
   //for saving in database
   async function save(event) {
@@ -107,6 +108,12 @@ export function TaskCreation() {
       !tasktype
     ) {
       return toast.error("Please fill in all fields");
+    }
+    if (!taskassignee || !childId) {
+      return toast.error("Please select task assignee");
+    }
+    if (!tasktag) {
+      return toast.error("Please select task tag");
     }
     const taskDate = new Date(taskdate);
     const currentDate = new Date();
@@ -141,9 +148,9 @@ export function TaskCreation() {
           tasktag: tasktag,
           taskassignee: taskassignee,
           tasktype: tasktype,
+          childId: childId,
         });
         toast.success("Task Created");
-
         setTaskname("");
         setTaskdescription("");
         setStatus("");
@@ -154,6 +161,7 @@ export function TaskCreation() {
         setTasktag("");
         setTaskassignee("");
         setTasktype("");
+        setChildId("");
       }
       if (taskname.length <= 3) {
         return toast.error("A task must have more than 3 characters");
@@ -166,7 +174,63 @@ export function TaskCreation() {
       return toast.error("Task creation is faild");
     }
   }
+  const [childProfileData, setChildProfileData] = useState([]);
+  const [tasksData, setTasksData] = useState([]);
+  const [selectedChildId, setSelectedChildId] = useState(null);
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [filteredTasks, setFilteredTasks] = useState([]);
 
+  useEffect(() => {
+    loadChildProfileData();
+    loadTasks();
+  }, []);
+
+  async function loadChildProfileData() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-child"
+      );
+      setChildProfileData(result.data);
+      console.log("Child profile data:", result.data);
+    } catch (error) {
+      console.error("Error loading child profile data:", error);
+    }
+  }
+
+  async function loadTasks() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/task/getall"
+      );
+      setTasksData(result.data);
+      console.log("All tasks:", result.data);
+    } catch (error) {
+      console.error("Error loading tasks:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (selectedChildId && selectedTag) {
+      const filtered = tasksData.filter(
+        (task) =>
+          task.childId === selectedChildId &&
+          task.tags &&
+          task.tags.includes(selectedTag)
+      );
+      setFilteredTasks(filtered);
+    } else if (selectedChildId) {
+      const filtered = tasksData.filter(
+        (task) => task.childId === selectedChildId
+      );
+      setFilteredTasks(filtered);
+    } else {
+      setFilteredTasks(tasksData);
+    }
+  }, [selectedChildId, selectedTag, tasksData]);
+
+  const filterTasksByChild = (childId) => {
+    setSelectedChildId(childId);
+  };
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-9">
@@ -313,7 +377,12 @@ export function TaskCreation() {
 
                 <div className="flex flex-col">
                   <div className="mb-7">
-                    <Assignee />
+                    <Assignee
+                      setTaskassignee={setTaskassignee}
+                      setChildId={setChildId}
+                      childProfileData={childProfileData}
+                      filterTasks={filterTasksByChild}
+                    />
                   </div>
 
                   <div className="mb-7">
@@ -334,7 +403,11 @@ export function TaskCreation() {
                     />
                   </div>
                   <div>
-                    <Tags />
+                    <Tags
+                      childProfileData={childProfileData}
+                      setTasktag={setTasktag}
+                      selectedChildId={selectedChildId}
+                    />
                   </div>
 
                   <div className="mb-20 space-y-10">

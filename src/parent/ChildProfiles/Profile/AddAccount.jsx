@@ -15,11 +15,21 @@ function AddAccount(props) {
     password: "",
     dob: "",
     name: "",
+    image: "",
   });
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
     setImage(selectedImage);
+    // Convert image to Base64
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({
+        ...formData,
+        image: reader.result, // Store Base64 string
+      });
+    };
+    reader.readAsDataURL(selectedImage);
   };
 
   const handleSubmit = (event) => {
@@ -47,15 +57,30 @@ function AddAccount(props) {
   const [gender, setGender] = useState("");
   const [tags, setTags] = useState([]);
   const [role, setRole] = useState("child");
+  const [parentId, setParentId] = useState("");
   async function save(event) {
     event.preventDefault();
     if (!email || !password || !name || !dob || !gender || !tags) {
       return toast.error("Please fill in all fields");
     }
-
     const dobDate = new Date(dob);
 
     const currentDate = new Date();
+
+    // Calculate the age of the child
+    let age = currentDate.getFullYear() - dobDate.getFullYear();
+    const monthDiff = currentDate.getMonth() - dobDate.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && currentDate.getDate() < dobDate.getDate())
+    ) {
+      age--;
+    }
+
+    // Check if the child's age is within the required range
+    if (age < 7 || age >= 18) {
+      return toast.error("Child's age must be between 7 and 18 years old");
+    }
 
     if (dobDate > currentDate) {
       return toast.error("Date of Birth cannot be in the future");
@@ -76,6 +101,7 @@ function AddAccount(props) {
       let data = await response.json();
 
       console.log(data);
+      const base64Image = formData.image.split(",")[1];
       await axios.post("http://localhost:8081/api/v1/user/save-child", {
         name: name,
         email: email,
@@ -85,6 +111,8 @@ function AddAccount(props) {
         tags: tags,
         role: role,
         location: data.region,
+        img: base64Image,
+        parentId: parentId,
       });
 
       toast.success("Child Account is created Successfully");
@@ -95,6 +123,7 @@ function AddAccount(props) {
       setPassword("");
       setGender("");
       setTags([]);
+      setImage("");
     } catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);

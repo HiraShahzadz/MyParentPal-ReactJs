@@ -6,7 +6,7 @@ const ProgressGraph = () => {
 
   const getChartOptions = () => {
     return {
-      series: [12, 64, 64, 64],
+      series: [80, 70, 55, 60],
       colors: ["#b089be", "#5bb85e", "#FD8552", "#4E9AD0"],
       chart: {
         height: "380px",

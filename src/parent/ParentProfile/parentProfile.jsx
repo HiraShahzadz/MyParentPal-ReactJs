@@ -1,26 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardBody } from "@material-tailwind/react";
-import { CameraIcon } from "@heroicons/react/24/solid";
-
-import { tasksData } from "../data/tasksData";
-
+import { PencilIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 import bgImage from "/img/bgcover.jpeg";
 import AboutSection from "./AboutSection";
 import Feedback from "./Feedback";
+import { Toaster } from "react-hot-toast";
+import { DndProvider } from "react-dnd";
+import { toast } from "react-hot-toast";
+import { HTML5Backend } from "react-dnd-html5-backend";
 export function ParentProfile() {
   const [image, setImage] = useState(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    dob: "",
     name: "",
+    image: "",
   });
-  const [hiddenImages, setHiddenImages] = useState([]);
 
-  const handleImageClick = (index) => {
-    // Set the index of the clicked image to the hiddenImages state
-    setHiddenImages([...hiddenImages, index]);
-  };
   function DiscardChangesModal({ show, setShow }) {
     // Function to handle confirmation of discarding changes
     const handleDiscardChanges = (confirmDiscard) => {
@@ -62,17 +59,17 @@ export function ParentProfile() {
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
     setImage(selectedImage);
+    // Convert image to Base64
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({
+        ...formData,
+        image: reader.result, // Store Base64 string
+      });
+    };
+    reader.readAsDataURL(selectedImage);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // Include logic to handle form submission with selectedParent data
-    // This might involve sending a request to the backend or triggering notifications
-
-    console.log("Form Data:", formData);
-    console.log("Image File:", image);
-  };
   document.addEventListener("DOMContentLoaded", function () {
     const discardButton = document.querySelector(
       '[data-modal-toggle="popup-modal"]'
@@ -90,16 +87,57 @@ export function ParentProfile() {
       modal.classList.add("hidden");
     });
   });
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const [showModal, setShowModal] = useState(false);
+
+  const [parentProfile, setParentProfile] = useState([]);
+  useEffect(() => {
+    loadParentProfile();
+  }, []);
+  async function loadParentProfile() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-parent"
+      );
+      setParentProfile(result.data);
+      console.log("Parent profile:", result.data);
+    } catch (error) {
+      console.error("Error loading parentProfile:", error);
+    }
+  }
+  const myProfile = parentProfile.find((profile) => profile);
+
+  async function update(event) {
+    event.preventDefault();
+    try {
+      const base64Image = formData.image.split(",")[1];
+      await axios.put(
+        "http://localhost:8081/api/v1/user/editParent/" + myProfile.id,
+        {
+          id: myProfile.id,
+          email: myProfile.email,
+          password: myProfile.password,
+          firstName: myProfile.firstName,
+          lastName: myProfile.lastName,
+          phoneNo: myProfile.phoneNo,
+          cnic: myProfile.cnic,
+          img: base64Image,
+        }
+      );
+    } catch (err) {
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+      } else if (err.request) {
+        console.error("Network Error:", err.request);
+      } else {
+        console.error("Other Error:", err.message);
+      }
+      toast.error("Failed to save in information");
+    }
+  }
   return (
     <>
+      <DndProvider backend={HTML5Backend}>
+        <Toaster />
+      </DndProvider>
       <div
         className="relative mt-3 h-72 w-full overflow-hidden rounded-xl"
         style={{
@@ -124,6 +162,10 @@ export function ParentProfile() {
                 className="hidden"
                 onChange={handleImageChange}
               />
+              <div className=" absolute -right-2 bottom-8 z-10 flex rounded-md border border-gray-300 bg-white p-1 pl-1 pr-3 text-sm font-medium text-black shadow-sm">
+                <PencilIcon class="text-inheri h-5 w-5 pr-1" />
+                <span>Edit</span>
+              </div>
               <div className="relative mb-5 ml-10 mt-[-70px] flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 bg-gray-100">
                 {image ? (
                   <div className="h-full w-full">
@@ -134,7 +176,27 @@ export function ParentProfile() {
                     />
                   </div>
                 ) : (
-                  <CameraIcon className="h-10 w-10 text-gray-400" />
+                  <>
+                    {parentProfile.map(
+                      (profile) =>
+                        profile.role === "parent" && (
+                          <>
+                            <div className="relative flex items-center justify-center">
+                              <div className="relative flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 bg-gray-100">
+                                <img
+                                  src={
+                                    profile.img
+                                      ? `data:image/jpeg;base64,${profile.img}`
+                                      : "/img/user.png"
+                                  }
+                                  className="h-full w-full rounded-full object-cover"
+                                />
+                              </div>
+                            </div>
+                          </>
+                        )
+                    )}
+                  </>
                 )}
               </div>
             </label>
@@ -144,14 +206,19 @@ export function ParentProfile() {
             {/* Left side div */}
 
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
-              <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
-                <div className="text-center text-lg font-bold text-black">
-                  About
-                </div>
-                <div>
-                  <AboutSection />
-                </div>
-              </div>
+              {parentProfile.map(
+                (profile) =>
+                  profile.role === "parent" && (
+                    <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
+                      <div className="text-center text-lg font-bold text-black">
+                        About
+                      </div>
+                      <div>
+                        <AboutSection profile={profile} updatePhoto={update} />
+                      </div>
+                    </div>
+                  )
+              )}
             </div>
 
             {/* Right side div covering remaining space */}
@@ -161,7 +228,7 @@ export function ParentProfile() {
                   Give Feedback
                 </div>
                 <div>
-                  <Feedback />
+                  <Feedback myProfile={myProfile} />
                 </div>
               </div>
             </div>

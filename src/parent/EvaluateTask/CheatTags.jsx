@@ -1,17 +1,17 @@
 import React from "react";
 import { TagIcon } from "@heroicons/react/24/solid";
 
-function CheatTags({ childtags, setChildtags }) {
+function CheatTags({ cheatTags, setCheatTags }) {
   const addTags = (e) => {
     if (e.keyCode === 13 && e.target.value) {
-      setChildtags([...childtags, e.target.value]);
+      setCheatTags([...cheatTags, e.target.value]);
       e.target.value = "";
     }
   };
 
   const deleteTags = (val) => {
-    const remainingTags = childtags.filter((t) => t !== val);
-    setChildtags(remainingTags);
+    const remainingTags = cheatTags.filter((t) => t !== val);
+    setCheatTags(remainingTags);
   };
 
   return (
@@ -32,7 +32,7 @@ function CheatTags({ childtags, setChildtags }) {
                 X
               </span>
             </button>
-            {childtags.map((item, index) => (
+            {cheatTags.map((item, index) => (
               <button
                 className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-1 pl-3  outline-transparent"
                 key={index}

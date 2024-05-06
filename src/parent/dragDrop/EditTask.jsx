@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
@@ -9,16 +9,21 @@ import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { toast } from "react-hot-toast";
-const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
+import axios from "axios";
+
+const EditTask = ({ task, selectedTaskDetails, handleCloseTaskDetails }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDetails, setEditedDetails] = useState({
-    ...selectedTaskDetails,
+    title: task.taskname,
+    details: task.taskdescription,
+    reward: task.rewardname,
+    fileType: task.taskfiletype,
+    tags: task.tasktag,
+    taststatus: task.status,
   });
-  const [editedDate, setEditedDate] = useState(
-    new Date(selectedTaskDetails.description)
-  );
-  const defaultFileTypes = selectedTaskDetails.fileType
-    ? selectedTaskDetails.fileType.split(",").map((item) => item.trim())
+  const [editedDate, setEditedDate] = useState(new Date(task.taskdate));
+  const defaultFileTypes = task.taskfiletype
+    ? task.taskfiletype.map((item) => item.trim())
     : [];
   const [fileTypes, setFileTypes] = useState(defaultFileTypes);
   const [savedDetails, setSavedDetails] = useState(null);
@@ -26,9 +31,9 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
   const handleEdit = () => {
     setIsEditing(true);
   };
-  const [taskdate, setTaskdate] = useState("");
-  const [tasktime, setTasktime] = useState();
-  const handleSave = () => {
+  const [taskdate, setTaskdate] = useState(task.taskdate);
+  const [tasktime, setTasktime] = useState(task.tasktime);
+  async function update(event) {
     // Check if all required fields are filled
     if (
       !editedDetails.title ||
@@ -40,6 +45,7 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
       toast.error("Please fill in all required fields");
       return;
     }
+
     const taskDate = new Date(taskdate);
     const currentDate = new Date();
 
@@ -48,8 +54,9 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
     const currentDateWithoutTime = new Date(currentDate.toDateString());
 
     if (taskDateWithoutTime < currentDateWithoutTime) {
-      return toast.error("Task submission date cannot be in the past ");
+      return toast.error("Task submission date cannot be in the past");
     }
+
     const selectedTime = new Date(taskdate + " " + tasktime);
 
     // Compare with the current time
@@ -60,17 +67,44 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
         "Task submission time cannot be in the past or present (1-24)"
       );
     }
-    setEditedDetails(
-      { ...editedDetails, fileType: fileTypes.join(", ") },
-      () => {
-        handleSubmitTask(editedDetails);
-        setIsEditing(false); // Switch back to non-editable mode after saving
-        setSavedDetails(editedDetails); // Store the edited details upon save
-      }
-    );
-    toast.success("Task details edited");
-  };
 
+    try {
+      await axios.put(
+        `http://localhost:8081/api/v1/task/edit_task/${task._id}`,
+        {
+          taskname: editedDetails.title,
+          taskdescription: editedDetails.details,
+          rewardname: editedDetails.reward,
+          status: editedDetails.taststatus,
+          taskdate: taskdate,
+          tasktime: tasktime,
+          tasktag: editedDetails.tags,
+          taskfiletype: fileTypes,
+        }
+      );
+      // If the update is successful, display a success message
+      toast.success("Task details edited");
+
+      // Update the saved details state with the edited details
+      setSavedDetails({
+        taskname: editedDetails.title,
+        taskdescription: editedDetails.details,
+        rewardname: editedDetails.reward,
+        taskdate: taskdate,
+        tasktime: tasktime,
+        taskfiletype: fileTypes.join(", "),
+      });
+
+      // Switch back to non-editable mode after saving
+      setIsEditing(false);
+      // Reload the page
+      window.location.reload();
+    } catch (error) {
+      // If the update fails, display an error message
+      toast.error("Failed to update task details");
+      console.error("Error updating task details:", error);
+    }
+  }
   const handleCancel = () => {
     setIsEditing(false);
     setEditedDetails({ ...selectedTaskDetails });
@@ -156,6 +190,16 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
             />
             <span className="ml-2">Audio</span>
           </label>
+          <label className="mr-4 inline-flex items-center">
+            <input
+              type="checkbox"
+              value="Text"
+              checked={fileTypes.includes("Text")}
+              onChange={handleCheckboxChange}
+              className="border-gray-300 text-MyPurple-400 focus:ring-MyPurple-400"
+            />
+            <span className="ml-2">Text</span>
+          </label>
         </div>
         <input
           type="text"
@@ -209,28 +253,11 @@ const EditTask = ({ selectedTaskDetails, handleCloseTaskDetails }) => {
           </div>
         </p>
 
-        {/* Display section for showing saved details */}
-        {savedDetails && !isEditing && (
-          <div className="mb-6">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              <strong>Updated Details:</strong>
-            </p>
-            <ul className="text-gray-700 dark:text-gray-300">
-              {Object.keys(savedDetails).map((key) => (
-                <li key={key}>
-                  <strong>{key}: </strong>
-                  {savedDetails[key]}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
         <div className="flex justify-end">
           <div className="mt-2 flex">
             <button
               type="submit"
-              onClick={handleSave}
+              onClick={update}
               className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
             >
               Save

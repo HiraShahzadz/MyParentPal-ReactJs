@@ -1,18 +1,17 @@
-import { Button } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faPhone } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
-function AboutSection() {
+function AboutSection({ profile, updatePhoto }) {
   const [isFirstNameFocused, setIsFirstNameFocused] = useState(false);
   const [isLastNameFocused, setIsLastNameFocused] = useState(false);
   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
   const [isCnicFocused, setIsCnicFocused] = useState(false);
-
   const handleFirstNameFocus = () => {
     setIsFirstNameFocused(true);
   };
@@ -47,9 +46,71 @@ function AboutSection() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    toast.success("Profile updated");
+    toast.success("Profile reset");
   };
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [cnic, setCnic] = useState("");
+  useEffect(() => {
+    setFirstName(profile.firstName);
+    setLastName(profile.lastName);
+    setPhoneNo(profile.phoneNo);
+    setCnic(profile.cnic);
+  }, [profile]);
+  async function update(event) {
+    event.preventDefault();
+    if (!firstName || !lastName || !phoneNo || !cnic) {
+      return toast.error("Please fill in all fields");
+    } // Validate phone number format
+    const phoneRegex = /^\+92\d{10}$/;
+    if (!phoneRegex.test(phoneNo)) {
+      return toast.error(
+        "Phone number must start with +92 and be 12 digits long"
+      );
+    }
+    // Validate CNIC format
+    const cnicRegex = /^\d{5}-\d{7}-\d$/;
+    if (!cnicRegex.test(cnic)) {
+      return toast.error("CNIC must be in the format: 12345-6789012-3");
+    }
+    try {
+      await axios.put(
+        "http://localhost:8081/api/v1/user/editParent/" + profile.id,
+        {
+          id: profile.id,
+          email: profile.email,
+          password: profile.password,
+          firstName: firstName,
+          lastName: lastName,
+          phoneNo: phoneNo,
+          cnic: cnic,
+          img: profile.image,
+        }
+      );
+      toast.success("Parent profile is created Successfully");
+    } catch (err) {
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+      } else if (err.request) {
+        console.error("Network Error:", err.request);
+      } else {
+        console.error("Other Error:", err.message);
+      }
+      toast.error("Failed to save in information");
+    }
+  }
+  const handleCancel = () => {
+    setFirstName(profile.firstName);
+    setLastName(profile.lastName);
+    setPhoneNo(profile.phoneNo);
+    setCnic(profile.cnic);
+  };
+  const handleSave = (event) => {
+    update(event);
+    updatePhoto(event);
+  };
   return (
     <div>
       <div>
@@ -67,8 +128,12 @@ function AboutSection() {
                   />
                   <input
                     type="text"
-                    name="task"
-                    id="task"
+                    name="firstName"
+                    id="firstName"
+                    value={firstName}
+                    onChange={(event) => {
+                      setFirstName(event.target.value);
+                    }}
                     pattern="[A-Za-z]+"
                     title="Please enter only letters"
                     autoComplete="task"
@@ -88,8 +153,12 @@ function AboutSection() {
                   />
                   <input
                     type="text"
-                    name="task"
-                    id="task"
+                    name="lastName"
+                    id="lastName"
+                    value={lastName}
+                    onChange={(event) => {
+                      setLastName(event.target.value);
+                    }}
                     pattern="[A-Za-z ]+"
                     title="Please enter only letters"
                     autoComplete="task"
@@ -109,8 +178,12 @@ function AboutSection() {
                   />
                   <input
                     type="text"
-                    name="task"
-                    id="task"
+                    name="phoneNo"
+                    id="phoneNo"
+                    value={phoneNo}
+                    onChange={(event) => {
+                      setPhoneNo(event.target.value);
+                    }}
                     pattern="\+\d{12}"
                     title="Enter a valid phone no. (e.g., +929081675668)"
                     autoComplete="task"
@@ -131,8 +204,12 @@ function AboutSection() {
                   />
                   <input
                     type="text"
-                    name="task"
-                    id="task"
+                    name="cnic"
+                    id="cnic"
+                    value={cnic}
+                    onChange={(event) => {
+                      setCnic(event.target.value);
+                    }}
                     pattern="\d{5}-\d{7}-\d"
                     title="Enter a valid CNIC no. (e.g., 12345-6789012-3)"
                     autoComplete="task"
@@ -149,11 +226,15 @@ function AboutSection() {
           <div className="mt-4 flex items-center justify-center">
             <button
               type="submit"
+              onClick={handleSave}
               className="mr-2 mt-2 rounded-md bg-MyPurple-400 px-5 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
             >
               Save
             </button>
-            <button className="mt-2 rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white">
+            <button
+              onClick={handleCancel}
+              className="mt-2 rounded-md bg-gray-400 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:shadow-white"
+            >
               Cancel
             </button>
           </div>
