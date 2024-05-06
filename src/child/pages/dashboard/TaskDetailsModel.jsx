@@ -5,7 +5,57 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import TimeLeftCalculator from './TimeLeftCalculator';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
 const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleSubmitTask }) => {
+    const [timeRemaining, setTimeRemaining] = useState(null);
+
+    useEffect(() => {
+        if (
+            selectedTaskDetails &&
+            selectedTaskDetails.taskdate &&
+            selectedTaskDetails.tasktime
+        ) {
+            const submissionDate = new Date(selectedTaskDetails.taskdate);
+            const timeParts = selectedTaskDetails.tasktime.split(" ");
+            if (timeParts.length !== 2) {
+                setTimeRemaining("Invalid time format");
+                return;
+            }
+            const [time, ampm] = timeParts;
+            const [hoursStr, minutesStr] = time.split(":");
+            let taskHours = parseInt(hoursStr, 10);
+            const minutes = parseInt(minutesStr, 10);
+
+            if (!["am", "pm"].includes(ampm.toLowerCase())) {
+                setTimeRemaining("Invalid time format");
+                return;
+            }
+
+            if (ampm.toLowerCase() === "pm" && taskHours !== 12) {
+                taskHours += 12;
+            }
+
+            submissionDate.setHours(taskHours);
+            submissionDate.setMinutes(minutes);
+
+            const currentTime = new Date();
+            const timeDifference = submissionDate - currentTime;
+
+            if (timeDifference < 0) {
+                const absoluteTimeDifference = Math.abs(timeDifference);
+                const days = Math.floor(absoluteTimeDifference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((absoluteTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                setTimeRemaining(`${days} days and ${hours} hours passed`);
+            } else {
+                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                setTimeRemaining(`${days} days and ${hours} hours`);
+            }
+        } else {
+            setTimeRemaining("Date or time not provided");
+        }
+    }, [selectedTaskDetails]);
 
     const navigate = useNavigate();
     const id = selectedTaskDetails._id;
@@ -15,11 +65,12 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
     const rewardname = selectedTaskDetails.rewardname;
     const filetype = selectedTaskDetails.taskfiletype;
     const tasktime = selectedTaskDetails.tasktime;
+    const timeleft =  timeRemaining;
     const handleNavigation = () => {
         // Navigate to the submit task route with taskDetails in the state
-        navigate('/childDashboard/submitTask', { state: { id: id, taskname: taskname, taskdescription: taskdescription, taskdate: taskdate, rewardname: rewardname, filetype: filetype, tasktime: tasktime } });
+        navigate('/childDashboard/submitTask', { state: { id: id, taskname: taskname, taskdescription: taskdescription, taskdate: taskdate, rewardname: rewardname, filetype: filetype, tasktime: tasktime, timeleft: timeleft } });
     };
-
+    
 
 
     return (
@@ -82,7 +133,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
                                         Time Remaining:
                                     </th>
                                     <td className="px-6 py-4">
-                                        1 day 3 hours
+                                    {timeRemaining ? timeRemaining : "Calculating..."}
                                     </td>
                                 </tr>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">

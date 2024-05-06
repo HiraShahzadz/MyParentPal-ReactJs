@@ -100,16 +100,23 @@ function ProfileSection({ childData, updatePhoto }) {
       );
       return;
     }
-
-    try {
-      await axios.post("http://localhost:8081/api/v1/profile/save", {
-        name: name,
+    let url1 = "http://localhost:8081/api/v1/profile/save";
+    let url2 = "http://localhost:8081/api/v1/notify/profileNotification";
+  
+    let promise1 = axios.post(url1, {
+      name: name,
         email: email,
         password: password,
         dob: dob,
         img: childData.image,
-      });
-      toast.success("Request Sent Successfully");
+    });
+  
+    let promise2 = axios.post(url2, {
+    });
+   
+    try {  
+      Promise.all([promise1, promise2]);
+      toast.success("Your profile will be updated after parent's approval");
     }
     catch (err) {
       if (err.response) {

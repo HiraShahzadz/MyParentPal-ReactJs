@@ -4,6 +4,7 @@ import TaskDetailsModal from './TaskDetailsModel';
 import { useState, useEffect } from "react";
 import FileUploader from './FileUploader';
 import ChatForm from './Recorder';
+import RequestExtension from './ExtendDeadline';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { toast } from "react-hot-toast";
@@ -40,6 +41,7 @@ const SubmitTask = () => {
   const goToNextSlide = () => {
     setCurrentImage((prevImage) => (prevImage + 1) % images.length);
   };
+
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [submittedFile, setSubmittedFile] = useState(""); // Initialize with an empty string
   const handleFileSelection = (file) => {
@@ -116,7 +118,14 @@ const SubmitTask = () => {
                     {location.state.taskdate} at {location.state.tasktime}
                   </td>
                 </tr>
-
+                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <th scope="row" className="border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Time left:
+                  </th>
+                  <td className="px-6 py-4">
+                    {location.state.timeleft}
+                  </td>
+                </tr>
                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <th scope="row" className="border-r px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Reward
@@ -159,44 +168,68 @@ const SubmitTask = () => {
 
               </tbody>
             </table>
-            {(!allowedTypes || allowedTypes.length === 0) && (
-              <div className="mt-5 mb-3">
-                <ChatForm taskId={location.state.id} />
-              </div>
-            )}
-
-            {allowedTypes.includes("Text") && (
+            {(!location.state.tasktime || !location.state.tasktime.includes('passed')) && (
               <>
+                {location.state.timeleft && location.state.timeleft.includes('passed') && !submission.some(sub => sub.taskid === location.state.id) ? (
+                 
+                 <div className="mt-5 mb-3">
+                   <Typography variant="h5" className="mt-6 text-black text-lg text-justify center mb-4 ">
+                        <p> Request your parent for time extension</p>
+                    </Typography>
+                    <RequestExtension taskId={location.state.id} />
+                  </div>
+                ) : (
+                  <>
+                    {(!allowedTypes || allowedTypes.length === 0) && (
+                      <div className="mt-5 mb-3">
+                        <ChatForm taskId={location.state.id} />
+                      </div>
+                    )}
 
-                <div className="mt-5 mb-3">
-                  <ChatForm taskId={location.state.id} />
-                </div>
+                    {allowedTypes.includes("Text") && (
+                      <>
+
+                        <div className="mt-5 mb-3">
+                          <ChatForm taskId={location.state.id} />
+                        </div>
+                      </>
+                    )}
+
+                    {allowedTypes.includes("Text") && allowedTypes.length > 1 && !submission.some(sub => sub.taskid === location.state.id) && (
+                      <div className="flex justify-center items-center mt-5">
+                        <button
+                          className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                          onClick={handleAddSubmissionClick}
+                        >
+                          Add Submission
+                        </button>
+                      </div>
+                    )}
+
+                    {!allowedTypes.includes("Text") && !submission.some(sub => sub.taskid === location.state.id) && (
+                      <div className="flex justify-center items-center mt-5">
+                        <button
+                          className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                          onClick={handleAddSubmissionClick}
+                        >
+                          Add Submission
+                        </button>
+                      </div>
+                    )}
+
+                  </>
+                )}
+                {showFileUploader && (
+                  <div className="bg-white">
+                    <FileUploader taskId={location.state.id} filetype={location.state.filetype} />
+                    <DndProvider backend={HTML5Backend}>
+                      <Toaster />
+                    </DndProvider>
+                  </div>
+                )}
+
               </>
             )}
-
-            {allowedTypes.includes("Text") && allowedTypes.length > 1 && !submission.some(sub => sub.taskid === location.state.id) && (
-              <div className="flex justify-center items-center mt-5">
-                <button
-                  className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                  onClick={handleAddSubmissionClick}
-                >
-                  Add Submission
-                </button>
-              </div>
-            )}
-
-          
-
-            {showFileUploader && (
-              <div className="bg-white">
-                <FileUploader taskId={location.state.id} filetype={location.state.filetype} />
-                <DndProvider backend={HTML5Backend}>
-                  <Toaster />
-                </DndProvider>
-              </div>
-            )}
-
-
           </div>
         </div>
 

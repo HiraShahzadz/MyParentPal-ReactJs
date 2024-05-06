@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { Typography } from "@material-tailwind/react";
 
-const ChatForm = ({ taskId }) => {
+const RequestExtension = ({ taskId }) => {
     
     const [typedMessage, setTypedMessage] = useState('');
     const [showSendButton, setShowSendButton] = useState(true);
@@ -20,7 +20,7 @@ const ChatForm = ({ taskId }) => {
 
     async function Load() {
         try {
-            let url = "http://localhost:8081/api/v1/task_submission/getall";
+            let url = "http://localhost:8081/api/v1/dateExtension/getall";
             const all = await axios.get(url);
             setsubmission(all.data);
         } catch (error) {
@@ -57,8 +57,8 @@ const ChatForm = ({ taskId }) => {
         if (!typedMessage) {
             return toast.error("Please fill in the field");
         }
-        let url1 = `http://localhost:8081/api/v1/task_submission/send?taskid=${taskId}`;
-        let url2 = `http://localhost:8081/api/v1/notify/messageNotify?taskid=${taskId}`;
+        let url1 = `http://localhost:8081/api/v1/dateExtension/send?taskid=${taskId}`;
+        let url2 = `http://localhost:8081/api/v1/notify/dateExtensionNotify?taskid=${taskId}`
       
         let promise1 = axios.post(url1, {
             typedMessage: typedMessage,
@@ -188,4 +188,4 @@ const ChatForm = ({ taskId }) => {
     );
 };
 
-export default ChatForm;
+export default RequestExtension;

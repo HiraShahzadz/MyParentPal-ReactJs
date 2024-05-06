@@ -94,20 +94,24 @@ const FileUploader = ({ taskId, filetype }) => {
       setFiles([]);
       return;
     }
-
+    let url1 =  `http://localhost:8081/api/v1/task_submission/save?taskid=${taskId}`;
+    let url2 = `http://localhost:8081/api/v1/notify/messageNotify?taskid=${taskId}`;
+  
+    let promise1 = axios.post(url1, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    
+  
+    let promise2 = axios.post(url2, {
+     
+    });
     setIsSaving(true);
-
     try {
-      const response = await axios.post(
-        `http://localhost:8081/api/v1/task_submission/save?taskid=${taskId}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      toast.success("Task saved successfully ");
+      // Send both requests simultaneously using Promise.all()
+       Promise.all([promise1, promise2]);
+      toast.success("Submission done successfully ");
       setFiles([]);
     } catch (error) {
       console.error("Error uploading files:", error);

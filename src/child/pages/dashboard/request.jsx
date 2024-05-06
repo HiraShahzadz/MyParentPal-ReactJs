@@ -58,27 +58,39 @@ export function Reward_Request() {
   
   async function save(event) {
     event.preventDefault();
-
+  
     if (!taskname || !taskdescription || !desiredreward || !rewarddescription) {
       return toast.error("Please fill in all fields");
     }
-
+  
+    let url1 = "http://localhost:8081/api/v1/Reward_Request/save";
+    let url2 = "http://localhost:8081/api/v1/notify/sendRequestNotification";
+  
+    let promise1 = axios.post(url1, {
+      taskname: taskname,
+      taskdescription: taskdescription,
+      desiredreward: desiredreward,
+      rewarddescription: rewarddescription
+    });
+  
+    let promise2 = axios.post(url2, {
+      taskname: taskname,
+      taskdescription: taskdescription,
+      desiredreward: desiredreward,
+      rewarddescription: rewarddescription
+    });
+  
     try {
-      await axios.post("http://localhost:8081/api/v1/Reward_Request/save", {
-        taskname: taskname,
-        taskdescription: taskdescription,
-        desiredreward: desiredreward,
-        rewarddescription: rewarddescription,
-        
-      });
+      // Send both requests simultaneously using Promise.all()
+       Promise.all([promise1, promise2]);
+  
       toast.success("Request Sent Successfully");
       settaskname("");
       settaskdescription("");
       setdesiredreward("");
       setrewarddescription("");
       Load();
-    }
-    catch (err) {
+    } catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);
       } else if (err.request) {
@@ -86,11 +98,11 @@ export function Reward_Request() {
       } else {
         console.error("Other Error:", err.message);
       }
-
+  
       toast.error("Failed to send request");
     }
   }
-
+  
 
 
   const images = [
