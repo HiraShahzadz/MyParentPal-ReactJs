@@ -9,21 +9,21 @@ import FileUploader from "./FileUploader";
 import Penalty from "./Penalty";
 import { TagIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
-
-function PaneltyTask(props) {
+import { GiftIcon } from "@heroicons/react/24/solid";
+function PaneltyTask({ onClose, task, childProfileData }) {
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
   const handledecline = (event) => {
     event.preventDefault();
-    props.onClose(false);
+    onClose(false);
   };
 
   const [taskid, setId] = useState("");
   const [taskname, setTaskname] = useState("");
   const [taskdescription, setTaskdescription] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("Reviewed");
   const [taskfiletype, setTaskfiletype] = useState([]);
   const [taskdate, setTaskdate] = useState("");
   const [tasktime, setTasktime] = useState();
@@ -64,14 +64,17 @@ function PaneltyTask(props) {
         await axios.post("http://localhost:8081/api/v1/task/save_penalty", {
           taskname,
           taskdescription,
-          status,
+          status: "Todo",
           taskfiletype,
           taskdate,
           tasktime,
-          rewardname: props.task.rewardname,
-          childId: props.task.childId,
+          rewardname: task.rewardname,
+          taskassignee: task.taskassignee,
+          childId: task.childId,
           taskTypeIs,
-          taskId: props.task._id,
+          tasktag: task.tasktag,
+          tasktype: task.tasktype,
+          taskId: task._id,
           cheatTags,
         });
         toast.success("Task Created");
@@ -99,41 +102,46 @@ function PaneltyTask(props) {
   }
 
   async function update(event) {
-    const taskDate = new Date(taskdate);
-    const currentDate = new Date();
-
-    // Extract the date part without considering the time
-    const taskDateWithoutTime = new Date(taskDate.toDateString());
-    const currentDateWithoutTime = new Date(currentDate.toDateString());
-
-    if (taskDateWithoutTime < currentDateWithoutTime) {
-      return toast.error("Task submission date cannot be in the past");
-    }
-
-    const selectedTime = new Date(taskdate + " " + tasktime);
-
-    // Compare with the current time
-    const currentTime = new Date();
-
-    if (selectedTime <= currentTime) {
-      return toast.error(
-        "Task submission time cannot be in the past or present (1-24)"
-      );
-    }
-
     try {
-      await axios.put(
-        `http://localhost:8081/api/v1/task/edit_penalty/${props.task._id}`,
-        {
-          taskdate: taskdate,
-          tasktime: tasktime,
-          status: status,
-        }
-      );
+      await axios.put(`http://localhost:8081/api/v1/task/edit/${task._id}`, {
+        status: status,
+      });
+
       // If the update is successful, display a success message
       toast.success("Task details edited");
       // Reload the page
       window.location.reload();
+    } catch (error) {
+      // If the update fails, display an error message
+      toast.error("Failed to update task details");
+      console.error("Error updating task details:", error);
+    }
+  }
+
+  const [taskRemarks, setTaskRemarks] = useState("");
+  async function updateTask(event) {
+    if (!taskRemarks) {
+      return toast.error("Please Add remarks");
+    }
+    try {
+      await axios.put(
+        `http://localhost:8081/api/v1/task/edit_task/${task._id}`,
+        {
+          taskname: task.taskname,
+          taskdescription: task.taskdescription,
+          rewardname: task.rewardname,
+          taskdate: task.taskdate,
+          tasktime: task.tasktime,
+          tasktag: task.tasktag,
+          taskfiletype: task.taskfiletype,
+          status: status,
+          taskRemarks: taskRemarks,
+        }
+      );
+
+      // If the update is successful, display a success message
+      toast.success("Task details edited");
+      setTaskRemarks("");
     } catch (error) {
       // If the update fails, display an error message
       toast.error("Failed to update task details");
@@ -146,7 +154,7 @@ function PaneltyTask(props) {
         <div class="pt-22 relative flex items-center justify-end">
           <XMarkIcon
             className="h-7 w-7 hover:bg-gray-300"
-            onClick={() => props.onClose(false)}
+            onClick={() => onClose(false)}
           />
         </div>
         <div className="grid grid-cols-1 xl:grid-cols-3  ">
@@ -161,25 +169,43 @@ function PaneltyTask(props) {
                   <div className="sm:col-span-full">
                     <label
                       htmlFor="username"
-                      className="block text-lg font-medium leading-6 text-gray-900"
+                      className="block text-xl font-medium leading-6 text-gray-900"
                     >
-                      {props.task.taskname}
+                      Task Name: {task.taskname}
                     </label>
                   </div>
 
                   <div className="col-span-full">
                     <label
                       htmlFor="about"
-                      className="block font-medium leading-6 text-gray-900"
+                      className="text block font-medium leading-6 text-gray-900"
                     >
-                      Description
+                      Description:
                     </label>
                     <label
                       htmlFor="name"
                       className="block text-gray-900 dark:text-white"
                     >
-                      {props.task.taskdescription}
+                      {task.taskdescription}
                     </label>
+                  </div>
+                  <div className="col-span-full">
+                    <div className="flex">
+                      {" "}
+                      <GiftIcon className="mr-1 mt-0.5 h-4 w-4 rounded-sm text-MyPurple-400 " />
+                      <label
+                        htmlFor="about"
+                        className="text block font-medium leading-6 text-gray-900"
+                      >
+                        Reward :
+                      </label>
+                      <label
+                        htmlFor="name"
+                        className="ml-1 block text-gray-900 dark:text-white"
+                      >
+                        {task.rewardname}
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -190,10 +216,11 @@ function PaneltyTask(props) {
                 >
                   Proof
                 </label>
+                <div>
+                  <FileUploader taskId={task._id} />
+                </div>
               </div>
-              <div>
-                <FileUploader />
-              </div>
+
               <div className="rounded-lg border border-gray-400 bg-gray-100 p-2">
                 <Penalty
                   taskid={taskid}
@@ -211,6 +238,8 @@ function PaneltyTask(props) {
                   setTaskdate={setTaskdate}
                   tasktime={tasktime}
                   setTasktime={setTasktime}
+                  taskRemarks={taskRemarks}
+                  setTaskRemarks={setTaskRemarks}
                 />
               </div>
             </form>
@@ -254,9 +283,9 @@ function PaneltyTask(props) {
               <div className="flex flex-col">
                 <div className="relative mb-4 inline-block text-left">
                   <div className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                    {props.childProfileData.map(
+                    {childProfileData.map(
                       (child) =>
-                        child.id === props.task.childId && (
+                        child.id === task.childId && (
                           <div key={child.id}>
                             <img
                               className="mt-0.5 h-5 w-5 rounded-full object-cover"
@@ -270,7 +299,7 @@ function PaneltyTask(props) {
                           </div>
                         )
                     )}
-                    <span className="mt-0.5">{props.task.taskassignee}</span>
+                    <span className="mt-0.5">{task.taskassignee}</span>
                   </div>
                 </div>
 
@@ -281,14 +310,14 @@ function PaneltyTask(props) {
                       src="/img/green.png"
                       alt=""
                     />
-                    <span>{props.task.status}</span>
+                    <span>{task.status}</span>
                   </div>
                 </div>
 
                 <div>
                   <div className="inline-flex justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 ">
                     <TagIcon className="h-4 w-4 text-MyPurple-400" />
-                    <span>{props.task.tasktag}</span>
+                    <span>{task.tasktag}</span>
                   </div>
                 </div>
               </div>
@@ -299,19 +328,19 @@ function PaneltyTask(props) {
                   <label className="mt-2 block text-sm font-medium leading-6 text-gray-900">
                     Time
                   </label>
-                  <div className="mt-1">{props.task.tasktime}</div>
+                  <div className="mt-1">{task.tasktime}</div>
                 </div>
                 <div className="col-span-1  border-r border-gray-400 pt-1">
                   <label className="mt-2 block text-sm font-medium leading-6 text-gray-900">
                     Date
                   </label>
-                  <div className="mt-1">{props.task.taskdate}</div>
+                  <div className="mt-1">{task.taskdate}</div>
                 </div>
                 <div className="col-span-1 pt-1">
                   <label className="mt-2 block text-sm font-medium leading-6 text-gray-900">
                     Type
                   </label>
-                  <div className="mt-1">{props.task.tasktype}</div>
+                  <div className="mt-1">{task.tasktype}</div>
                 </div>
               </div>
             </div>
@@ -323,6 +352,7 @@ function PaneltyTask(props) {
             onClick={(event) => {
               save(event);
               update(event);
+              updateTask(event);
             }}
             className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
           >

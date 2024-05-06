@@ -24,13 +24,13 @@ function Penalty(props) {
         <div className="mt-5 flex gap-x-20 ">
           <div className="flex items-center gap-x-3">
             <input
-              id="penaltyTask"
-              name="penaltyTask"
+              id="Reviewed"
+              name="Reviewed"
               type="radio"
               className="h-4 w-4 border-gray-300 text-[#B089BE] focus:ring-[#B089BE]"
-              value="Todo"
+              value="Reviewed"
               onChange={handleChange}
-              checked={selectedOption === "Todo"}
+              checked={selectedOption === "Reviewed"}
               required
             />
             <label
@@ -60,7 +60,7 @@ function Penalty(props) {
           </div>
         </div>
 
-        {selectedOption === "Todo" && (
+        {selectedOption === "Reviewed" && (
           <>
             <div className="mt-3">
               <CheatTags
@@ -143,7 +143,7 @@ function Penalty(props) {
               <div className="ml-10 mt-3">
                 <label
                   htmlFor="about"
-                  className="mb-2 block text-sm font-medium leading-6 text-gray-900"
+                  className=" block text-sm font-medium leading-6 text-gray-900"
                 >
                   Submission Time
                 </label>
@@ -156,6 +156,29 @@ function Penalty(props) {
             </div>
           </>
         )}
+        <div className="col-span-full">
+          <label
+            htmlFor="about"
+            className="mt-3 block text-sm font-medium leading-6 text-gray-900"
+          >
+            Add Your remarks
+          </label>
+          <div className="mt-2">
+            <textarea
+              type="text"
+              id="remarks"
+              name="remarks"
+              value={props.taskRemarks}
+              rows={3}
+              onChange={(event) => {
+                props.setTaskRemarks(event.target.value);
+              }}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+              placeholder="Write a few sentences explaining why a task is being penalized or rewarded.."
+              required
+            />
+          </div>
+        </div>
       </fieldset>
     </div>
   );

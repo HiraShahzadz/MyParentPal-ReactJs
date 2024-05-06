@@ -94,7 +94,6 @@ export function TaskEvaluate() {
     setSelectedTask(task);
     setShowModal(true);
   };
-  console.log("han ggg:" + Tasktag);
   return (
     <div className="mb-4 mt-9 flex flex-col gap-12">
       <DndProvider backend={HTML5Backend}>

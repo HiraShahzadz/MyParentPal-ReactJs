@@ -18,6 +18,8 @@ const EditTask = ({ task, selectedTaskDetails, handleCloseTaskDetails }) => {
     details: task.taskdescription,
     reward: task.rewardname,
     fileType: task.taskfiletype,
+    tags: task.tasktag,
+    taststatus: task.status,
   });
   const [editedDate, setEditedDate] = useState(new Date(task.taskdate));
   const defaultFileTypes = task.taskfiletype
@@ -73,8 +75,10 @@ const EditTask = ({ task, selectedTaskDetails, handleCloseTaskDetails }) => {
           taskname: editedDetails.title,
           taskdescription: editedDetails.details,
           rewardname: editedDetails.reward,
+          status: editedDetails.taststatus,
           taskdate: taskdate,
           tasktime: tasktime,
+          tasktag: editedDetails.tags,
           taskfiletype: fileTypes,
         }
       );

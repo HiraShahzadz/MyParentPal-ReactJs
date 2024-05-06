@@ -106,37 +106,21 @@ export function MyProfile({ childData }) {
       modal.classList.add("hidden");
     });
   });
-  const [childProfile, setChildProfile] = useState([]);
-  useEffect(() => {
-    loadParentProfile();
-  }, []);
-  async function loadParentProfile() {
-    try {
-      const result = await axios.get(
-        "http://localhost:8081/api/v1/user/get-child"
-      );
-      setChildProfile(result.data);
-      console.log("Parent profile:", result.data);
-    } catch (error) {
-      console.error("Error loading parentProfile:", error);
-    }
-  }
-  const myProfile = childProfile.find((profile) => profile);
 
   async function update(event) {
     event.preventDefault();
     try {
       const base64Image = formData.image.split(",")[1];
       await axios.put(
-        "http://localhost:8081/api/v1/user/editChild/" + myProfile.id,
+        "http://localhost:8081/api/v1/user/editChild/" + childData.id,
         {
-          id: myProfile.id,
-          email: myProfile.email,
-          password: myProfile.password,
-          name: myProfile.name,
-          tags: myProfile.tags,
-          dob: myProfile.dob,
-          gender: myProfile.gender,
+          id: childData.id,
+          email: childData.email,
+          password: childData.password,
+          name: childData.name,
+          tags: childData.tags,
+          dob: childData.dob,
+          gender: childData.gender,
           img: base64Image,
         }
       );
