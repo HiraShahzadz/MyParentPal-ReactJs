@@ -143,17 +143,25 @@ console.log();
       );
       return;
     }
-    try {
-      const base64Image = formData.image.split(",")[1];
-        await axios.post("http://localhost:8081/api/v1/profileUpdate/save/",
-        {
-          email: myProfile.email,
-          password: myProfile.password,
-          name: myProfile.name,
-          dob: myProfile.dob,
-         img: base64Image,
-        }
-      );
+    let url1 = "http://localhost:8081/api/v1/profileUpdate/save/";
+    let url2 = "http://localhost:8081/api/v1/notify/ProfileNotification";
+  
+    const base64Image = formData.image.split(",")[1];
+    let promise1 = axios.post(url1, {
+      email: myProfile.email,
+      password: myProfile.password,
+      name: myProfile.name,
+      dob: myProfile.dob,
+      img: base64Image,
+    });
+  
+    let promise2 = axios.post(url2, {
+    });
+   
+    try {  
+      Promise.all([promise1, promise2]);
+      toast.success("Your profile will be updated after parent's approval");
+   
     } catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);
@@ -285,7 +293,7 @@ console.log();
                     tasksData
                       .filter(
                         (task) =>
-                          task.status === "Todo" &&
+                        
                           task.childId === myProfile.id
                       )
                       .map((task) => (

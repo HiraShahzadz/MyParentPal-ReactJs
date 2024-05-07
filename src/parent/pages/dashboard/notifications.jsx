@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import {
   Typography,
   Alert,
@@ -22,6 +23,29 @@ export function Notifications() {
     setHiddenImages([...hiddenImages, index]);
   };
 
+  const [requestrs, setrequestrs] = useState([]);
+ 
+  useEffect(() => {
+    Load(); // Load data initially
+    const interval = setInterval(() => {
+      Load(); // Fetch new notifications periodically
+    }, 30000); // Fetch data every minute (adjust interval as needed)
+    return () => clearInterval(interval); // Cleanup function to clear interval on component unmount
+  }, []);
+
+  async function Load(filter = "") {
+    try {
+      let url = "http://localhost:8081/api/v1/notify/getall";
+      if (filter === "latest") {
+        url += "?filter=latest";
+      }
+      const allrequests = await axios.get(url);
+      setrequestrs(allrequests.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  
   const [showModal, setShowModal] = useState(false);
   return (
     <div className="mx-auto my-10 flex max-w-screen-lg flex-col gap-8">
@@ -40,8 +64,8 @@ export function Notifications() {
           </Typography>
         </CardHeader>
         <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
-          {NotificationData.map(
-            ({ time, name, description, image, task }, index) => (
+          {requestrs.map(
+            ({  ChildName, message, image, taskname,time }, index) => (
               <div
                 href=""
                 className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
@@ -50,15 +74,15 @@ export function Notifications() {
                 <div className="flex">
                   <img className="h-10 w-10 rounded-full" src={image} alt="" />
                   <div className="ml-3">
-                    <span className="mr-1 font-medium text-black">{name}</span>
-                    <span className="text-black">{description}</span>
+                    <span className="mr-1 font-medium text-black">{ChildName}</span>
+                    <span className="text-black">{message}</span>
                     <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
                       {time}
                     </span>
                     <div className="mt-1.5 flex">
                       <img className="h-3 w-3" src="/img/task.png" alt="" />
                       <span className="ml-1 text-xs text-black hover:underline">
-                        {task}
+                      {taskname ? taskname : "Pending"}
                       </span>
                     </div>
                   </div>
@@ -92,21 +116,23 @@ export function Notifications() {
           </Typography>
         </CardHeader>
         <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
-          {RespondNotificationsData.map(
-            ({ time, name, description, image, task }, index) => (
+          {requestrs
+          .filter(request => request.taskdescription)
+          .map(
+            ({  ChildName, message, image, taskname, time }, index) => (
               <div className="items-center rounded-md p-3 text-sm hover:bg-blue-gray-50 sm:flex">
                 <div className="flex">
                   <img className="h-10 w-10 rounded-full" src={image} alt="" />
                   <div className="ml-3">
-                    <span className="mr-1 font-medium text-black">{name}</span>
-                    <span className="text-black">{description}</span>
+                    <span className="mr-1 font-medium text-black">{ChildName}</span>
+                    <span className="text-black">{message}</span>
                     <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
                       {time}
                     </span>
                     <div className="mt-1.5 flex">
                       <img className="h-3 w-3" src="/img/task.png" alt="" />
                       <span className="ml-1 text-xs text-black hover:underline">
-                        {task}
+                        {taskname}
                       </span>
                     </div>
                   </div>
