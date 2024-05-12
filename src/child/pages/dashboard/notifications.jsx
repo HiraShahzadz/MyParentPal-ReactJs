@@ -52,11 +52,36 @@ export function Notifications() {
         url += "?filter=latest";
       }
       const allrequests = await axios.get(url);
-      setrequestrs(allrequests.data);
+      
+      // Filter notifications based on date and local time
+      const currentDate = new Date();
+      const startTime = new Date(currentDate);
+      const endTime = new Date(currentDate);
+      startTime.setHours(13, 23, 0); // 10:00 AM
+      endTime.setHours(17, 0, 0);   // 5:00 PM
+  
+      const filteredRequests = allrequests.data.filter(request => {
+        // Check if request.localtime is defined and not null
+        if (!request.localtime) return false;
+  
+        // Extract hours and minutes from localtime
+        const [hours, minutes] = request.localtime.split(":").map(Number);
+  
+        // Create a new Date object for the localtime
+        const localTime = new Date(currentDate);
+        localTime.setHours(hours, minutes, 0); // Set seconds to 0 for accurate comparison
+  
+        // Check if localtime falls within the specified range
+        return localTime <= endTime || localTime >= startTime;
+      }).sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      setrequestrs(filteredRequests);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
+  
+   
   const [childProfile, setChildProfile] = useState([]);
   useEffect(() => {
     loadParentProfile();
@@ -97,6 +122,7 @@ export function Notifications() {
           {requestrs
           .filter((Notification) => Notification.childId === myProfile.id)
           .filter(({ message }) => message.startsWith("Your parent"))
+          
           .map(
             ({  ChildName, message, taskname,time }, index) => (
               <div

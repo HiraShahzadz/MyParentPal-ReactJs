@@ -155,6 +155,7 @@ export function TaskCreation() {
 
     let promise2 = axios.post(url2, {
       taskname: taskname,
+       childId: childId,
     });
 
     try {

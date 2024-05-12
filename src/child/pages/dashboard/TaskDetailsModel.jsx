@@ -76,7 +76,7 @@ const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleS
     return (
         selectedTaskDetails && (
             <div className="fixed top-0 left-0 z-50 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
-                <div className="bg-white rounded-lg shadow-lg p-6 w-200">
+               <div className="w-screen rounded-lg bg-white p-6 shadow-lg lg:m-96">
                     <div className="flex justify-end">
                         <button className="focus:outline-none" onClick={handleCloseTaskDetails}>
                             <FontAwesomeIcon icon={faTimes} className="text-gray-600 text-lg" />

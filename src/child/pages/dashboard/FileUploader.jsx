@@ -119,8 +119,24 @@ const FileUploader = ({ taskId, filetype }) => {
       setIsSaving(false);
       setIsVisible(false);
     }
+  update();
   };
+  async function update(event) {
+    try {
+      await axios.put(`http://localhost:8081/api/v1/task/edit/${taskId}`, {
+        status: "Completed",
+      });
 
+      // If the update is successful, display a success message
+      toast.success("Task details edited");
+      // Reload the page
+      window.location.reload();
+    } catch (error) {
+      // If the update fails, display an error message
+      toast.error("Failed to update task details");
+      console.error("Error updating task details:", error);
+    }
+  }
 
 
 
