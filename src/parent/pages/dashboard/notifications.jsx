@@ -60,7 +60,7 @@ export function Notifications() {
       return childProfileData.some((child) => child.id === request.childId);
     } else {
       console.log(
-        `ChildId or childId is undefined or null for request:`,
+        "ChildId or childId is undefined or null for request:",
         request
       );
       return false;
@@ -68,8 +68,13 @@ export function Notifications() {
   });
 
   const handleImageClick = (index) => {
-    setHiddenImages([...hiddenImages, index]);
+    setHiddenImages((prevHiddenImages) =>
+      prevHiddenImages.includes(index)
+        ? prevHiddenImages.filter((item) => item !== index)
+        : [...prevHiddenImages, index]
+    );
   };
+  
 
   const [showModal, setShowModal] = useState(false);
   return (
@@ -89,8 +94,12 @@ export function Notifications() {
           </Typography>
         </CardHeader>
         <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
-          {filteredNotifications.map(
+          {filteredNotifications
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .map(
             ({ ChildId, ChildName, message, taskname, time }, index) => (
+              <>
+              {!message.startsWith("Your parent") && (
               <div
                 href=""
                 className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
@@ -101,14 +110,11 @@ export function Notifications() {
                     (child) =>
                       child.id === ChildId && (
                         <img
-                          className="h-10 w-10 rounded-full"
-                          src={
-                            child.img
-                              ? `data:image/jpeg;base64,${child.img}`
-                              : "/img/user.png"
-                          }
-                          alt=""
-                        />
+                        className="h-10 w-10 rounded-full"
+                        src={child.img ? `data:image/jpeg;base64,${child.img}` : "/img/user.png"}
+                        alt=""
+                      />
+                      
                       )
                   )}
                   <div className="ml-3">
@@ -140,7 +146,9 @@ export function Notifications() {
                   </div>
                 )}
               </div>
-            )
+              )}
+            </>
+          )
           )}
         </CardBody>
       </Card>
@@ -156,12 +164,12 @@ export function Notifications() {
           </Typography>
         </CardHeader>
         <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
-          {requestrs
+          {filteredNotifications
             .filter((request) => request.taskdescription)
             .map(({ ChildName, message, image, taskname, time }, index) => (
               <div className="items-center rounded-md p-3 text-sm hover:bg-blue-gray-50 sm:flex">
                 <div className="flex">
-                  <img className="h-10 w-10 rounded-full" src={image} alt="" />
+                <img className="h-10 w-10 rounded-full" src="/img/userc.png" alt="" />
                   <div className="ml-3">
                     <span className="mr-1 font-medium text-black">
                       {ChildName}
