@@ -5,19 +5,47 @@ import { SkillTasks } from "@/parent/Report/SkillTasks";
 import ChildSelection from "@/parent/Report/ChildSelection";
 import ProgressGraph from "@/parent/Report/ProgressGraph";
 import axios from "axios";
+
 export function ChildReport() {
   const [childProfileData, setChildProfileData] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [tasksData, setTasksData] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState(null);
-  const [selectedTask, setSelectedTask] = useState(null);
   const [Tasktag, setTasktag] = useState(null);
   const [filteredTasks, setFilteredTasks] = useState([]);
+  const [taskCounts, setTaskCounts] = useState({
+    Todo: 0,
+    Completed: 0,
+    Reviewed: 0,
+    Rewarded: 0,
+  });
+  const [totalTasks, setTotalTasks] = useState(0);
+  const [taskPercentages, setTaskPercentages] = useState({
+    Todo: 0,
+    Completed: 0,
+    Reviewed: 0,
+    Rewarded: 0,
+  });
 
   useEffect(() => {
     loadChildProfileData();
     loadTasks();
   }, []);
+
+  useEffect(() => {
+    updateFilteredTasks();
+  }, [selectedChildId, Tasktag, tasksData]);
+
+  useEffect(() => {
+    updateTaskCounts();
+  }, [filteredTasks]);
+
+  useEffect(() => {
+    calculateTotalTasks();
+  }, [taskCounts]);
+
+  useEffect(() => {
+    calculateTaskPercentages();
+  }, [taskCounts, totalTasks]);
 
   async function loadChildProfileData() {
     try {
@@ -25,7 +53,6 @@ export function ChildReport() {
         "http://localhost:8081/api/v1/user/get-child"
       );
       setChildProfileData(result.data);
-      console.log("Child profile data:", result.data);
     } catch (error) {
       console.error("Error loading child profile data:", error);
     }
@@ -37,48 +64,71 @@ export function ChildReport() {
         "http://localhost:8081/api/v1/task/getall"
       );
       setTasksData(result.data);
-      console.log("All tasks:", result.data);
     } catch (error) {
       console.error("Error loading tasks:", error);
     }
   }
 
-  useEffect(() => {
-    if (selectedChildId !== null && Tasktag !== null) {
-      const filtered = tasksData.filter(
-        (task) =>
+  const updateFilteredTasks = () => {
+    const filtered = tasksData.filter((task) => {
+      if (selectedChildId !== null && Tasktag !== null) {
+        return (
           task.childId === selectedChildId &&
           task.tasktag &&
-          task.tasktag.includes(Tasktag) &&
-          isTaskChildIdInProfileData(task.childId)
-      );
-      setFilteredTasks(filtered);
-    } else if (selectedChildId !== null) {
-      const filtered = tasksData.filter(
-        (task) =>
-          task.childId === selectedChildId &&
-          isTaskChildIdInProfileData(task.childId)
-      );
-      setFilteredTasks(filtered);
-    } else if (Tasktag !== null) {
-      const filtered = tasksData.filter(
-        (task) =>
-          task.tasktag &&
-          task.tasktag.includes(Tasktag) &&
-          isTaskChildIdInProfileData(task.childId)
-      );
-      setFilteredTasks(filtered);
-    } else {
-      const filtered = tasksData.filter((task) =>
-        isTaskChildIdInProfileData(task.childId)
-      );
-      setFilteredTasks(filtered);
-    }
-  }, [selectedChildId, Tasktag, tasksData, childProfileData]);
+          task.tasktag.includes(Tasktag)
+        );
+      } else if (selectedChildId !== null) {
+        return task.childId === selectedChildId;
+      } else if (Tasktag !== null) {
+        return task.tasktag && task.tasktag.includes(Tasktag);
+      } else {
+        return true;
+      }
+    });
 
-  // Helper function to check if task's child ID exists in childProfileData
-  const isTaskChildIdInProfileData = (taskId) => {
-    return childProfileData.some((child) => child.id === taskId);
+    setFilteredTasks(filtered);
+  };
+
+  const updateTaskCounts = () => {
+    const counts = {
+      Todo: 0,
+      Completed: 0,
+      Reviewed: 0,
+      Rewarded: 0,
+    };
+
+    filteredTasks.forEach((task) => {
+      counts[task.status]++;
+    });
+
+    setTaskCounts(counts);
+  };
+
+  const calculateTotalTasks = () => {
+    const total = Object.values(taskCounts).reduce(
+      (acc, count) => acc + count,
+      0
+    );
+    setTotalTasks(total);
+  };
+
+  const calculateTaskPercentages = () => {
+    if (totalTasks === 0) {
+      setTaskPercentages({
+        Todo: 0,
+        Completed: 0,
+        Reviewed: 0,
+        Rewarded: 0,
+      });
+    } else {
+      const percentages = {
+        Todo: (taskCounts.Todo * 100) / totalTasks,
+        Completed: (taskCounts.Completed * 100) / totalTasks,
+        Reviewed: (taskCounts.Reviewed * 100) / totalTasks,
+        Rewarded: (taskCounts.Rewarded * 100) / totalTasks,
+      };
+      setTaskPercentages(percentages);
+    }
   };
 
   const filterTasksByChild = (childId) => {
@@ -110,7 +160,19 @@ export function ChildReport() {
           </div>
 
           <div className="border-b">
-            <ProgressGraph />
+            <ProgressGraph
+              todoCount={taskCounts.Todo}
+              completedCount={taskCounts.Completed}
+              reviewedCount={taskCounts.Reviewed}
+              rewardedCount={taskCounts.Rewarded}
+              totalTasks={totalTasks}
+              taskPercentages={{
+                Todo: taskPercentages.Todo.toFixed(2),
+                Completed: taskPercentages.Completed.toFixed(2),
+                Reviewed: taskPercentages.Reviewed.toFixed(2),
+                Rewarded: taskPercentages.Rewarded.toFixed(2),
+              }}
+            />
           </div>
         </div>
 
@@ -120,6 +182,25 @@ export function ChildReport() {
               <div className="text-left text-lg font-bold text-black">
                 Task Summary
               </div>
+            </div>
+            {/* Display task counts */}
+            <div>
+              <p>Total Tasks: {totalTasks}</p>
+              <p>
+                Todo: {taskCounts.Todo} ({taskPercentages.Todo.toFixed(2)}%)
+              </p>
+              <p>
+                Completed: {taskCounts.Completed} (
+                {taskPercentages.Completed.toFixed(2)}%)
+              </p>
+              <p>
+                Reviewed: {taskCounts.Reviewed} (
+                {taskPercentages.Reviewed.toFixed(2)}%)
+              </p>
+              <p>
+                Rewarded: {taskCounts.Rewarded} (
+                {taskPercentages.Rewarded.toFixed(2)}%)
+              </p>
             </div>
             <SkillTasks
               childProfileData={childProfileData}

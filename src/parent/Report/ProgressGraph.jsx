@@ -1,12 +1,25 @@
 import React, { useEffect, useRef } from "react";
 import ApexCharts from "apexcharts";
 
-const ProgressGraph = () => {
+const ProgressGraph = ({
+  totalTasks,
+  todoCount,
+  completedCount,
+  reviewedCount,
+  rewardedCount,
+  taskPercentages,
+}) => {
   const chartRef = useRef(null);
 
   const getChartOptions = () => {
     return {
-      series: [80, 70, 55, 60],
+      series: [
+        taskPercentages.Todo,
+        taskPercentages.Completed,
+        taskPercentages.Reviewed,
+        taskPercentages.Rewarded,
+      ],
+
       colors: ["#b089be", "#5bb85e", "#FD8552", "#4E9AD0"],
       chart: {
         height: "380px",
@@ -40,7 +53,7 @@ const ProgressGraph = () => {
           bottom: -20,
         },
       },
-      labels: ["To do", "Done", "Reviewed", "Rewarded"],
+      labels: ["Todo", "Done", "Reviewed", "Rewarded"],
       legend: {
         show: true,
         position: "bottom",
@@ -100,7 +113,7 @@ const ProgressGraph = () => {
         chartRef.current.destroy();
       }
     };
-  }, []);
+  }, [taskPercentages]);
 
   return (
     <div className="flex items-center justify-center">
@@ -109,15 +122,23 @@ const ProgressGraph = () => {
           <div class="grid grid-cols-4 gap-3">
             <dl class="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#b089be] dark:bg-gray-600">
               <dt class="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-MyPurple-400 dark:bg-gray-500 dark:text-white">
-                12
+                {totalTasks}
               </dt>
               <dd class="text-sm font-medium text-white dark:text-white">
-                To do
+                Total
+              </dd>
+            </dl>
+            <dl class="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#b089be] dark:bg-gray-600">
+              <dt class="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-MyPurple-400 dark:bg-gray-500 dark:text-white">
+                {todoCount}
+              </dt>
+              <dd class="text-sm font-medium text-white dark:text-white">
+                Todo
               </dd>
             </dl>
             <dl class="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#5bb85e] dark:bg-gray-600">
               <dt class="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-[#5bb85e] dark:bg-gray-500 dark:text-white">
-                64
+                {completedCount}
               </dt>
               <dd class="text-sm font-medium text-white dark:text-blue-300">
                 Completed
@@ -125,7 +146,7 @@ const ProgressGraph = () => {
             </dl>
             <dl class="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#FD8552] dark:bg-gray-600">
               <dt class="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-[#FD8552] dark:bg-gray-500 dark:text-white">
-                64
+                {reviewedCount}
               </dt>
               <dd class="text-sm font-medium text-white dark:text-blue-300">
                 Reviewed
@@ -133,7 +154,7 @@ const ProgressGraph = () => {
             </dl>
             <dl class="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#4E9AD0] dark:bg-gray-600">
               <dt class="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-[#4E9AD0] dark:bg-gray-500 dark:text-white">
-                64
+                {rewardedCount}
               </dt>
               <dd class="text-sm font-medium text-white dark:text-blue-300">
                 Rewarded

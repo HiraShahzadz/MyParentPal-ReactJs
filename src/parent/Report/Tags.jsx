@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { TagIcon } from "@heroicons/react/24/solid";
@@ -8,14 +8,19 @@ function classNames(...classes) {
 }
 
 function Tags({ setTasktag, childProfileData, selectedChildId }) {
-  const [selectedTag, setSelectedTag] = useState(
-    childProfileData.length > 0 && childProfileData[0].tags.length > 0
-      ? childProfileData[0].tags[0]
-      : null
-  );
+  const [selectedTag, setSelectedTag] = useState(null);
+
+  useEffect(() => {
+    if (
+      childProfileData &&
+      childProfileData.length > 0 &&
+      childProfileData[0]?.tags?.length > 0 // Ensure childProfileData[0].tags is defined and has length
+    ) {
+      setSelectedTag(childProfileData[0].tags[0]);
+    }
+  }, [childProfileData]);
 
   const handleTagClick = (tag) => {
-    // If the clicked tag is already selected, deselect it
     if (tag === selectedTag) {
       setSelectedTag(null);
       setTasktag(null);
@@ -50,27 +55,29 @@ function Tags({ setTasktag, childProfileData, selectedChildId }) {
         <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {childProfileData
             .filter((child) => child.id === selectedChildId)
-            .map((child) =>
-              child.tags.map((tag) => (
-                <div className="py-1" key={tag}>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        onClick={() => handleTagClick(tag)}
-                        className={classNames(
-                          active
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
-                          "flex px-4 py-2 text-sm "
-                        )}
-                      >
-                        <TagIcon className="h-4 w-4 text-MyPurple-400" />
-                        <span className="ml-2">{tag}</span>
-                      </a>
-                    )}
-                  </Menu.Item>
-                </div>
-              ))
+            .map(
+              (child) =>
+                child.tags &&
+                child.tags.map((tag) => (
+                  <div className="py-1" key={tag}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          onClick={() => handleTagClick(tag)}
+                          className={classNames(
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "flex px-4 py-2 text-sm "
+                          )}
+                        >
+                          <TagIcon className="h-4 w-4 text-MyPurple-400" />
+                          <span className="ml-2">{tag}</span>
+                        </a>
+                      )}
+                    </Menu.Item>
+                  </div>
+                ))
             )}
         </Menu.Items>
       </Transition>
