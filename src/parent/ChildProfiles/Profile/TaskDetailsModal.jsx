@@ -55,7 +55,7 @@ const TaskDetailsModal = ({
   return (
     selectedTaskDetails && (
       <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50">
-        <div className="m-96 w-screen rounded-lg bg-white p-6 shadow-lg">
+        <div className="w-screen rounded-lg bg-white p-6 shadow-lg lg:m-96">
           <div className="flex justify-end">
             <button
               className="focus:outline-none"
@@ -102,9 +102,7 @@ const TaskDetailsModal = ({
                   >
                     Assignee
                   </th>
-                  <td className="text-gray text-md px-6 py-4">
-                    {childData.name}
-                  </td>
+                  <td className="text-gray text-md px-6 py-4">{childData}</td>
                 </tr>
                 <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
                   <th

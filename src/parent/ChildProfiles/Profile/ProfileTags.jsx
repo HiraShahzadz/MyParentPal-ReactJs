@@ -77,20 +77,21 @@ function ProfileTags({ childData }) {
           Milstone Tags
         </div>
         <div className="flex flex-wrap">
-          {childData.tags.map((tag, index) => (
-            <button
-              key={index}
-              className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-2 pl-3 outline-transparent"
-            >
-              {tag}
-              <span
-                onClick={() => deleteTags(tag)}
-                className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50 hover:bg-gray-500 hover:text-white"
+          {childData.tags &&
+            childData.tags.map((tag, index) => (
+              <button
+                key={index}
+                className="m-2 flex cursor-pointer rounded-xl border-transparent bg-MyPurple-400 bg-opacity-40 p-2 pl-3 outline-transparent"
               >
-                X
-              </span>
-            </button>
-          ))}
+                {tag}
+                <span
+                  onClick={() => deleteTags(tag)}
+                  className="hover ml-3 mr-1 h-6 w-6 rounded-full bg-gray-50 hover:bg-gray-500 hover:text-white"
+                >
+                  X
+                </span>
+              </button>
+            ))}
           <button
             onClick={showPopup}
             className="m-2 mr-2 flex cursor-pointer rounded-md border-transparent bg-MyPurple-400 p-1 px-2 py-2 pl-3 text-sm font-semibold normal-case text-white shadow-sm shadow-white outline-transparent hover:bg-purple-400  hover:shadow-white"

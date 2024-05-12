@@ -14,17 +14,46 @@ function MyChild() {
   const [childProfileData, setChildProfileData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [selectedChild, setSelectedChild] = useState(null); // State to hold selected child's data
+  const [profileRequest, setProfileRequest] = useState([]); // State to hold profile request data
+  const [showApproveChanges, setShowApproveChanges] = useState(false); // Flag to indicate whether to show ApproveChanges component
 
   useEffect(() => {
-    (async () => await Load())();
-  }, []);
+    if (childProfileData) {
+      (async () => {
+        await LoadChildData();
+        await LoadProfileRequestData();
+      })();
+    }
+  }, [selectedChild]);
 
-  async function Load() {
-    const result = await axios.get(
-      "http://localhost:8081/api/v1/user/get-child"
-    );
-    setChildProfileData(result.data);
-    console.log(result.data);
+  async function LoadChildData() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-child"
+      );
+      setChildProfileData(result.data);
+      console.log("Child Profiles:", result.data); // Update console log message
+    } catch (error) {
+      console.error("Error loading child profiles:", error); // Update console error message
+    }
+  }
+
+  async function LoadProfileRequestData() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/profile/get-all"
+      );
+      setProfileRequest(result.data);
+      console.log("Profile Requests:", result.data);
+
+      // Check if there's a match between child IDs in childProfileData and profileRequest
+      const hasMatchingChild = childProfileData.some((child) => {
+        return result.data.some((profile) => profile.childId === child.id);
+      });
+      setShowApproveChanges(hasMatchingChild);
+    } catch (error) {
+      console.error("Error loading profile requests:", error);
+    }
   }
 
   const handleViewProfile = (child) => {
@@ -32,8 +61,9 @@ function MyChild() {
     setShowProfiles(false);
   };
 
-  const handleShowRequest = (requests) => {
-    setShowRequest(requests > 0);
+  const handleShowRequest = (child) => {
+    setSelectedChild(child);
+    setShowRequest(true);
   };
 
   // Filter child profiles based on search input
@@ -144,19 +174,36 @@ function MyChild() {
                       >
                         View Profile
                       </Button>
-                      <Button
-                        onClick={() => handleShowRequest(1)}
-                        className={`mt-3 rounded-md  ${
-                          requests === 0 ? "bg-gray-400" : "bg-gray-500"
-                        } px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:text-white hover:shadow-white`}
-                      >
-                        <span className="mr-1 rounded-full bg-MyPurple-400 pl-1 pr-1">
-                          {requests}
-                        </span>
-                        Requests
-                      </Button>
+                      {profileRequest.map(
+                        (profile) =>
+                          profile.childId === id &&
+                          profile.status === "Pending" && (
+                            <Button
+                              onClick={() =>
+                                handleShowRequest({
+                                  id,
+                                  dob,
+                                  gender,
+                                  tags,
+                                  image,
+                                  img,
+                                  parentId,
+                                  name,
+                                  email,
+                                  password,
+                                  role,
+                                })
+                              }
+                              className="mt-3 rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-gray-500 hover:text-white hover:shadow-white"
+                            >
+                              <span className="mr-1 rounded-full bg-red-700 pl-1 pr-1">
+                                1
+                              </span>
+                              Requests
+                            </Button>
+                          )
+                      )}
                     </div>
-                    {showRequest && <ApproveChanges onClose={setShowRequest} />}
                   </CardBody>
                 </Card>
               )
@@ -166,6 +213,18 @@ function MyChild() {
       ) : (
         <MyProfile childData={selectedChild} />
       )}
+      {showRequest &&
+        showApproveChanges &&
+        profileRequest.some(
+          (profile) =>
+            profile.childId === selectedChild.id && profile.status === "Pending"
+        ) && (
+          <ApproveChanges
+            onClose={() => setShowRequest(false)}
+            childData={selectedChild}
+            profileRequest={profileRequest}
+          />
+        )}
     </div>
   );
 }

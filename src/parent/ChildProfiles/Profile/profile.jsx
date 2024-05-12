@@ -485,7 +485,7 @@ export function MyProfile({ childData }) {
 
                 {taskDetailsToShow && (
                   <TaskDetailsModal
-                    childData={childData}
+                    childData={childData.name}
                     selectedTaskDetails={taskDetailsToShow}
                     handleCloseTaskDetails={handleCloseTaskDetails}
                     // handleSubmitTask={/* Pass your handleSubmitTask function here */}
