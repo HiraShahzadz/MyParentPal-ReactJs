@@ -113,7 +113,9 @@ export function TaskCreation() {
       return toast.error("Please select task assignee");
     }
     if (!tasktag) {
-      return toast.error("Please select task tag");
+      return toast.error(
+        "Please select task tag. If no tags create in child profile"
+      );
     }
     const taskDate = new Date(taskdate);
     const currentDate = new Date();
@@ -136,29 +138,28 @@ export function TaskCreation() {
       );
     }
 
-    let url1 = "http://localhost:8081/api/v1/task/save";
-    let url2 = "http://localhost:8081/api/v1/notify/assigntaskNotification";
-
-    let promise1 = axios.post(url1, {
-      taskname: taskname,
-      taskdescription: taskdescription,
-      status: status,
-      rewardname: rewardname,
-      taskfiletype: taskfiletype,
-      taskdate: taskdate,
-      tasktime: tasktime,
-      tasktag: tasktag,
-      taskassignee: taskassignee,
-      tasktype: tasktype,
-      childId: childId,
-    });
-
-    let promise2 = axios.post(url2, {
-      taskname: taskname,
-    });
-
     try {
       if (taskname.length > 3 && taskname.length < 15) {
+        let url1 = "http://localhost:8081/api/v1/task/save";
+        let url2 = "http://localhost:8081/api/v1/notify/assigntaskNotification";
+
+        let promise1 = axios.post(url1, {
+          taskname: taskname,
+          taskdescription: taskdescription,
+          status: status,
+          rewardname: rewardname,
+          taskfiletype: taskfiletype,
+          taskdate: taskdate,
+          tasktime: tasktime,
+          tasktag: tasktag,
+          taskassignee: taskassignee,
+          tasktype: tasktype,
+          childId: childId,
+        });
+
+        let promise2 = axios.post(url2, {
+          taskname: taskname,
+        });
         Promise.all([promise1, promise2]);
         toast.success("Task Created");
         setTaskname("");
