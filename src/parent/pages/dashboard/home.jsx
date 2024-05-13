@@ -16,6 +16,12 @@ export function ParentHome() {
   useEffect(() => {
     loadChildProfileData();
     loadTasks();
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
   }, []);
 
   async function loadChildProfileData() {

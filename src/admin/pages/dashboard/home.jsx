@@ -7,17 +7,27 @@ import {
 } from "@material-tailwind/react";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import { StatisticsCard } from "@/admin/widgets/cards";
+import { useNavigate } from "react-router-dom";
 import { StatisticsChart } from "@/admin/widgets/charts";
 import { statisticsCardsData, statisticsChartsData } from "@/admin/data";
 import { dailySalesChart } from "@/admin/data/statistics-charts-data";
 
 export function Home() {
+  const navigate = useNavigate();
   const [userCounts, setUserCounts] = useState({
     totalUsers: 0,
     parentUsers: 0,
     childUsers: 0,
   });
-
+  useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
+    (async () => await Load())();
+  }, []);
   useEffect(() => {
     fetchUserCounts();
   }, []);
