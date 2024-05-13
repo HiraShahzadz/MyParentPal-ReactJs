@@ -31,7 +31,8 @@ function PaneltyTask({ onClose, task, childProfileData }) {
   const [taskId, setTaskId] = useState("");
   const [cheatTags, setCheatTags] = useState([]);
   const [childId, setChildId] = useState("");
-
+  const [taskRemarks, setTaskRemarks] = useState("");
+  const [percentage, setPercentage] = useState("");
   //for saving in database
   async function save(event) {
     event.preventDefault();
@@ -76,6 +77,8 @@ function PaneltyTask({ onClose, task, childProfileData }) {
           tasktype: task.tasktype,
           taskId: task._id,
           cheatTags,
+          taskRemarks: taskRemarks,
+          percentage: percentage,
         });
         toast.success("Task Created");
         setTaskname("");
@@ -118,7 +121,6 @@ function PaneltyTask({ onClose, task, childProfileData }) {
     }
   }
 
-  const [taskRemarks, setTaskRemarks] = useState("");
   async function updateTask(event) {
     if (!taskRemarks) {
       return toast.error("Please Add remarks");
@@ -136,12 +138,14 @@ function PaneltyTask({ onClose, task, childProfileData }) {
           taskfiletype: task.taskfiletype,
           status: status,
           taskRemarks: taskRemarks,
+          percentage: percentage,
         }
       );
 
       // If the update is successful, display a success message
       toast.success("Task details edited");
       setTaskRemarks("");
+      setPercentage("");
     } catch (error) {
       // If the update fails, display an error message
       toast.error("Failed to update task details");
@@ -240,6 +244,8 @@ function PaneltyTask({ onClose, task, childProfileData }) {
                   setTasktime={setTasktime}
                   taskRemarks={taskRemarks}
                   setTaskRemarks={setTaskRemarks}
+                  percentage={percentage}
+                  setPercentage={setPercentage}
                 />
               </div>
             </form>

@@ -6,11 +6,13 @@ import CheatTags from "./CheatTags";
 import RegulateAccess from "../dragDrop/TaskCreationForum/RegulateAccess";
 function Penalty(props) {
   const [selectedOption, setSelectedOption] = useState("");
+
   const handleChange = (event) => {
     setSelectedOption(event.target.value); // Update the selected option when a radio button is clicked
     props.setStatus(event.target.value);
   };
-
+  // Generate percentage options for marking task
+  const percentageOptions = Array.from({ length: 11 }, (_, i) => i * 10);
   return (
     <div className="space-y-10 ">
       <fieldset>
@@ -177,6 +179,35 @@ function Penalty(props) {
               placeholder="Write a few sentences explaining why a task is being penalized or rewarded.."
               required
             />
+          </div>
+        </div>
+        <div className="col-span-full">
+          <label
+            htmlFor="about"
+            className="mt-3 block text-sm font-medium leading-6 text-gray-900"
+          >
+            Mark task
+          </label>
+          <p className="mt-1 text-sm leading-6 text-gray-600">
+            Add percentage for 0-100 range
+          </p>
+          <div className="mt-2 grid grid-cols-3 gap-3">
+            <select
+              id="markTask"
+              name="markTask"
+              value={props.percentage}
+              onChange={(event) =>
+                props.setPercentage(parseInt(event.target.value))
+              }
+              className="sc-guDLey eTsQIx mr-1 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+            >
+              {/* Generate dropdown options */}
+              {percentageOptions.map((percentage) => (
+                <option key={percentage} value={percentage}>
+                  {percentage}%
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </fieldset>
