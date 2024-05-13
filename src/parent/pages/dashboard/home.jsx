@@ -12,16 +12,16 @@ export function ParentHome() {
   const [tasks, setTasks] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState(null);
   const [searchInput, setSearchInput] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
-    loadChildProfileData();
-    loadTasks();
     const email = localStorage.getItem("email");
     const password = localStorage.getItem("password");
     if (!email && !password) {
       // Redirect to sign-in page if email or password is missing
       navigate("/sign-in");
     }
+    loadChildProfileData();
+    loadTasks();
   }, []);
 
   async function loadChildProfileData() {
