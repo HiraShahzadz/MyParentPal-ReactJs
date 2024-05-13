@@ -26,7 +26,6 @@ export function Profile() {
     password: "",
     dob: "",
     name: "",
-    image: "",
   });
   const [hiddenImages, setHiddenImages] = useState([]);
 
@@ -78,13 +77,14 @@ export function Profile() {
     // Convert image to Base64
     const reader = new FileReader();
     reader.onloadend = () => {
-      setFormData({
-        ...formData,
-        image: reader.result, // Store Base64 string
-      });
+        setFormData({
+            ...formData,
+            image: reader.result, // Store Base64 string
+        });
     };
     reader.readAsDataURL(selectedImage);
-  };
+};
+
   console.log("Image File:", image);
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -122,7 +122,7 @@ export function Profile() {
   }
   const myProfile = childProfile.find((profile) => profile);
 console.log();
-  async function update(event) {
+  async function save(event) {
     event.preventDefault();
     if (!email || !password || !name || !dob || !gender) {
       return toast.error("Please fill in all fields");
@@ -143,17 +143,27 @@ console.log();
       );
       return;
     }
-    try {
-      const base64Image = formData.image.split(",")[1];
-        await axios.post("http://localhost:8081/api/v1/profileUpdate/save/",
-        {
-          email: myProfile.email,
-          password: myProfile.password,
-          name: myProfile.name,
-          dob: myProfile.dob,
-         img: base64Image,
-        }
-      );
+    const base64Image = formData.image.split(",")[1];
+    console.log("manhoos",base64Image);
+    let url1 = "http://localhost:8081/api/v1/profile/save";
+    let url2 = "http://localhost:8081/api/v1/notify/ProfileNotification";
+    
+    let promise1 = axios.post(url1, {
+      email: myProfile.email,
+      password: myProfile.password,
+      name: myProfile.name,
+      dob: myProfile.dob,
+      img: base64Image,
+
+    });
+  
+    let promise2 = axios.post(url2, {
+    });
+   
+    try {  
+      Promise.all([promise1, promise2]);
+      toast.success("Your profile will be updated after parent's approval");
+   
     } catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);
@@ -251,7 +261,7 @@ console.log();
             {childProfile.map((childData)=> (
               <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
                 <div>
-                  <ProfileSection childData={childData} updatePhoto={update} />
+                  <ProfileSection childData={childData} updatePhoto={save} />
                 </div>
               </div>
               ))}
@@ -285,7 +295,7 @@ console.log();
                     tasksData
                       .filter(
                         (task) =>
-                          task.status === "Todo" &&
+                        
                           task.childId === myProfile.id
                       )
                       .map((task) => (

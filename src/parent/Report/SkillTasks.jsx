@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { GiftIcon } from "@heroicons/react/24/solid";
-import tasksData from "@/parent/data/tasksData";
-import TaskDetailsModal from "../ChildProfiles/Profile/TaskDetailsModal";
+import TaskDetailsAndReport from "./TaskDetailsAndReport";
 export function SkillTasks({ tasksData, childProfileData }) {
+  const [childName, setChildName] = useState(null);
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {
+    const child = childProfileData.find((child) => child.id === task.childId);
+    if (child) {
+      setChildName(child.name);
+    } else {
+      setChildName(null); // Reset childName if no child is found
+    }
     setTaskDetailsToShow(task);
   };
   const handleCloseTaskDetails = () => {
@@ -226,7 +232,7 @@ export function SkillTasks({ tasksData, childProfileData }) {
                                   }
                                   alt=""
                                 />
-                                <span className="ml-1 mt-1 text-xs text-black ">
+                                <span className="ml-1 mt-1 text-xs text-black">
                                   {child.name}
                                 </span>
                               </>
@@ -255,10 +261,10 @@ export function SkillTasks({ tasksData, childProfileData }) {
         </div>
 
         {taskDetailsToShow && (
-          <TaskDetailsModal
+          <TaskDetailsAndReport
+            childData={childName}
             selectedTaskDetails={taskDetailsToShow}
             handleCloseTaskDetails={handleCloseTaskDetails}
-            // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
       </div>

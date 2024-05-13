@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import {
   Typography,
   Alert,
@@ -16,10 +17,62 @@ import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 export function Notifications() {
   const [hiddenImages, setHiddenImages] = useState([]);
+  const [requestrs, setrequestrs] = useState([]);
+  const [childProfileData, setChildProfileData] = useState([]);
+
+  useEffect(() => {
+    loadNotifications();
+    loadChildProfileData();
+    const interval = setInterval(() => {
+      loadNotifications();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  async function loadNotifications(filter = "") {
+    try {
+      let url = "http://localhost:8081/api/v1/notify/getall";
+      if (filter === "latest") {
+        url += "?filter=latest";
+      }
+      const allrequests = await axios.get(url);
+      setrequestrs(allrequests.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  async function loadChildProfileData() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-child"
+      );
+      setChildProfileData(result.data);
+    } catch (error) {
+      console.error("Error fetching child profile data:", error);
+    }
+  }
+
+  const filteredNotifications = requestrs.filter((request) => {
+    if (request.ChildId !== undefined && request.ChildId !== null) {
+      return childProfileData.some((child) => child.id === request.ChildId);
+    } else if (request.childId !== undefined && request.childId !== null) {
+      return childProfileData.some((child) => child.id === request.childId);
+    } else {
+      console.log(
+        "ChildId or childId is undefined or null for request:",
+        request
+      );
+      return false;
+    }
+  });
 
   const handleImageClick = (index) => {
-    // Set the index of the clicked image to the hiddenImages state
-    setHiddenImages([...hiddenImages, index]);
+    setHiddenImages((prevHiddenImages) =>
+      prevHiddenImages.includes(index)
+        ? prevHiddenImages.filter((item) => item !== index)
+        : [...prevHiddenImages, index]
+    );
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -40,44 +93,63 @@ export function Notifications() {
           </Typography>
         </CardHeader>
         <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
-          {NotificationData.map(
-            ({ time, name, description, image, task }, index) => (
-              <div
-                href=""
-                className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
-                key={index}
-              >
-                <div className="flex">
-                  <img className="h-10 w-10 rounded-full" src={image} alt="" />
-                  <div className="ml-3">
-                    <span className="mr-1 font-medium text-black">{name}</span>
-                    <span className="text-black">{description}</span>
-                    <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
-                      {time}
-                    </span>
-                    <div className="mt-1.5 flex">
-                      <img className="h-3 w-3" src="/img/task.png" alt="" />
-                      <span className="ml-1 text-xs text-black hover:underline">
-                        {task}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                {!hiddenImages.includes(index) && (
+          {filteredNotifications
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .map(({ ChildId, ChildName, message, taskname, time }, index) => (
+              <>
+                {!message.startsWith("Your parent") && (
                   <div
-                    className="ml-auto flex items-end rounded-full border p-1 hover:border-MyPurple-400"
-                    onClick={() => handleImageClick(index)}
+                    href=""
+                    className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
+                    key={index}
                   >
-                    <img
-                      className="h-1.5 w-1.5 rounded-full"
-                      src="/img/purple.png"
-                      alt=""
-                    />
+                    <div className="flex">
+                      {childProfileData.map(
+                        (child) =>
+                          child.id === ChildId && (
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={
+                                child.img
+                                  ? `data:image/jpeg;base64,${child.img}`
+                                  : "/img/user.png"
+                              }
+                              alt=""
+                            />
+                          )
+                      )}
+                      <div className="ml-3">
+                        <span className="mr-1 font-medium text-black">
+                          {ChildName}
+                        </span>
+                        <span className="text-black">{message}</span>
+                        <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
+                          {time}
+                        </span>
+                        <div className="mt-1.5 flex">
+                          <img className="h-3 w-3" src="/img/task.png" alt="" />
+                          <span className="ml-1 text-xs text-black hover:underline">
+                            {taskname ? taskname : "Pending"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {!hiddenImages.includes(index) && (
+                      <div
+                        className="ml-auto flex items-end rounded-full border p-1 hover:border-MyPurple-400"
+                        onClick={() => handleImageClick(index)}
+                      >
+                        <img
+                          className="h-1.5 w-1.5 rounded-full"
+                          src="/img/userc.png"
+                          alt=""
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
-            )
-          )}
+              </>
+            ))}
         </CardBody>
       </Card>
       <Card>
@@ -92,21 +164,28 @@ export function Notifications() {
           </Typography>
         </CardHeader>
         <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
-          {RespondNotificationsData.map(
-            ({ time, name, description, image, task }, index) => (
+          {filteredNotifications
+            .filter((request) => request.taskdescription)
+            .map(({ ChildName, message, image, taskname, time }, index) => (
               <div className="items-center rounded-md p-3 text-sm hover:bg-blue-gray-50 sm:flex">
                 <div className="flex">
-                  <img className="h-10 w-10 rounded-full" src={image} alt="" />
+                  <img
+                    className="h-10 w-10 rounded-full"
+                    src="/img/userc.png"
+                    alt=""
+                  />
                   <div className="ml-3">
-                    <span className="mr-1 font-medium text-black">{name}</span>
-                    <span className="text-black">{description}</span>
+                    <span className="mr-1 font-medium text-black">
+                      {ChildName}
+                    </span>
+                    <span className="text-black">{message}</span>
                     <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
                       {time}
                     </span>
                     <div className="mt-1.5 flex">
                       <img className="h-3 w-3" src="/img/task.png" alt="" />
                       <span className="ml-1 text-xs text-black hover:underline">
-                        {task}
+                        {taskname}
                       </span>
                     </div>
                   </div>
@@ -121,8 +200,7 @@ export function Notifications() {
                 </div>
                 {showModal && <RespondNotifications onClose={setShowModal} />}
               </div>
-            )
-          )}
+            ))}
         </CardBody>
       </Card>
     </div>

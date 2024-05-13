@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import EditTask from "./EditTask"; // Import your EditTask component
+import ReassignTasks from "./ReassignTasks";
 
 function Task({ task, tasks, setTasks }) {
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -30,6 +31,9 @@ function Task({ task, tasks, setTasks }) {
   };
 
   const [showModal, setShowModal] = useState(false);
+  const handleReassignTaskClick = (task) => {
+    setShowModal(task);
+  };
   const [taskid, setId] = useState("");
   async function DeleteTask(taskid) {
     await axios.delete("http://localhost:8081/api/v1/task/delete/" + taskid);
@@ -44,6 +48,7 @@ function Task({ task, tasks, setTasks }) {
 
   const handleCloseTaskDetails = () => {
     setTaskDetailsToShow(null);
+    setShowModal(null);
   };
   const [childProfileData, setChildProfileData] = useState([]);
 
@@ -113,6 +118,21 @@ function Task({ task, tasks, setTasks }) {
               >
                 Edit
               </MenuItem>
+              <div className="border-b border-gray-900 border-opacity-10"></div>
+              <MenuItem
+                onClick={() =>
+                  handleReassignTaskClick({
+                    id: task.id,
+                    title: task.title,
+                    image: task.image,
+                    description: task.description,
+                    reward: task.points,
+                    details: task.details,
+                  })
+                }
+              >
+                Reassign
+              </MenuItem>
             </MenuList>
           </Menu>
         </div>
@@ -121,6 +141,14 @@ function Task({ task, tasks, setTasks }) {
           <EditTask
             task={task}
             selectedTaskDetails={taskDetailsToShow}
+            handleCloseTaskDetails={handleCloseTaskDetails}
+          />
+        )}
+
+        {showModal && (
+          <ReassignTasks
+            task={task}
+            selectedTaskDetails={showModal}
             handleCloseTaskDetails={handleCloseTaskDetails}
           />
         )}
