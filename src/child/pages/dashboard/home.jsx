@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import "../../styles/ChildHome.css"; // Reference your CSS file here
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import {
-  tasksData,
-} from "@/child/data";
+import { tasksData } from "@/child/data";
 import { GiftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
-import TaskDetailsModal from './TaskDetailsModel';
-import { isSameDay } from 'date-fns';
+import TaskDetailsModal from "./TaskDetailsModel";
+import { isSameDay } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import CompletedTaskDetailsModal from "./CompletedTaskDetailModel";
 import {
   Typography,
@@ -33,15 +32,24 @@ const icon = {
   className: "w-5 h-5 text-inherit",
 };
 export function Home() {
-  const [taskDetailsToShow, setTaskDetailsToShow] = useState(null);//taskdetailmodel
+  const navigate = useNavigate();
+  const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {
     setTaskDetailsToShow(task);
   };
-
+  useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
+  }, []);
   const handleCloseTaskDetails = () => {
     setTaskDetailsToShow(null);
   };
-  const [CompletedtaskDetailsToShow, setCompletedTaskDetailsToShow] = useState(null);//completedtaskdetailmodel
+  const [CompletedtaskDetailsToShow, setCompletedTaskDetailsToShow] =
+    useState(null); //completedtaskdetailmodel
   const handleSubmittedClick = (task) => {
     setCompletedTaskDetailsToShow(task);
   };
@@ -52,7 +60,7 @@ export function Home() {
   const [selectedTask, setSelectedTask] = useState("Assigned");
   const [showNextArrow, setShowNextArrow] = useState(false);
   const [visibleTasks, setVisibleTasks] = useState(3);
-  const [PresentTasks, setPresentTasks] = useState(2);//today task
+  const [PresentTasks, setPresentTasks] = useState(2); //today task
   const [todaysTasks, setTodaysTasks] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [tasksToShow, setTasksToShow] = useState([]);
@@ -75,20 +83,21 @@ export function Home() {
   };
   useEffect(() => {
     const today = new Date();
-    const filteredTasks = tasksData.filter(task => isSameDay(new Date(task.description), today));
+    const filteredTasks = tasksData.filter((task) =>
+      isSameDay(new Date(task.description), today)
+    );
     setTodaysTasks(filteredTasks);
   }, [date]);
-
 
   const showNext = () => {
     setShowNextArrow(true);
     const [progress, setProgress] = useState(0);
     useEffect(() => {
-      const id = setInterval = setInterval(() => {
+      const id = (setInterval = setInterval(() => {
         setProgress(math.random() * 100);
-      }, 3000);
+      }, 3000));
     }, []);
-  }
+  };
 
   const ViewMore = () => {
     setVisibleTasks(visibleTasks + 3);
@@ -108,60 +117,65 @@ export function Home() {
     const handleDiscardChanges = (confirmDiscard) => {
       if (confirmDiscard) {
         // Handle discarding changes here
-        console.log('Changes discarded');
+        console.log("Changes discarded");
       }
       setShow(false); // Close the modal
     };
 
     return (
       <div
-        className={`fixed top-0 left-0 z-50 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center ${show ? '' : 'hidden'
-          }`}
+        className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${
+          show ? "" : "hidden"
+        }`}
       >
-        <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-          <p className="text-gray-800 mb-4">Are you sure you want to discard changes?</p>
+        <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
+          <p className="mb-4 text-gray-800">
+            Are you sure you want to discard changes?
+          </p>
           <div className="flex justify-end">
             <button
               onClick={() => handleDiscardChanges(false)}
-              className="text-gray-500 hover:text-gray-700 mr-4"
+              className="mr-4 text-gray-500 hover:text-gray-700"
             >
               No
             </button>
             <button
               onClick={() => handleDiscardChanges(true)}
-              className="text-white bg-purple-400 hover:bg-purple-500 px-4 py-2 rounded-lg"
+              className="rounded-lg bg-purple-400 px-4 py-2 text-white hover:bg-purple-500"
             >
               Yes
             </button>
-
           </div>
         </div>
       </div>
     );
   }
-  document.addEventListener('DOMContentLoaded', function () {
-    const discardButton = document.querySelector('[data-modal-toggle="popup-modal"]');
-    const modal = document.getElementById('popup-modal');
-    const closeModalButton = modal.querySelector('[data-modal-hide="popup-modal"]');
+  document.addEventListener("DOMContentLoaded", function () {
+    const discardButton = document.querySelector(
+      '[data-modal-toggle="popup-modal"]'
+    );
+    const modal = document.getElementById("popup-modal");
+    const closeModalButton = modal.querySelector(
+      '[data-modal-hide="popup-modal"]'
+    );
 
-    discardButton.addEventListener('click', function () {
-      modal.classList.toggle('hidden');
+    discardButton.addEventListener("click", function () {
+      modal.classList.toggle("hidden");
     });
 
-    closeModalButton.addEventListener('click', function () {
-      modal.classList.add('hidden');
+    closeModalButton.addEventListener("click", function () {
+      modal.classList.add("hidden");
     });
   });
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const [showModal, setShowModal] = useState(false);
-
 
   // Show Submit Form
   const [SubmitFormDetails, setSubmitFormDetails] = useState(null);
@@ -178,40 +192,48 @@ export function Home() {
   return (
     <div>
       <div className="mt-3 flex flex-col lg:flex-row">
-        <div className="mb-2 lg:w-1/2 flex-1 lg:ml-1">
-          <div className="mr-2  mb-1 p-4 bg-white rounded-lg">
-            <div className="text-black text-left font-bold text-lg">
+        <div className="mb-2 flex-1 lg:ml-1 lg:w-1/2">
+          <div className="mb-1  mr-2 rounded-lg bg-white p-4">
+            <div className="text-left text-lg font-bold text-black">
               Timeline: Tasks Closing Soon
             </div>
 
             <div>
-              <p className="ml-2 mt-3 mb-3 text-gray-500 dark:text-gray-400">Complete your pending task</p>
-
+              <p className="mb-3 ml-2 mt-3 text-gray-500 dark:text-gray-400">
+                Complete your pending task
+              </p>
 
               {todaysTasks
                 .slice(0, PresentTasks)
                 .map(({ id, description, title, image, details, reward }) => (
-
-                  <div onClick={() => handleMoreInfoClick({
-                    id,
-                    title,
-                    image,
-                    description: description.toLocaleDateString(),
-                    reward,
-                    details
-                  })}
-                    key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
-
-                    <div className="flex"
-                    >
-                      <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
+                  <div
+                    onClick={() =>
+                      handleMoreInfoClick({
+                        id,
+                        title,
+                        image,
+                        description: description.toLocaleDateString(),
+                        reward,
+                        details,
+                      })
+                    }
+                    key={id}
+                    href=""
+                    className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                  >
+                    <div className="flex">
+                      <img
+                        className="mt-2 h-6 w-6 "
+                        src="/img/task.png"
+                        alt=""
+                      />
                       <div className="ml-3">
                         <span className="font-medium text-black">{title}</span>
                         <br></br>
-                        <span className="mt-3 text-black">Time Remaining: 4 hours</span>
-                        <span className="text-black">
-
+                        <span className="mt-3 text-black">
+                          Time Remaining: 4 hours
                         </span>
+                        <span className="text-black"></span>
                         <div className="mt-1.5 flex">
                           <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
                           <span className="ml-1 text-xs text-black ">
@@ -221,31 +243,24 @@ export function Home() {
                       </div>
                     </div>
 
-                    <div
-                      className="ml-auto flex items-end  hover:border-MyPurple-400"
-                    >
+                    <div className="ml-auto flex items-end  hover:border-MyPurple-400">
                       <Link to="/childDashboard/submitTask">
-                        <button
-                          className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                        >
+                        <button className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0">
                           Complete
                         </button>
                       </Link>
                     </div>
-
                   </div>
-                )
-                )
-              }
+                ))}
               <div className="mt-5 flex justify-center">
                 <a
-                  className="text-purple-500 hover:underline flex items-center"
+                  className="flex items-center text-purple-500 hover:underline"
                   onClick={PresentTasks === 2 ? More : Less}
                 >
-                  <span>
-                    {PresentTasks === 2 ? "View more" : "View less"}
-                  </span>
-                  {PresentTasks === 2 && <ChevronDownIcon className="h-4 w-4 ml-1" />}
+                  <span>{PresentTasks === 2 ? "View more" : "View less"}</span>
+                  {PresentTasks === 2 && (
+                    <ChevronDownIcon className="ml-1 h-4 w-4" />
+                  )}
                 </a>
               </div>
             </div>
@@ -253,79 +268,79 @@ export function Home() {
         </div>
       </div>
 
-      <div className=" mr-2  mb-4 p-4 bg-white rounded-lg">
-        <div className="text-black text-left font-bold text-lg">Summary</div>
+      <div className=" mb-4  mr-2 rounded-lg bg-white p-4">
+        <div className="text-left text-lg font-bold text-black">Summary</div>
         <br></br>
         <div className="task-titles">
           <div
-            className={`task-nav-item ${selectedTask === "Assigned" ? "active" : ""
-              }`}
+            className={`task-nav-item ${
+              selectedTask === "Assigned" ? "active" : ""
+            }`}
             onClick={() => setSelectedTask("Assigned")}
           >
             Assigned
           </div>
-          &nbsp;
-          &nbsp;
+          &nbsp; &nbsp;
           <div
-            className={`task-nav-item ${selectedTask === "Pending" ? "active" : ""
-              }`}
+            className={`task-nav-item ${
+              selectedTask === "Pending" ? "active" : ""
+            }`}
             onClick={() => setSelectedTask("Pending")}
           >
             Pending
           </div>
-          &nbsp;
-          &nbsp;
+          &nbsp; &nbsp;
           <div
-            className={`task-nav-item ${selectedTask === "Completed" ? "active" : ""
-              }`}
+            className={`task-nav-item ${
+              selectedTask === "Completed" ? "active" : ""
+            }`}
             onClick={() => setSelectedTask("Completed")}
           >
             Completed
           </div>
-          &nbsp;
-          &nbsp;
+          &nbsp; &nbsp;
           {showNextArrow && (
             <div className="next-arrow" onClick={showNext}>
               Next ▶
             </div>
           )}
-
-
         </div>
         {selectedTask === "Assigned" && (
-          <div className="ml-4 mr-4 mb-2">
+          <div className="mb-2 ml-4 mr-4">
             <br></br>
             <br></br>
-
-
 
             {tasksData
               .sort((a, b) => a.description - b.description)
               .slice(0, visibleTasks)
               .map(({ id, title, image, description, reward, details }) => (
-
                 <div
-                  onClick={() => handleMoreInfoClick({
-                    id,
-                    title,
-                    image,
-                    description: description.toLocaleDateString(),
-                    reward,
-                    details,
-                  })}
-                  key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
-
+                  onClick={() =>
+                    handleMoreInfoClick({
+                      id,
+                      title,
+                      image,
+                      description: description.toLocaleDateString(),
+                      reward,
+                      details,
+                    })
+                  }
+                  key={id}
+                  href=""
+                  className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                >
                   <div className="flex">
                     <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
                     <div className="ml-3">
                       <span className="font-medium text-black">{title}</span>
                       <br></br>
-                     <div className="mt-2"></div>
-                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
-                       Time Remaining: 1 day 3 hours
-                      <span className="text-black">
-
+                      <div className="mt-2"></div>
+                      <span className="mb-3 mt-2  text-black">
+                        Submission date: {description.toLocaleDateString()}
                       </span>
+                      <br></br>
+                      Time Remaining: 1 day 3 hours
+                      <span className="text-black"></span>
                       <div className="mt-1.5 flex">
                         <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
                         <span className="ml-1 text-xs text-black ">
@@ -335,81 +350,76 @@ export function Home() {
                       </div>
                     </div>
                   </div>
-                  <div
-                    className="ml-auto flex items-end  hover:border-MyPurple-400"
-                  >
-                  
+                  <div className="ml-auto flex items-end  hover:border-MyPurple-400">
                     <button
-                      onClick={() => handleMoreInfoClick({
-                        id,
-                        title,
-                        image,
-                        description: description.toLocaleDateString(),
-                        reward,
-                        details
-                      })}
-                      className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                      onClick={() =>
+                        handleMoreInfoClick({
+                          id,
+                          title,
+                          image,
+                          description: description.toLocaleDateString(),
+                          reward,
+                          details,
+                        })
+                      }
+                      className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
                     >
                       more info
                     </button>
                   </div>
-
                 </div>
-              )
-              )}
+              ))}
 
             <div className="mt-5 flex justify-center">
               <a
-                className="text-purple-500 hover:underline flex items-center"
+                className="flex items-center text-purple-500 hover:underline"
                 onClick={visibleTasks === 3 ? loadMore : loadLess}
               >
-                <span>
-                  {visibleTasks === 3 ? "View more" : "View less"}
-                </span>
-                {visibleTasks === 3 && <ChevronDownIcon className="h-4 w-4 ml-1" />}
+                <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
+                {visibleTasks === 3 && (
+                  <ChevronDownIcon className="ml-1 h-4 w-4" />
+                )}
               </a>
             </div>
-
-
-
-
           </div>
         )}
 
         {selectedTask === "Pending" && (
-            <div className="ml-4 mr-4 mb-2">
+          <div className="mb-2 ml-4 mr-4">
             <br></br>
             <br></br>
-
-
 
             {tasksData
               .sort((a, b) => a.description - b.description)
               .slice(0, visibleTasks)
               .map(({ id, title, image, description, reward, details }) => (
-
                 <div
-                  onClick={() => handleMoreInfoClick({
-                    id,
-                    title,
-                    image,
-                    description: description.toLocaleDateString(),
-                    reward,
-                    details,
-                  })}
-                  key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
-
+                  onClick={() =>
+                    handleMoreInfoClick({
+                      id,
+                      title,
+                      image,
+                      description: description.toLocaleDateString(),
+                      reward,
+                      details,
+                    })
+                  }
+                  key={id}
+                  href=""
+                  className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                >
                   <div className="flex">
                     <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
                     <div className="ml-3">
                       <span className="font-medium text-black">{title}</span>
                       <br></br>
-                     <div className="mt-2"></div>
-                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
-                       Time Remaining: 1 day 3 hours
-                      <span className="text-black">
-
+                      <div className="mt-2"></div>
+                      <span className="mb-3 mt-2  text-black">
+                        Submission date: {description.toLocaleDateString()}
                       </span>
+                      <br></br>
+                      Time Remaining: 1 day 3 hours
+                      <span className="text-black"></span>
                       <div className="mt-1.5 flex">
                         <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
                         <span className="ml-1 text-xs text-black ">
@@ -419,44 +429,37 @@ export function Home() {
                       </div>
                     </div>
                   </div>
-                  <div
-                    className="ml-auto flex items-end  hover:border-MyPurple-400"
-                  >
-                  
+                  <div className="ml-auto flex items-end  hover:border-MyPurple-400">
                     <button
-                      onClick={() => handleMoreInfoClick({
-                        id,
-                        title,
-                        image,
-                        description: description.toLocaleDateString(),
-                        reward,
-                        details
-                      })}
-                      className="mt-14 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+                      onClick={() =>
+                        handleMoreInfoClick({
+                          id,
+                          title,
+                          image,
+                          description: description.toLocaleDateString(),
+                          reward,
+                          details,
+                        })
+                      }
+                      className="mb-2 mt-14 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
                     >
                       more info
                     </button>
                   </div>
-
                 </div>
-              )
-              )}
+              ))}
 
             <div className="mt-5 flex justify-center">
               <a
-                className="text-purple-500 hover:underline flex items-center"
+                className="flex items-center text-purple-500 hover:underline"
                 onClick={visibleTasks === 3 ? loadMore : loadLess}
               >
-                <span>
-                  {visibleTasks === 3 ? "View more" : "View less"}
-                </span>
-                {visibleTasks === 3 && <ChevronDownIcon className="h-4 w-4 ml-1" />}
+                <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
+                {visibleTasks === 3 && (
+                  <ChevronDownIcon className="ml-1 h-4 w-4" />
+                )}
               </a>
             </div>
-
-
-
-
           </div>
         )}
 
@@ -466,76 +469,72 @@ export function Home() {
             <br></br>
 
             <div>
-
               {tasksData
                 .sort((a, b) => a.description - b.description)
                 .slice(0, visibleTasks)
                 .map(({ id, title, image, description, reward, details }) => (
-
                   <div
-                    onClick={() => handleSubmittedClick({
-                      id,
-                      title,
-                      image,
-                      description: description.toLocaleDateString(),
-                      reward,
-                      details,
-                    })}
-                         key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
-
-                  <div className="flex">
-                    <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
-                    <div className="ml-3">
-                      <span className="font-medium text-black">{title}</span>
-                      <br></br>
-                     <div className="mt-2"></div>
-                      <span className="mt-2 mb-3  text-black">Submission date: {description.toLocaleDateString()}</span><br></br>
-                      
-                      <span className="text-black">
-
-                      </span>
-                      <div className="mt-1.5 flex">
-                        <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-                        <span className="ml-1 text-xs text-black ">
-                          Reward: {reward}
+                    onClick={() =>
+                      handleSubmittedClick({
+                        id,
+                        title,
+                        image,
+                        description: description.toLocaleDateString(),
+                        reward,
+                        details,
+                      })
+                    }
+                    key={id}
+                    href=""
+                    className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                  >
+                    <div className="flex">
+                      <img
+                        className="mt-2 h-6 w-6 "
+                        src="/img/task.png"
+                        alt=""
+                      />
+                      <div className="ml-3">
+                        <span className="font-medium text-black">{title}</span>
+                        <br></br>
+                        <div className="mt-2"></div>
+                        <span className="mb-3 mt-2  text-black">
+                          Submission date: {description.toLocaleDateString()}
                         </span>
                         <br></br>
+
+                        <span className="text-black"></span>
+                        <div className="mt-1.5 flex">
+                          <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                          <span className="ml-1 text-xs text-black ">
+                            Reward: {reward}
+                          </span>
+                          <br></br>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    className="ml-auto flex items-end  hover:border-MyPurple-400"
-                  >
-                  
-                  <button
-                        className="mt-14 text-white bg-gray-400  font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
-                      >
+                    <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                      <button className="mb-2 mt-14 rounded-lg  bg-gray-400 px-5 py-2.5 text-center text-sm font-medium text-white dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0">
                         Submitted
                       </button>
+                    </div>
                   </div>
+                ))}
 
-                </div>
-              )
-              )}
-
-           
               <div className="mt-5 flex justify-center">
                 <a
-                  className="text-purple-500 hover:underline flex items-center"
+                  className="flex items-center text-purple-500 hover:underline"
                   onClick={visibleTasks === 3 ? loadMore : loadLess}
                 >
-                  <span>
-                    {visibleTasks === 3 ? "View more" : "View less"}
-                  </span>
-                  {visibleTasks === 3 && <ChevronDownIcon className="h-4 w-4 ml-1" />}
+                  <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
+                  {visibleTasks === 3 && (
+                    <ChevronDownIcon className="ml-1 h-4 w-4" />
+                  )}
                 </a>
               </div>
-
             </div>
-
           </div>
         )}
-
 
         {selectedTask === "Penality" && (
           <div>
@@ -549,23 +548,19 @@ export function Home() {
           <TaskDetailsModal
             selectedTaskDetails={taskDetailsToShow}
             handleCloseTaskDetails={handleCloseTaskDetails}
-          // handleSubmitTask={/* Pass your handleSubmitTask function here */}
+            // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
         {CompletedtaskDetailsToShow && (
           <CompletedTaskDetailsModal
             selectedTaskDetails={CompletedtaskDetailsToShow}
             handleCloseCompletedTaskDetails={handleCloseCompletedTaskDetails}
-          // handleSubmitTask={/* Pass your handleSubmitTask function here */}
+            // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
-
       </div>
-
     </div>
-
   );
 }
 
 export default Home;
-

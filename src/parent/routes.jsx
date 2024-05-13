@@ -8,6 +8,7 @@ import {
   PlusCircleIcon,
   UserGroupIcon,
   UserPlusIcon,
+  ArrowLeftEndOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 import { Button } from "@material-ui/core";
 
@@ -27,14 +28,10 @@ import TaskRequests from "./requests/TaskRequests";
 const icon = {
   className: "w-5 h-5 text-inherit",
 };
-const clearLocalStorage = () => {
-  localStorage.removeItem("email");
-  localStorage.removeItem("password"); // Clear all items from local storage
-  console.log("inside the function i am");
-};
 
 export const routes = [
   {
+    title: "",
     layout: "parentDashboard/parent",
     pages: [
       {
@@ -87,18 +84,6 @@ export const routes = [
         name: "Child Report",
         path: "/report",
         element: <ChildReport />,
-      },
-    ],
-  },
-  {
-    title: "auth pages",
-    layout: "/localhost:5173",
-    pages: [
-      {
-        icon: <ArrowLeftOnRectangleIcon {...icon} />,
-        name: "Logout",
-        path: "/sign-in",
-        element: <SignIn onClick={clearLocalStorage} />,
       },
     ],
   },

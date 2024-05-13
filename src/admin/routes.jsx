@@ -15,6 +15,7 @@ const icon = {
 
 export const routes = [
   {
+    title: "",
     layout: "dashboard",
     pages: [
       {
@@ -29,16 +30,6 @@ export const routes = [
         name: "Feedback and Queries",
         path: "/feedback",
         element: <Tables />,
-      },
-    ],
-  },
-  {
-    pages: [
-      {
-        icon: <ArrowLeftOnRectangleIcon {...icon} />,
-        name: "Log out",
-        path: "/sign-in",
-        element: <SignIn />,
       },
     ],
   },

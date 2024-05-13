@@ -16,9 +16,8 @@ export function ParentHome() {
     if (!email && !password) {
       // Redirect to sign-in page if email or password is missing
       navigate("/sign-in");
-    } else {
-      (async () => await Load())();
     }
+    (async () => await Load())();
   }, []);
 
   async function Load() {
@@ -27,25 +26,11 @@ export function ParentHome() {
     console.log(result.data);
   }
   console.log("tasks", tasks);
-  const handleLogout = () => {
-    // Clear email and password from localStorage
-    localStorage.removeItem("email");
-    localStorage.removeItem("password");
-    // Redirect to sign-in page
-    navigate("/sign-in");
-  };
 
   return (
     <div className="mt-6">
       <DndProvider backend={HTML5Backend}>
         <Toaster />
-        <Button
-          fullWidth
-          className="bg-MyPurple-400 shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
-          onClick={handleLogout}
-        >
-          LOG OUT
-        </Button>
 
         <div className="relative mt-4 grid grid-cols-1 gap-x-2 gap-y-3 rounded-md sm:grid-cols-8">
           <div className="relative sm:col-span-2 sm:col-start-1">

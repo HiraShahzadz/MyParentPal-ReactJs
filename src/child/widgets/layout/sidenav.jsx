@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { Link, NavLink } from "react-router-dom";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/solid";
 import {
   Avatar,
   Button,
@@ -17,7 +18,13 @@ export function Sidenav({ brandImg, brandName, routes }) {
     white: "bg-white shadow-lg",
     transparent: "bg-transparent",
   };
-
+  const handleLogout = () => {
+    // Clear email and password from localStorage
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
+    // Redirect to sign-in page
+    navigate("/sign-in");
+  };
   return (
     <aside
       className={`${sidenavTypes[sidenavType]} ${
@@ -91,6 +98,33 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 </NavLink>
               </li>
             ))}
+
+            {title === "" && (
+              <li>
+                <Link
+                  className="flex items-center gap-4 rounded-lg bg-transparent px-4 py-3 capitalize text-white hover:bg-white/10" // Apply bg-transparent class
+                  onClick={handleLogout}
+                  fullWidth
+                  style={{
+                    boxShadow: "none", // Set box shadow to none by default
+                    transition: "box-shadow 0.2s", // Add transition for smooth effect
+                  }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.boxShadow = "none")
+                  } // Remove box shadow on hover
+                  onMouseOut={(e) => (e.currentTarget.style.boxShadow = "none")} // Restore box shadow after hover
+                >
+                  <ArrowLeftOnRectangleIcon className="h-5 w-5 text-white" />{" "}
+                  {/* Ensure icon color is white */}
+                  <Typography
+                    color="inherit"
+                    className="font-medium capitalize"
+                  >
+                    Logout
+                  </Typography>
+                </Link>
+              </li>
+            )}
           </ul>
         ))}
       </div>

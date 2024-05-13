@@ -25,6 +25,7 @@ const icon = {
 
 export const routes = [
   {
+    title: "",
     layout: "childDashboard",
     pages: [
       {
@@ -68,18 +69,6 @@ export const routes = [
         name: "Submit Task",
         path: "/submitTask",
         element: <SubmitTask />,
-      },
-    ],
-  },
-  {
-    title: "auth pages",
-    layout: "auth",
-    pages: [
-      {
-        icon: <ArrowLeftOnRectangleIcon {...icon} />,
-        name: "Logout",
-        path: "/sign-in",
-        element: <SignIn />,
       },
     ],
   },
