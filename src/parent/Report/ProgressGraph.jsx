@@ -171,58 +171,8 @@ const ProgressGraph = ({
               </dd>
             </dl>
           </div>
-
-          <div
-            id="more-details"
-            class="hidden border-t border-gray-200 dark:border-gray-600"
-          >
-            <dl class="flex items-center justify-between">
-              <dt class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                Average task completion rate:
-              </dt>
-              <dd class="inline-flex items-center rounded-md bg-[#b089be] px-2.5 py-1 text-xs font-medium text-white dark:bg-green-900 dark:text-green-300">
-                <svg
-                  class="me-1.5 h-2.5 w-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13V1m0 0L1 5m4-4 4 4"
-                  />
-                </svg>{" "}
-                57%
-              </dd>
-            </dl>
-            <dl class="flex items-center justify-between">
-              <dt class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                Days until sprint ends:
-              </dt>
-              <dd class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-800 dark:bg-gray-600 dark:text-gray-300">
-                13 days
-              </dd>
-            </dl>
-            <dl class="flex items-center justify-between">
-              <dt class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                Next meeting:
-              </dt>
-              <dd class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-800 dark:bg-gray-600 dark:text-gray-300">
-                Thursday
-              </dd>
-            </dl>
-          </div>
         </div>
-
         <div class="pb-2" id="radial-chart"></div>
-
-        <div class="grid grid-cols-1 items-center justify-between">
-          <div class="flex items-center justify-between pt-2"></div>
-        </div>
       </div>
     </div>
   );

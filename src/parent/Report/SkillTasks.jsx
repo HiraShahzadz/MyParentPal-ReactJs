@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { GiftIcon } from "@heroicons/react/24/solid";
-import tasksData from "@/parent/data/tasksData";
-import TaskDetailsModal from "../ChildProfiles/Profile/TaskDetailsModal";
+import TaskDetailsAndReport from "./TaskDetailsAndReport";
 export function SkillTasks({ tasksData, childProfileData }) {
   const [childName, setChildName] = useState(null);
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
@@ -262,11 +261,10 @@ export function SkillTasks({ tasksData, childProfileData }) {
         </div>
 
         {taskDetailsToShow && (
-          <TaskDetailsModal
+          <TaskDetailsAndReport
             childData={childName}
             selectedTaskDetails={taskDetailsToShow}
             handleCloseTaskDetails={handleCloseTaskDetails}
-            // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
       </div>

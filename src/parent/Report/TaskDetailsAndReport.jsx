@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import TaskPercentage from "./TaskPercentage";
 
-const TaskDetailsModal = ({
+const TaskDetailsAndReport = ({
   childData,
   selectedTaskDetails,
   handleCloseTaskDetails,
@@ -79,7 +80,11 @@ const TaskDetailsModal = ({
             {" "}
             {selectedTaskDetails.taskdescription}
           </p>
-
+          <div>
+            <div className="border-b">
+              <TaskPercentage />
+            </div>
+          </div>
           <div className="relative mt-2 overflow-x-auto rounded-lg">
             <table className="w-full rounded-lg border border-gray-100 text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
               <thead className="bg-[#b089be] text-xs uppercase text-gray-700 dark:bg-gray-100 dark:text-gray-400">
@@ -159,4 +164,4 @@ const TaskDetailsModal = ({
   );
 };
 
-export default TaskDetailsModal;
+export default TaskDetailsAndReport;
