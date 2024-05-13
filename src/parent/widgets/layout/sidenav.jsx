@@ -25,7 +25,7 @@ export function Sidenav({ brandImg, routes }) {
     <aside
       className={`${sidenavTypes[sidenavType]} ${
         openSidenav ? "translate-x-0" : "-translate-x-80"
-      } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0`}
+      }   fixed inset-0 z-50 my-1 ml-1 w-72 rounded-xl transition-transform duration-300 xl:translate-x-0`}
     >
       <div
         className={`relative border-b ${
@@ -52,7 +52,7 @@ export function Sidenav({ brandImg, routes }) {
           <XMarkIcon strokeWidth={2.5} className="h-5 w-5 text-white" />
         </IconButton>
       </div>
-      <div className="m-4">
+      <div className="m-4 flex h-5/6 flex-col gap-4 overflow-y-auto p-3  lg:max-h-full">
         {routes.map(({ layout, title, pages }, key) => (
           <ul key={key} className="mb-4 flex flex-col gap-1">
             {title && (
