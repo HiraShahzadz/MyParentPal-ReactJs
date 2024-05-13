@@ -7,6 +7,7 @@ const ProgressGraph = ({
   completedCount,
   reviewedCount,
   rewardedCount,
+  PenalizedCount,
   taskPercentages,
 }) => {
   const chartRef = useRef(null);
@@ -18,9 +19,10 @@ const ProgressGraph = ({
         taskPercentages.Completed,
         taskPercentages.Reviewed,
         taskPercentages.Rewarded,
+        taskPercentages.Penalty,
       ],
 
-      colors: ["#b089be", "#5bb85e", "#FD8552", "#4E9AD0"],
+      colors: ["#b089be", "#5bb85e", "#FD8552", "#4E9AD0", "#f53e57"],
       chart: {
         height: "380px",
         width: "100%",
@@ -53,7 +55,7 @@ const ProgressGraph = ({
           bottom: -20,
         },
       },
-      labels: ["Todo", "Done", "Reviewed", "Rewarded"],
+      labels: ["Todo", "Done", "Reviewed", "Rewarded", "Penalized"],
       legend: {
         show: true,
         position: "bottom",
@@ -119,9 +121,9 @@ const ProgressGraph = ({
     <div className="flex items-center justify-center">
       <div class="w-full max-w-md rounded-lg bg-white dark:bg-gray-800 ">
         <div class="rounded-lg bg-white p-3 dark:bg-gray-700">
-          <div class="grid grid-cols-4 gap-3">
-            <dl class="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#b089be] dark:bg-gray-600">
-              <dt class="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-MyPurple-400 dark:bg-gray-500 dark:text-white">
+          <div class="grid grid-cols-3 gap-3">
+            <dl class="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#47d0b7] dark:bg-gray-600">
+              <dt class="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-[#47d0b7] dark:bg-gray-500 dark:text-white">
                 {totalTasks}
               </dt>
               <dd class="text-sm font-medium text-white dark:text-white">
@@ -158,6 +160,14 @@ const ProgressGraph = ({
               </dt>
               <dd class="text-sm font-medium text-white dark:text-blue-300">
                 Rewarded
+              </dd>
+            </dl>
+            <dl class="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#f53e57] dark:bg-gray-600">
+              <dt class="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-[#f53e57] dark:bg-gray-500 dark:text-white">
+                {PenalizedCount}
+              </dt>
+              <dd class="text-sm font-medium text-white dark:text-white">
+                Penalized
               </dd>
             </dl>
           </div>

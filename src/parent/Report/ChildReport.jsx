@@ -17,6 +17,7 @@ export function ChildReport() {
     Completed: 0,
     Reviewed: 0,
     Rewarded: 0,
+    Penalty: 0, // New state for penalty tasks
   });
   const [totalTasks, setTotalTasks] = useState(0);
   const [taskPercentages, setTaskPercentages] = useState({
@@ -24,6 +25,7 @@ export function ChildReport() {
     Completed: 0,
     Reviewed: 0,
     Rewarded: 0,
+    Penalty: 0,
   });
 
   useEffect(() => {
@@ -95,10 +97,14 @@ export function ChildReport() {
       Completed: 0,
       Reviewed: 0,
       Rewarded: 0,
+      Penalty: 0, // Initialize penalty count
     };
 
     filteredTasks.forEach((task) => {
       counts[task.status]++;
+      if (task.taskTypeIs === "Penalty") {
+        counts.Penalty++; // Increment penalty count
+      }
     });
 
     setTaskCounts(counts);
@@ -119,6 +125,7 @@ export function ChildReport() {
         Completed: 0,
         Reviewed: 0,
         Rewarded: 0,
+        Penalty: 0,
       });
     } else {
       const percentages = {
@@ -126,6 +133,7 @@ export function ChildReport() {
         Completed: (taskCounts.Completed * 100) / totalTasks,
         Reviewed: (taskCounts.Reviewed * 100) / totalTasks,
         Rewarded: (taskCounts.Rewarded * 100) / totalTasks,
+        Penalty: (taskCounts.Penalty * 100) / totalTasks, // Calculate penalty percentage
       };
       setTaskPercentages(percentages);
     }
@@ -165,12 +173,14 @@ export function ChildReport() {
               completedCount={taskCounts.Completed}
               reviewedCount={taskCounts.Reviewed}
               rewardedCount={taskCounts.Rewarded}
+              PenalizedCount={taskCounts.Penalty}
               totalTasks={totalTasks}
               taskPercentages={{
                 Todo: taskPercentages.Todo.toFixed(2),
                 Completed: taskPercentages.Completed.toFixed(2),
                 Reviewed: taskPercentages.Reviewed.toFixed(2),
                 Rewarded: taskPercentages.Rewarded.toFixed(2),
+                Penalty: taskPercentages.Penalty.toFixed(2), // Pass penalty percentage
               }}
             />
           </div>
@@ -183,25 +193,7 @@ export function ChildReport() {
                 Task Summary
               </div>
             </div>
-            {/* Display task counts */}
-            <div>
-              <p>Total Tasks: {totalTasks}</p>
-              <p>
-                Todo: {taskCounts.Todo} ({taskPercentages.Todo.toFixed(2)}%)
-              </p>
-              <p>
-                Completed: {taskCounts.Completed} (
-                {taskPercentages.Completed.toFixed(2)}%)
-              </p>
-              <p>
-                Reviewed: {taskCounts.Reviewed} (
-                {taskPercentages.Reviewed.toFixed(2)}%)
-              </p>
-              <p>
-                Rewarded: {taskCounts.Rewarded} (
-                {taskPercentages.Rewarded.toFixed(2)}%)
-              </p>
-            </div>
+
             <SkillTasks
               childProfileData={childProfileData}
               tasksData={filteredTasks}
