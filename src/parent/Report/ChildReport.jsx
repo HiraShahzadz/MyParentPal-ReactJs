@@ -35,7 +35,7 @@ export function ChildReport() {
 
   useEffect(() => {
     updateFilteredTasks();
-  }, [selectedChildId, Tasktag, tasksData]);
+  }, [selectedChildId, Tasktag, tasksData, childProfileData]);
 
   useEffect(() => {
     updateTaskCounts();
@@ -73,19 +73,13 @@ export function ChildReport() {
 
   const updateFilteredTasks = () => {
     const filtered = tasksData.filter((task) => {
-      if (selectedChildId !== null && Tasktag !== null) {
-        return (
-          task.childId === selectedChildId &&
-          task.tasktag &&
-          task.tasktag.includes(Tasktag)
-        );
-      } else if (selectedChildId !== null) {
-        return task.childId === selectedChildId;
-      } else if (Tasktag !== null) {
-        return task.tasktag && task.tasktag.includes(Tasktag);
-      } else {
-        return true;
-      }
+      // Check if task's childId exists in childProfileData's id list
+      const childIds = childProfileData.map((child) => child.id);
+      return (
+        childIds.includes(task.childId) &&
+        (selectedChildId === null || task.childId === selectedChildId) && // Check for selected child
+        (Tasktag === null || (task.tasktag && task.tasktag.includes(Tasktag))) // Check for selected tag
+      );
     });
 
     setFilteredTasks(filtered);
@@ -111,10 +105,11 @@ export function ChildReport() {
   };
 
   const calculateTotalTasks = () => {
-    const total = Object.values(taskCounts).reduce(
-      (acc, count) => acc + count,
-      0
-    );
+    const total =
+      taskCounts.Todo +
+      taskCounts.Completed +
+      taskCounts.Reviewed +
+      taskCounts.Rewarded;
     setTotalTasks(total);
   };
 

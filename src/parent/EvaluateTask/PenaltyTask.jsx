@@ -78,7 +78,6 @@ function PaneltyTask({ onClose, task, childProfileData }) {
           taskId: task._id,
           cheatTags,
           taskRemarks: taskRemarks,
-          percentage: percentage,
         });
         toast.success("Task Created");
         setTaskname("");
