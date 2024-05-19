@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import ApexCharts from "apexcharts";
-
+import { useNavigate } from "react-router-dom";
 const ProgressGraph = () => {
   const chartRef = useRef(null);
-
+  
   const getChartOptions = () => {
     return {
       series: [40, 85, 80, 95],

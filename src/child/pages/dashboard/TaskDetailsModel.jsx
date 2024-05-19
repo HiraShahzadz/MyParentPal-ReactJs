@@ -7,7 +7,10 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
+
 const TaskDetailsModal = ({ selectedTaskDetails, handleCloseTaskDetails, handleSubmitTask }) => {
+
+  
     const [timeRemaining, setTimeRemaining] = useState(null);
 
     useEffect(() => {

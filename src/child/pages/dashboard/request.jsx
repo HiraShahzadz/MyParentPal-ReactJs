@@ -35,9 +35,9 @@ export function Reward_Request() {
   const [taskdescription, settaskdescription] = useState("");
   const [desiredreward, setdesiredreward] = useState("");
   const [rewarddescription, setrewarddescription] = useState("");
-  
+
   const [requestrs, setrequestrs] = useState([]);
- 
+
   useEffect(() => {
     Load();
   }, []);
@@ -54,36 +54,36 @@ export function Reward_Request() {
       console.error("Error fetching data:", error);
     }
   }
-  
-  
+
+
   async function save(event) {
     event.preventDefault();
-  
+
     if (!taskname || !taskdescription || !desiredreward || !rewarddescription) {
       return toast.error("Please fill in all fields");
     }
-  
+
     let url1 = "http://localhost:8081/api/v1/Reward_Request/save";
     let url2 = "http://localhost:8081/api/v1/notify/sendRequestNotification";
-  
+
     let promise1 = axios.post(url1, {
       taskname: taskname,
       taskdescription: taskdescription,
       desiredreward: desiredreward,
       rewarddescription: rewarddescription
     });
-  
+
     let promise2 = axios.post(url2, {
       taskname: taskname,
       taskdescription: taskdescription,
       desiredreward: desiredreward,
       rewarddescription: rewarddescription
     });
-  
+
     try {
       // Send both requests simultaneously using Promise.all()
-       Promise.all([promise1, promise2]);
-  
+      Promise.all([promise1, promise2]);
+
       toast.success("Request Sent Successfully");
       settaskname("");
       settaskdescription("");
@@ -98,12 +98,29 @@ export function Reward_Request() {
       } else {
         console.error("Other Error:", err.message);
       }
-  
+
       toast.error("Failed to send request");
     }
   }
-  
 
+  const [childProfile, setChildProfile] = useState([]);
+  useEffect(() => {
+    loadParentProfile();
+  }, []);
+  async function loadParentProfile() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/getChildId"
+      );
+      setChildProfile(result.data);
+      console.log("child profile:", result.data);
+    } catch (error) {
+      console.error("Error loading parentProfile:", error);
+
+    }
+  }
+  const myProfile = childProfile.find((profile) => profile);
+  console.log();
 
   const images = [
     "/img/re02.png",
@@ -273,25 +290,21 @@ export function Reward_Request() {
               All Requests
             </div>
             <div
-              className={`text-sm font-medium text-center text-purple-500  mt-3 mb-2 ml-3 req-nav-item ${selectedTask === "Approved Requests" ? "active" : ""} p-2 cursor-pointer`}
-              onClick={() => setSelectedTask("Approved Requests")}
+              className={`text-sm font-medium text-center text-purple-500  mt-3 mb-2 ml-3 req-nav-item ${selectedTask === "Accepted" ? "active" : ""} p-2 cursor-pointer`}
+              onClick={() => setSelectedTask("Accepted")}
             >
-              Approved Requests
+              Accepted Requests
             </div>
             <div
-              className={`text-sm font-medium text-center text-purple-500 mt-3 mb-2 ml-3 req-nav-item ${selectedTask === "Rejected Requests" ? "active" : ""} p-2 cursor-pointer`}
-              onClick={() => setSelectedTask("Rejected Requests")}
+              className={`text-sm font-medium text-center text-purple-500 mt-3 mb-2 ml-3 req-nav-item ${selectedTask === "Rejected" ? "active" : ""} p-2 cursor-pointer`}
+              onClick={() => setSelectedTask("Rejected")}
             >
               Rejected Requests
             </div>
           </div>
           <div>
-          <div
-              className='text-sm font-medium text-center text-purple-500 mt-3 ml-3 req-nav-item'
-             >
-          <DropDownMenu onOptionSelected={(option) => Load(option.value)} />
+          
           </div>
-</div>
         </div>
         {selectedTask === "All Requests" && (
 
@@ -317,58 +330,63 @@ export function Reward_Request() {
                 </tr>
               </thead>
               <tbody>
-              {requestrs
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
-          .slice(0, displayedRequests)
-          .map((request) => (
-            <tr key={request.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {request.taskdescription}
-              </th>
-              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {request.taskname}
-              </td>
-              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {request.desiredreward}
-              </td>
-              <td className="px-6 py-4">
-                {request.status}
-              </td>
-              <td className="px-6 py-4">
-                {request.date}
-              </td>
-            </tr>
-          ))}
-      </tbody>
-      {!showAllRequests && requestrs.length > displayedRequests && (
-        <tfoot className="bg-white">
-          <tr>
-            <td colSpan="5" className="text-center py-4">
-              <button onClick={handleShowMore} className="bg-[#b089be] text-white px-4 py-2 rounded-md hover:bg-purple-400">
-                Show More
-              </button>
-            </td>
-          </tr>
-        </tfoot>
-      )}
-      {showAllRequests && (
-        <tfoot className="bg-white">
-          <tr>
-            <td colSpan="5" className="text-center py-4">
-              <button onClick={handleShowLess} className="bg-[#b089be] text-white px-4 py-2 rounded-md hover:bg-purple-400">
-                Show Less
-              </button>
-            </td>
-          </tr>
-        </tfoot>
-      )}
-    
+                {myProfile && (
+                  <>
+                    {requestrs
+                      .filter((request) => request.childId === myProfile.id)
+                      .sort((a, b) => new Date(b.date) - new Date(a.date))
+                      .slice(0, displayedRequests)
+                      .map((request) => (
+                        <tr key={request.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.taskdescription}
+                          </th>
+                          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.taskname}
+                          </td>
+                          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.desiredreward}
+                          </td>
+                          <td className="px-6 py-4">
+                            {request.status}
+                          </td>
+                          <td className="px-6 py-4">
+                            {request.date}
+                          </td>
+                        </tr>
+                      ))}
+                  </>
+                )}
+              </tbody>
+              {!showAllRequests && requestrs.length > displayedRequests && (
+                <tfoot className="bg-white">
+                  <tr>
+                    <td colSpan="5" className="text-center py-4">
+                      <button onClick={handleShowMore} className="bg-[#b089be] text-white px-4 py-2 rounded-md hover:bg-purple-400">
+                        Show More
+                      </button>
+                    </td>
+                  </tr>
+                </tfoot>
+              )}
+              {showAllRequests && (
+                <tfoot className="bg-white">
+                  <tr>
+                    <td colSpan="5" className="text-center py-4">
+                      <button onClick={handleShowLess} className="bg-[#b089be] text-white px-4 py-2 rounded-md hover:bg-purple-400">
+                        Show Less
+                      </button>
+                    </td>
+                  </tr>
+                </tfoot>
+              )}
+
 
             </table>
           </div>
         )}
 
-        {selectedTask === "Approved Requests" && (
+        {selectedTask === "Accepted" && (
           <div class="mt-8 relative overflow-x-auto">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700 bg-purple-800 rounded-lg ">
               <thead class="text-xs text-gray-700 uppercase bg-purple-50 dark:bg-gray-100 dark:text-gray-400">
@@ -382,30 +400,46 @@ export function Reward_Request() {
                   <th scope="col" class="px-6 py-3  text-purple-400">
                     Desired Reward
                   </th>
-
+                  <th scope="col" class="px-6 py-3 text-purple-400">
+                    Status
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-purple-400">
+                    Date
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {requestrs.map((request) => (
-                  <tr key={request.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {request.taskdescription}
-                    </th>
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {request.taskname}
-                    </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {request.desiredreward}
-                    </td>
-
-                  </tr>
-                ))}
+                {myProfile && (
+                  <>
+                    {requestrs
+                      .filter((request) => request.childId === myProfile.id && request.status === "Accepted")
+                      .map((request) => (
+                        <tr key={request.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.taskdescription}
+                          </th>
+                          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.taskname}
+                          </td>
+                          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.desiredreward}
+                          </td>
+                          <td className="px-6 py-4">
+                            {request.status}
+                          </td>
+                          <td className="px-6 py-4">
+                            {request.date}
+                          </td>
+                        </tr>
+                      ))}
+                  </>
+                )}
               </tbody>
             </table>
           </div>
         )}
 
-        {selectedTask === "Rejected Requests" && (
+        {selectedTask === "Decline" && (
           <div class="mt-8 relative overflow-x-auto">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700 bg-purple-800 rounded-lg ">
               <thead class="text-xs text-gray-700 uppercase bg-purple-50 dark:bg-gray-100 dark:text-gray-400">
@@ -419,24 +453,40 @@ export function Reward_Request() {
                   <th scope="col" class="px-6 py-3  text-purple-400">
                     Desired Reward
                   </th>
-
+                  <th scope="col" class="px-6 py-3 text-purple-400">
+                    Status
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-purple-400">
+                    Date
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {requestrs.map((request) => (
-                  <tr key={request.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {request.taskdescription}
-                    </th>
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {request.taskname}
-                    </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {request.desiredreward}
-                    </td>
-
-                  </tr>
-                ))}
+                {myProfile && (
+                  <>
+                    {requestrs
+                      .filter((request) => request.childId === myProfile.id && request.status === "Rejected")
+                      .map((request) => (
+                        <tr key={request.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.taskdescription}
+                          </th>
+                          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.taskname}
+                          </td>
+                          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {request.desiredreward}
+                          </td>
+                          <td className="px-6 py-4">
+                            {request.status}
+                          </td>
+                          <td className="px-6 py-4">
+                            {request.date}
+                          </td>
+                        </tr>
+                      ))}
+                  </>
+                )}
               </tbody>
             </table>
           </div>

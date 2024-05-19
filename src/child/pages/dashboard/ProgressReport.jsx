@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import ProgressGraph from './ProgressGraph';
 import { Typography } from "@material-tailwind/react";
 import StatisticsChart from '@/child/widgets/charts/statistics-chart';
+import { useNavigate } from "react-router-dom";
 import {
     statisticsChartsData,
 } from "@/child/data";
 import { ClockIcon } from '@heroicons/react/24/solid';
 
 const ProgressReport = () => {
+   
     const [selectedSkill, setSelectedSkill] = useState(null);
 
     const skillTags = ['Cooking', 'Gardening', 'Education', 'Crafts', 'Cleaning', 'Writing'];

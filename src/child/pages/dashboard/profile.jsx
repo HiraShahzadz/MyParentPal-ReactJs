@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import TaskDetailsModal from './TaskDetailsModel';
 import { GiftIcon } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import bgImage from "/img/bgcover.jpeg";
 import { toast } from 'react-toastify';
@@ -77,13 +78,16 @@ export function Profile() {
     // Convert image to Base64
     const reader = new FileReader();
     reader.onloadend = () => {
-        setFormData({
-            ...formData,
-            image: reader.result, // Store Base64 string
-        });
+      setFormData({
+        ...formData,
+        image: reader.result, // Store Base64 string
+      });
+      console.log("Selected Image:", reader.result); // Log the selected image
     };
     reader.readAsDataURL(selectedImage);
-};
+  };
+  
+
 
   console.log("Image File:", image);
 
@@ -122,59 +126,35 @@ export function Profile() {
   }
   const myProfile = childProfile.find((profile) => profile);
 console.log();
-  async function save(event) {
-    event.preventDefault();
-    if (!email || !password || !name || !dob || !gender) {
-      return toast.error("Please fill in all fields");
-    }
-    // Validate Date of Birth
-    const currentDate = new Date();
-    const selectedDate = new Date(dob);
-    if (selectedDate > currentDate) {
-      toast.error("Date of birth cannot be in the future");
-      return;
-    }
 
-    // Validate Password
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/;
-    if (!passwordRegex.test(password)) {
-      toast.error(
-        "Password should be at least 8 characters long, contain at least one uppercase letter, and one special character"
-      );
-      return;
-    }
-    const base64Image = formData.image.split(",")[1];
-    console.log("manhoos",base64Image);
-    let url1 = "http://localhost:8081/api/v1/profile/save";
-    let url2 = "http://localhost:8081/api/v1/notify/ProfileNotification";
-    
-    let promise1 = axios.post(url1, {
-      email: myProfile.email,
-      password: myProfile.password,
-      name: myProfile.name,
-      dob: myProfile.dob,
-      img: base64Image,
-
-    });
-  
-    let promise2 = axios.post(url2, {
-    });
-   
-    try {  
-      Promise.all([promise1, promise2]);
-      toast.success("Your profile will be updated after parent's approval");
-   
-    } catch (err) {
-      if (err.response) {
-        console.error("Server Error:", err.response.data);
-      } else if (err.request) {
-        console.error("Network Error:", err.request);
-      } else {
-        console.error("Other Error:", err.message);
+async function update(event) {
+  event.preventDefault();
+  try {
+   const base64Image = formData.image.split(",")[1];
+    await axios.post(
+      "http://localhost:8081/api/v1/profile/save",
+      {      
+        email: myProfile.email,
+        password: myProfile.password,
+        name: myProfile.name,
+        dob: myProfile.dob,
+        img: base64Image,
       }
-      toast.error("Failed to save in information");
+    );
+   
+    toast.success("Your profile will be updated after parent's approval");
+  } catch (err) {
+    if (err.response) {
+      console.error("Server Error:", err.response.data);
+    } else if (err.request) {
+      console.error("Network Error:", err.request);
+    } else {
+      console.error("Other Error:", err.message);
     }
+    toast.error("Failed to save in information");
   }
+}
+console.log("Update photo",formData.image);
   const [tasksData, setTasksData] = useState([]);
   useEffect(() => {
     loadTasks();
@@ -261,7 +241,7 @@ console.log();
             {childProfile.map((childData)=> (
               <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
                 <div>
-                  <ProfileSection childData={childData} updatePhoto={save} />
+                  <ProfileSection childData={childData} updatePhoto={formData.image}  />
                 </div>
               </div>
               ))}
