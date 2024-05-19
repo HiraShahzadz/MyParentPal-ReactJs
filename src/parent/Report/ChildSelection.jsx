@@ -10,12 +10,13 @@ function ChildSelection({ childProfileData, filterTasks }) {
   const [selectedAssignee, setSelectedAssignee] = useState({
     img: "",
     name: "Select Child",
+    id: null,
   });
 
   const handleChildClick = (childId) => {
     if (selectedAssignee.id === childId) {
       // Deselect the child if it's already selected
-      setSelectedAssignee({ img: "", name: "Select Child" });
+      setSelectedAssignee({ img: "", name: "Select Child", id: null });
       filterTasks(null); // Pass null to indicate deselection
     } else {
       // Otherwise, select the clicked child

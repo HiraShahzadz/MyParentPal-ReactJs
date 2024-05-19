@@ -54,7 +54,7 @@ const TaskDetailsAndReport = ({
   return (
     selectedTaskDetails && (
       <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50">
-        <div className="w-screen rounded-lg bg-white p-6 shadow-lg lg:m-96">
+        <div className="w-screen rounded-lg bg-white p-6 shadow-lg lg:m-80">
           <div className="flex justify-end">
             <button
               className="focus:outline-none"
@@ -68,92 +68,103 @@ const TaskDetailsAndReport = ({
           </div>
           <Typography
             variant="h5"
-            className="center mb-4 text-justify text-lg text-black "
+            className="center text-justify text-lg text-black "
           >
             <p> Task: {selectedTaskDetails.taskname}</p>
           </Typography>
-          <br></br>
-          <p className="justify-left mb-2 flex text-lg font-semibold text-black">
-            Description:{" "}
-          </p>
-          <p className="text-md mb-10 text-black">
-            {" "}
-            {selectedTaskDetails.taskdescription}
-          </p>
-          <div>
-            <div className="border-b">
-              <TaskPercentage />
+          <div className="items-center justify-center gap-4 md:flex lg:flex ">
+            <div className="max-h-[40vh] overflow-hidden overflow-y-auto sm:max-h-[50vh] md:max-h-[40vh] lg:max-h-[50vh] lg:w-96">
+              <div className="mb-2 mr-4 flex items-center justify-center border-b">
+                <TaskPercentage
+                  selectedTaskDetails={selectedTaskDetails.percentage}
+                />
+              </div>
+              <p className="justify-left mb-2 flex text-lg font-semibold text-black">
+                Description:
+              </p>
+              <p className="text-md text-black">
+                {" "}
+                {selectedTaskDetails.taskdescription}
+              </p>
+            </div>
+            <div>
+              <div className="relative mt-2 rounded-lg">
+                <table className="w-full rounded-lg border border-gray-100 text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
+                  <thead className="bg-[#b089be] text-xs uppercase text-gray-700 dark:bg-gray-100 dark:text-gray-400">
+                    <tr>
+                      <th
+                        colSpan="2"
+                        className="px-6 py-3 text-center text-sm text-white"
+                      >
+                        Details
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                      <th
+                        scope="row"
+                        className="text-md text-md whitespace-nowrap  border-r px-6 py-4 font-medium text-black  dark:text-white"
+                      >
+                        Assignee
+                      </th>
+                      <td className="text-gray text-md px-6 py-4">
+                        {childData}
+                      </td>
+                    </tr>
+                    <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                      <th
+                        scope="row"
+                        className="whitespace-nowrap border-r px-6 py-4 font-medium text-gray-900 dark:text-white"
+                      >
+                        Tags
+                      </th>
+                      <td className="px-6 py-4">
+                        {selectedTaskDetails.tasktag}
+                      </td>
+                    </tr>
+                    <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                      <th
+                        scope="row"
+                        className="whitespace-nowrap border-r px-6 py-4 font-medium text-gray-900 dark:text-white"
+                      >
+                        Submission date:
+                      </th>
+                      <td className="px-6 py-4">
+                        {selectedTaskDetails.taskdate}
+                      </td>
+                    </tr>
+                    <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                      <th
+                        scope="row"
+                        className="whitespace-nowrap border-r px-6 py-4 font-medium text-gray-900 dark:text-white"
+                      >
+                        Time Remaining:
+                      </th>
+                      <td className="px-6 py-4">
+                        {timeRemaining ? timeRemaining : "Calculating..."}
+                      </td>
+                    </tr>
+                    <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                      <th
+                        scope="row"
+                        className=" whitespace-nowrap border-r px-6 py-4 font-medium text-gray-900 dark:text-white"
+                      >
+                        Reward
+                      </th>
+                      <td className="px-6 py-4">
+                        {selectedTaskDetails.rewardname}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          <div className="relative mt-2 overflow-x-auto rounded-lg">
-            <table className="w-full rounded-lg border border-gray-100 text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
-              <thead className="bg-[#b089be] text-xs uppercase text-gray-700 dark:bg-gray-100 dark:text-gray-400">
-                <tr>
-                  <th
-                    colSpan="2"
-                    className="px-6 py-3 text-center text-sm text-white"
-                  >
-                    Details
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <th
-                    scope="row"
-                    className="text-md text-md whitespace-nowrap  border-r px-6 py-4 font-medium text-black  dark:text-white"
-                  >
-                    Assignee
-                  </th>
-                  <td className="text-gray text-md px-6 py-4">{childData}</td>
-                </tr>
-                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <th
-                    scope="row"
-                    className="whitespace-nowrap border-r px-6 py-4 font-medium text-gray-900 dark:text-white"
-                  >
-                    Tags
-                  </th>
-                  <td className="px-6 py-4">{selectedTaskDetails.tasktag}</td>
-                </tr>
-                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <th
-                    scope="row"
-                    className="whitespace-nowrap border-r px-6 py-4 font-medium text-gray-900 dark:text-white"
-                  >
-                    Submission date:
-                  </th>
-                  <td className="px-6 py-4">{selectedTaskDetails.taskdate}</td>
-                </tr>
-                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <th
-                    scope="row"
-                    className="whitespace-nowrap border-r px-6 py-4 font-medium text-gray-900 dark:text-white"
-                  >
-                    Time Remaining:
-                  </th>
-                  <td className="px-6 py-4">
-                    {timeRemaining ? timeRemaining : "Calculating..."}
-                  </td>
-                </tr>
-                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <th
-                    scope="row"
-                    className=" whitespace-nowrap border-r px-6 py-4 font-medium text-gray-900 dark:text-white"
-                  >
-                    Reward
-                  </th>
-                  <td className="px-6 py-4">
-                    {selectedTaskDetails.rewardname}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="flex justify-center">
+          <div className=" items-center justify-center text-center">
             <button
               onClick={handleCloseTaskDetails}
-              className="mb-2 mt-14 rounded-lg bg-MyPurple-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
+              className="mt-3 rounded-lg bg-MyPurple-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
             >
               Close
             </button>
