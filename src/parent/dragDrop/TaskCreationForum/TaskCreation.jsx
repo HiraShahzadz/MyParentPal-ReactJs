@@ -2,15 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import {
-  Typography,
-  Card,
-  CardHeader,
-  CardBody,
-} from "@material-tailwind/react";
-
-import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { Card, CardBody } from "@material-tailwind/react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -26,15 +18,8 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const mystatus = [
-  { label: "Todo", image: "/img/purple.png" },
-  { label: "Completed", image: "/img/green.png" },
-  { label: "Reviewed", image: "/img/orange.png" },
-  { label: "Rewarded", image: "/img/blue.png" },
-];
+const mystatus = [{ label: "Todo", image: "/img/purple.png" }];
 export function TaskCreation() {
-  const [selectedStatus, setSelectedStatus] = useState(mystatus[0]); // Initial selected status
-
   const [tasks, setTasks] = useState(mystatus[0]);
 
   console.log("tasks", tasks);
@@ -249,7 +234,7 @@ export function TaskCreation() {
           <Toaster />
         </DndProvider>
 
-        <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3 ">
+        <div className="mb-4 grid grid-cols-1 gap-3 xl:grid-cols-3 ">
           <Card className="overflow-hidden xl:col-span-2">
             <CardBody className="overflow-x-scroll px-0 pb-3 pt-0">
               <div className=" pb-2 pl-6 pt-6 text-left text-lg font-bold text-black">
@@ -335,7 +320,7 @@ export function TaskCreation() {
               Details
             </div>
 
-            <CardBody className="pt-0">
+            <CardBody className="overflow-hidden overflow-x-scroll pt-0">
               <div className="flex">
                 <div className="mr-4 mt-2">
                   <div className="mb-10">

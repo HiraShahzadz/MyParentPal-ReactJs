@@ -153,13 +153,16 @@ function Task({ task, tasks, setTasks }) {
           />
         )}
       </div>
+
+      {task.taskTypeIs === "Penalty" && (
+        <div className="w-20 rounded-full bg-[#f2d3ff]">
+          <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+            {task.taskTypeIs}
+          </p>
+        </div>
+      )}
       <div className="flex">
-        <p className="mr-3 mt-7 text-xs text-black ">{task.taskdate}</p>
-        {task.taskTypeIs === "Penalty" && (
-          <div className="mt-6 rounded-full bg-[#f2d3ff]">
-            <p className="pl-3 pr-3 text-sm text-black">{task.taskTypeIs}</p>
-          </div>
-        )}
+        <p className="mr-3 mt-4 text-xs text-black ">{task.taskdate}</p>
 
         <div className="absolute bottom-4 right-1">
           {childProfileData.map(({ id, img, role }, index) => {
