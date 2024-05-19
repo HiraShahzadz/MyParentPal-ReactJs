@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { tasksData } from "@/child/data";
-
 import { GiftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import TaskDetailsModal from "./TaskDetailsModel";
 import { isSameDay } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -38,6 +38,7 @@ export function Home() {
   const handleMoreInfoClick = (task) => {
     setTaskDetailsToShow(task);
   };
+  const navigate = useNavigate();
   useEffect(() => {
     const email = localStorage.getItem("email");
     const password = localStorage.getItem("password");
@@ -304,6 +305,7 @@ export function Home() {
                     _id,
                     childId,
                     taskname,
+                    taskTypeIs,
                     taskdescription,
                     rewardname,
                     taskdate,

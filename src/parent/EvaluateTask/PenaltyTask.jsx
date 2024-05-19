@@ -124,10 +124,11 @@ function PaneltyTask({ onClose, task, childProfileData }) {
     if (!taskRemarks) {
       return toast.error("Please Add remarks");
     }
-    try {
-      await axios.put(
-        `http://localhost:8081/api/v1/task/edit_task/${task._id}`,
-        {
+    
+    let url1 = `http://localhost:8081/api/v1/task/edit_task/${task._id}`;
+    let url2 = "http://localhost:8081/api/v1/notify/TaskRewardedNotification";
+
+    let promise1 = axios.put(url1, {
           taskname: task.taskname,
           taskdescription: task.taskdescription,
           rewardname: task.rewardname,
@@ -138,8 +139,14 @@ function PaneltyTask({ onClose, task, childProfileData }) {
           status: status,
           taskRemarks: taskRemarks,
           percentage: percentage,
-        }
-      );
+    });
+
+    let promise2 = axios.post(url2, {
+      taskname: taskname,
+    
+    });
+    try {
+      Promise.all([promise1, promise2]);
 
       // If the update is successful, display a success message
       toast.success("Task details edited");
