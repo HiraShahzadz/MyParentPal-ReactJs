@@ -60,8 +60,8 @@ function AddAccount(props) {
   const [tags, setTags] = useState([]);
   const [role, setRole] = useState("child");
   const [parentId, setParentId] = useState("");
-  const [notificationTime, setNotificationTime] = useState("");
-
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   async function save(event) {
     event.preventDefault();
     if (!email || !password || !name || !dob || !gender || !tags) {
@@ -117,7 +117,8 @@ function AddAccount(props) {
         location: data.region,
         img: base64Image,
         parentId: parentId,
-        notificationTime: notificationTime,
+        endTime: endTime,
+        startTime: startTime,
       });
 
       toast.success("Child Account is created Successfully");
@@ -129,7 +130,7 @@ function AddAccount(props) {
       setGender("");
       setTags([]);
       setImage("");
-      setNotificationTime("");
+      setStartTime("");
     } catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);
@@ -271,7 +272,27 @@ function AddAccount(props) {
                   />
                 </div>
               </div>
-              <div className="mb-6 w-full pl-3 pr-10 sm:w-1/2">
+              <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
+                <label
+                  htmlFor="Time"
+                  className=" block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Set Start notifications time
+                </label>
+
+                <TaskTime tasktime={startTime} setTasktime={setStartTime} />
+              </div>
+              <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
+                <label
+                  htmlFor="Time"
+                  className=" block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Set End notifications time
+                </label>
+
+                <TaskTime tasktime={endTime} setTasktime={setEndTime} />
+              </div>
+              <div className="mb-5 w-full pl-3 pr-10 sm:w-1/2">
                 <label
                   htmlFor="gender"
                   className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -320,23 +341,9 @@ function AddAccount(props) {
                   </div>
                 </div>
               </div>
-
-              <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
-                <label
-                  htmlFor="Time"
-                  className=" block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Set Notifications Time
-                </label>
-
-                <TaskTime
-                  tasktime={notificationTime}
-                  setTasktime={setNotificationTime}
-                />
+              <div className="-mt-6 ml-2">
+                <MilstoneTags tags={tags} setTags={setTags} />
               </div>
-            </div>
-            <div className=" flex items-center justify-center">
-              <MilstoneTags tags={tags} setTags={setTags} />
             </div>
           </div>
 
