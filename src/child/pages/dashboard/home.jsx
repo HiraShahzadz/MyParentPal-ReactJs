@@ -72,22 +72,7 @@ export function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const [tasksToShow, setTasksToShow] = useState([]);
 
-  const loadMore = () => {
-    setVisibleTasks((visibleTasks) => visibleTasks + 100);
-  };
-  const loadLess = () => {
-    if (visibleTasks > 3) {
-      setVisibleTasks((VisibleTasks) => VisibleTasks - 3);
-    }
-  };
-  const More = () => {
-    setPresentTasks((PresentTasks) => PresentTasks + 2);
-  };
-  const Less = () => {
-    if (PresentTasks > 2) {
-      setPresentTasks((PresentTasks) => PresentTasks - 2);
-    }
-  };
+ 
   useEffect(() => {
     const today = new Date();
     const filteredTasks = tasksData.filter((task) =>
@@ -263,6 +248,24 @@ export function Home() {
       return `${days} days and ${hours} hours`;
     }
   };
+
+  const loadMore = () => {
+    setVisibleTasks(taskss.length); // Show all tasks
+  };
+  const loadLess = () => {
+    if (visibleTasks > 3) {
+      setVisibleTasks(3);
+    }
+  };
+  const More = () => {
+    setPresentTasks((PresentTasks) => PresentTasks + 2);
+  };
+  const Less = () => {
+    if (PresentTasks > 2) {
+      setPresentTasks((PresentTasks) => PresentTasks - 2);
+    }
+  };
+
   const [isBlinking, setIsBlinking] = useState(false);
 
   const handleClick = (task) => {
