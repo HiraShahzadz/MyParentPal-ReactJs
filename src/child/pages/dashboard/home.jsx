@@ -72,7 +72,7 @@ export function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const [tasksToShow, setTasksToShow] = useState([]);
 
- 
+
   useEffect(() => {
     const today = new Date();
     const filteredTasks = tasksData.filter((task) =>
@@ -115,9 +115,8 @@ export function Home() {
     };
     return (
       <div
-        className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${
-          show ? "" : "hidden"
-        }`}
+        className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${show ? "" : "hidden"
+          }`}
       >
         <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
           <p className="mb-4 text-gray-800">
@@ -315,6 +314,7 @@ export function Home() {
                           taskdate,
                           rewardname,
                           tasktag,
+                          taskTypeIs,
                           tasktime,
                           taskfiletype,
                         })
@@ -322,7 +322,7 @@ export function Home() {
                       key={id}
                       href=""
                       className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50 blinking"
-                      >
+                    >
                       <div className="flex">
                         <img
                           className="mt-2 h-6 w-6 "
@@ -351,6 +351,13 @@ export function Home() {
                             </span>
                             <br></br>
                           </div>
+                          {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="ml-auto flex items-end  hover:border-MyPurple-400">
@@ -388,45 +395,40 @@ export function Home() {
         <br></br>
         <div className="task-titles">
           <div
-            className={`task-nav-item ${
-              selectedTask === "Assigned" ? "active" : ""
-            }`}
+            className={`task-nav-item ${selectedTask === "Assigned" ? "active" : ""
+              }`}
             onClick={() => setSelectedTask("Assigned")}
           >
             Assigned
           </div>
           &nbsp; &nbsp;
           <div
-            className={`task-nav-item ${
-              selectedTask === "Pending" ? "active" : ""
-            }`}
+            className={`task-nav-item ${selectedTask === "Pending" ? "active" : ""
+              }`}
             onClick={() => setSelectedTask("Pending")}
           >
             Pending
           </div>
           &nbsp; &nbsp;
           <div
-            className={`task-nav-item ${
-              selectedTask === "Completed" ? "active" : ""
-            }`}
+            className={`task-nav-item ${selectedTask === "Completed" ? "active" : ""
+              }`}
             onClick={() => setSelectedTask("Completed")}
           >
             Completed
           </div>
           &nbsp; &nbsp;
           <div
-            className={`task-nav-item ${
-              selectedTask === "Reviewed" ? "active" : ""
-            }`}
+            className={`task-nav-item ${selectedTask === "Reviewed" ? "active" : ""
+              }`}
             onClick={() => setSelectedTask("Reviewed")}
           >
             Reviewed
           </div>
           &nbsp; &nbsp;
           <div
-            className={`task-nav-item ${
-              selectedTask === "Rewarded" ? "active" : ""
-            }`}
+            className={`task-nav-item ${selectedTask === "Rewarded" ? "active" : ""
+              }`}
             onClick={() => setSelectedTask("Rewarded")}
           >
             Rewarded
@@ -445,7 +447,7 @@ export function Home() {
 
             {taskss.filter((task) => task.status === "Todo").length === 0 ? (
               <div className="items-center justify-center">
-                <p className="text-center text-sm">No task is completed yet</p>
+                <p className="text-center text-sm">No task is Assigned yet</p>
                 <div className="flex items-center justify-center">
                   <FontAwesomeIcon icon={faExclamationCircle} />
                 </div>
@@ -460,6 +462,7 @@ export function Home() {
                     _id,
                     childId,
                     taskname,
+                    taskTypeIs,
                     taskdescription,
                     rewardname,
                     taskdate,
@@ -475,6 +478,7 @@ export function Home() {
                           childId,
                           taskdescription,
                           taskdate,
+                          taskTypeIs,
                           rewardname,
                           tasktag,
                           tasktime,
@@ -513,6 +517,13 @@ export function Home() {
                             </span>
                             <br></br>
                           </div>
+                          {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="ml-auto flex items-end  hover:border-MyPurple-400">
@@ -530,7 +541,7 @@ export function Home() {
                 )
             )}
 
-            
+
           </div>
         )}
 
@@ -559,6 +570,7 @@ export function Home() {
                     taskdescription,
                     rewardname,
                     taskdate,
+                    taskTypeIs,
                     tasktime,
                     tasktag,
                     taskfiletype,
@@ -608,6 +620,13 @@ export function Home() {
                             </span>
                             <br></br>
                           </div>
+                          {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="ml-auto flex items-end  hover:border-MyPurple-400">
@@ -625,7 +644,7 @@ export function Home() {
                 )
             )}
 
-          
+
           </div>
         )}
 
@@ -636,7 +655,7 @@ export function Home() {
 
             <div>
               {taskss.filter((task) => task.status === "Completed").length ===
-              0 ? (
+                0 ? (
                 <div className="items-center justify-center">
                   <p className="text-center text-sm">
                     No task is completed yet
@@ -659,6 +678,7 @@ export function Home() {
                       taskdescription,
                       rewardname,
                       taskdate,
+                      taskTypeIs,
                       tasktime,
                       tasktag,
                       taskfiletype,
@@ -708,6 +728,13 @@ export function Home() {
                               </span>
                               <br></br>
                             </div>
+                            {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
                           </div>
                         </div>
                         <div className="ml-auto flex items-end  hover:border-MyPurple-400">
@@ -725,11 +752,11 @@ export function Home() {
                   )
               )}
 
-              
+
             </div>
           </div>
         )}
-        
+
         {selectedTask === "Reviewed" && (
           <div>
             <br></br>
@@ -737,7 +764,7 @@ export function Home() {
 
             <div>
               {taskss.filter((task) => task.status === "Reviewed").length ===
-              0 ? (
+                0 ? (
                 <div className="items-center justify-center">
                   <p className="text-center text-sm">
                     No task is reviewed yet
@@ -759,6 +786,7 @@ export function Home() {
                       taskname,
                       taskdescription,
                       rewardname,
+                      taskTypeIs,
                       taskdate,
                       tasktime,
                       tasktag,
@@ -809,6 +837,13 @@ export function Home() {
                               </span>
                               <br></br>
                             </div>
+                            {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
                           </div>
                         </div>
                         <div className="ml-auto flex items-end  hover:border-MyPurple-400">
@@ -826,19 +861,19 @@ export function Home() {
                   )
               )}
 
-              
+
             </div>
           </div>
         )}
 
-{selectedTask === "Rewarded" && (
+        {selectedTask === "Rewarded" && (
           <div>
             <br></br>
             <br></br>
 
             <div>
               {taskss.filter((task) => task.status === "Rewarded").length ===
-              0 ? (
+                0 ? (
                 <div className="items-center justify-center">
                   <p className="text-center text-sm">
                     No task is rewarded yet
@@ -858,6 +893,7 @@ export function Home() {
                       _id,
                       childId,
                       taskname,
+                      taskTypeIs,
                       taskdescription,
                       rewardname,
                       taskdate,
@@ -910,6 +946,13 @@ export function Home() {
                               </span>
                               <br></br>
                             </div>
+                            {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
                           </div>
                         </div>
                         <div className="ml-auto flex items-end  hover:border-MyPurple-400">
@@ -927,21 +970,21 @@ export function Home() {
                   )
               )}
 
-              
+
             </div>
           </div>
         )}
         <div className="mt-5 flex justify-center">
-                <a
-                  className="flex items-center text-purple-500 hover:underline"
-                  onClick={visibleTasks === 3 ? loadMore : loadLess}
-                >
-                  <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
-                  {visibleTasks === 3 && (
-                    <ChevronDownIcon className="ml-1 h-4 w-4" />
-                  )}
-                </a>
-              </div>
+          <a
+            className="flex items-center text-purple-500 hover:underline"
+            onClick={visibleTasks === 3 ? loadMore : loadLess}
+          >
+            <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
+            {visibleTasks === 3 && (
+              <ChevronDownIcon className="ml-1 h-4 w-4" />
+            )}
+          </a>
+        </div>
         {selectedTask === "Penality" && (
           <div>
             <br></br>
@@ -962,7 +1005,7 @@ export function Home() {
           <TaskDetailsModal
             selectedTaskDetails={taskDetailsToShow}
             handleCloseTaskDetails={handleCloseTaskDetails}
-            // handleSubmitTask={/* Pass your handleSubmitTask function here */}
+          // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
 
@@ -970,7 +1013,7 @@ export function Home() {
           <CompletedTaskDetailsModal
             selectedTaskDetails={CompletedtaskDetailsToShow}
             handleCloseCompletedTaskDetails={handleCloseCompletedTaskDetails}
-            // handleSubmitTask={/* Pass your handleSubmitTask function here */}
+          // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
       </div>

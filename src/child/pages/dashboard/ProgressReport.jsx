@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import ProgressGraph from './ProgressGraph';
 import { Typography } from "@material-tailwind/react";
-import StatisticsChart from '@/child/widgets/charts/statistics-chart';
-import { useNavigate } from "react-router-dom";
-import {
-    statisticsChartsData,
-} from "@/child/data";
-import { ClockIcon } from '@heroicons/react/24/solid';
+import axios from "axios";
 
 const ProgressReport = () => {
-   
     const [selectedSkill, setSelectedSkill] = useState(null);
+    const [childProfile, setChildProfile] = useState([]);
+    const [tasksData, setTasksData] = useState([]);
 
     const skillTags = ['Cooking', 'Gardening', 'Education', 'Crafts', 'Cleaning', 'Writing'];
 
@@ -19,8 +15,6 @@ const ProgressReport = () => {
     };
 
     const filteredProgressReports = [
-        // Replace this array with your actual progress reports
-        // Include different progress reports based on different skills
         { skill: 'Cooking', report: 'Progress report for Cooking' },
         { skill: 'Gardening', report: 'Progress report for Gardening' },
         { skill: 'Education', report: 'Progress report for Education' },
@@ -29,6 +23,39 @@ const ProgressReport = () => {
         { skill: 'Writing', report: 'Progress report for Writing' },
     ].filter(report => report.skill === selectedSkill);
 
+    useEffect(() => {
+        loadProfile();
+    }, []);
+
+    async function loadProfile() {
+        try {
+            const result = await axios.get("http://localhost:8081/api/v1/user/getChildId");
+            setChildProfile(result.data);
+            console.log("child profile:", result.data);
+        } catch (error) {
+            console.error("Error loading parentProfile:", error);
+        }
+    }
+
+    useEffect(() => {
+        if (childProfile.length > 0) {
+            loadTasks();
+        }
+    }, [childProfile]);
+
+    async function loadTasks() {
+        try {
+            const result = await axios.get("http://localhost:8081/api/v1/task/getall");
+            setTasksData(result.data);
+            console.log("All tasks:", result.data);
+        } catch (error) {
+            console.error("Error loading tasks:", error);
+        }
+    }
+
+    const myProfile = childProfile.find(profile => profile);
+    const filteredTasks = tasksData.filter(task => task.childId === myProfile?.id);
+    console.log("mytask",filteredTasks);  
     return (
         <div className="p-3 bg-white mt-4 mb-8 flex flex-col lg:flex-row gap-4 rounded-lg">
             <Typography variant="h5" color="blue-gray" className="ml-4 mt-5 mb-8">
