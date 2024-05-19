@@ -5,9 +5,10 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { Typography } from "@material-tailwind/react";
-
+import { useNavigate } from "react-router-dom";
 const ChatForm = ({ taskId }) => {
     
+   
     const [typedMessage, setTypedMessage] = useState('');
     const [showSendButton, setShowSendButton] = useState(true);
     const [messageSent, setMessageSent] = useState(false);

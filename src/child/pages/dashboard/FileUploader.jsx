@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Typography } from "@material-tailwind/react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowDownTrayIcon,
   MusicalNoteIcon,
