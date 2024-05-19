@@ -9,20 +9,37 @@ import axios from "axios"; // Import axios for making HTTP requests
 function ApproveChanges({ childData, onClose, profileRequest }) {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null); // State to hold the selected profile
-
+  const [ProfileStatus, setProfileStatus] = useState();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const handleClose = () => {
-    onClose(false);
+    setProfileStatus("Reject");
   };
 
   const handleAccept = () => {
     if (selectedProfile) {
-      update(selectedProfile); // Pass the selected profile to the update function
+      setProfileStatus("Accept");
     }
   };
+
+  useEffect(() => {
+    // Find the profile matching the childData id
+    const matchedProfile = profileRequest.find(
+      (profile) =>
+        profile.childId === childData.id && profile.status === "Pending"
+    );
+    setSelectedProfile(matchedProfile); // Set the matched profile to state
+  }, [childData, profileRequest]);
+
+  useEffect(() => {
+    if (ProfileStatus) {
+      // Call the update functions only when ProfileStatus is set
+      update(selectedProfile);
+      updateProfileStatus();
+    }
+  }, [ProfileStatus]);
 
   async function update(profile) {
     try {
@@ -53,14 +70,25 @@ function ApproveChanges({ childData, onClose, profileRequest }) {
     }
   }
 
-  useEffect(() => {
-    // Find the profile matching the childData id
-    const matchedProfile = profileRequest.find(
-      (profile) =>
-        profile.childId === childData.id && profile.status === "Pending"
-    );
-    setSelectedProfile(matchedProfile); // Set the matched profile to state
-  }, [childData, profileRequest]);
+  async function updateProfileStatus() {
+    try {
+      await axios.put(
+        `http://localhost:8081/api/v1/profile/edit-profile-req/${selectedProfile.id}`,
+        {
+          status: ProfileStatus,
+        }
+      );
+
+      // If the update is successful, display a success message
+      toast.success("Profile status updated");
+      // Reload the page
+      window.location.reload();
+    } catch (error) {
+      // If the update fails, display an error message
+      toast.error("Failed to update profile details");
+      console.error("Error updating profile details:", error);
+    }
+  }
 
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center  bg-gray-900 bg-opacity-20">

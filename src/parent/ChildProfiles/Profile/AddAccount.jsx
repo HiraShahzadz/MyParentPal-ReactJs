@@ -7,6 +7,8 @@ import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import MilstoneTags from "./MilstoneTags";
 import axios from "axios";
+import TimeLeftCalculator from "./TimeLeftCalculator";
+import TaskTime from "@/parent/attributes/TaskTime";
 
 function AddAccount(props) {
   const [image, setImage] = useState(null);
@@ -58,6 +60,8 @@ function AddAccount(props) {
   const [tags, setTags] = useState([]);
   const [role, setRole] = useState("child");
   const [parentId, setParentId] = useState("");
+  const [notificationTime, setNotificationTime] = useState("");
+
   async function save(event) {
     event.preventDefault();
     if (!email || !password || !name || !dob || !gender || !tags) {
@@ -113,6 +117,7 @@ function AddAccount(props) {
         location: data.region,
         img: base64Image,
         parentId: parentId,
+        notificationTime: notificationTime,
       });
 
       toast.success("Child Account is created Successfully");
@@ -124,6 +129,7 @@ function AddAccount(props) {
       setGender("");
       setTags([]);
       setImage("");
+      setNotificationTime("");
     } catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);
@@ -137,186 +143,203 @@ function AddAccount(props) {
   }
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center overflow-y-auto bg-gray-900 bg-opacity-50">
-      <div className="rounded-lg bg-white p-6 shadow-lg md:w-9/12 lg:w-6/12">
+      <div className=" rounded-lg bg-white p-6 shadow-lg md:w-9/12 lg:w-6/12">
         <div className="flex items-end justify-end">
           <XMarkIcon
             className="h-7 w-7 hover:bg-gray-300"
             onClick={() => props.onClose(false)}
           />
         </div>
-        <form onSubmit={handleSubmit} className="">
+        <form onSubmit={handleSubmit}>
           <DndProvider backend={HTML5Backend}>
             <Toaster />
           </DndProvider>
-          <div className="flex flex-col items-center justify-center ">
-            <label htmlFor="image-upload" className="cursor-pointer">
-              <input
-                id="image-upload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageChange}
-              />
-              <div className="relative mb-5 flex  h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 bg-gray-100">
-                {image ? (
-                  <div className="h-full w-full">
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt="Selected"
-                      className="h-full w-full rounded-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <CameraIcon className="h-12 w-12 text-gray-400" />
-                )}
-              </div>
-            </label>
-          </div>
-
-          <div className="mt-2 flex flex-wrap">
-            <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
-              <label
-                htmlFor="name"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Name
-              </label>
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
+          <div className="relative flex max-h-[70vh] flex-col overflow-hidden overflow-y-auto rounded-xl bg-white bg-clip-border text-gray-700 lg:max-h-[70vh] xl:col-span-2">
+            <div className="flex flex-col items-center justify-center ">
+              <label htmlFor="image-upload" className="cursor-pointer">
                 <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={name}
-                  onChange={(event) => {
-                    setName(event.target.value);
-                  }}
-                  className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  placeholder="Enter child's name"
-                  required
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
                 />
-              </div>
+                <div className="relative mb-5 flex  h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 bg-gray-100">
+                  {image ? (
+                    <div className="h-full w-full">
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt="Selected"
+                        className="h-full w-full rounded-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <CameraIcon className="h-12 w-12 text-gray-400" />
+                  )}
+                </div>
+              </label>
             </div>
 
-            <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
-              <label
-                htmlFor="dob"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Date of Birth
-              </label>
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
-                <input
-                  type="date"
-                  id="dob"
-                  name="dob"
-                  value={dob}
-                  onChange={(event) => {
-                    setDob(event.target.value);
-                  }}
-                  className="ml-1 block flex-1  border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400  focus:ring-0 sm:text-sm sm:leading-6"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
-              <label
-                htmlFor="name"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Username
-              </label>
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                  }}
-                  className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  placeholder="Enter child's username"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
-              <label
-                htmlFor="password"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Password
-              </label>
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={(event) => {
-                    setPassword(event.target.value);
-                  }}
-                  className="block w-full rounded-md border-0 py-1.5 pl-2 pr-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
-                  placeholder="Enter password"
-                  required
-                />
-              </div>
-            </div>
-            <div className="mb-6 w-full pl-3 pr-10 sm:w-1/2">
-              <label
-                htmlFor="gender"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Gender
-              </label>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center">
+            <div className="mt-2 flex flex-wrap">
+              <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
+                <label
+                  htmlFor="name"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Name
+                </label>
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
                   <input
-                    type="radio"
-                    id="male"
-                    name="gender"
-                    value="male"
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={name}
                     onChange={(event) => {
-                      setGender(event.target.value);
+                      setName(event.target.value);
                     }}
-                    className="mr-2 h-4 w-4 border-gray-300 text-MyPurple-600 focus:ring-MyPurple-400"
+                    className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="Enter child's name"
                     required
                   />
-                  <label
-                    htmlFor="male"
-                    className="mt-1 text-gray-900 dark:text-white"
-                    onClick="changeRadioColor()"
-                  >
-                    Male
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    id="female"
-                    name="gender"
-                    value="female"
-                    onChange={(event) => {
-                      setGender(event.target.value);
-                    }}
-                    className="mr-2 h-4 w-4 border-gray-300 text-MyPurple-400 focus:ring-MyPurple-400"
-                  />
-                  <label
-                    htmlFor="female"
-                    className="mt-1 text-gray-900 dark:text-white"
-                    onClick="changeRadioColor()"
-                  >
-                    Female
-                  </label>
                 </div>
               </div>
+
+              <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
+                <label
+                  htmlFor="dob"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Date of Birth
+                </label>
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
+                  <input
+                    type="date"
+                    id="dob"
+                    name="dob"
+                    value={dob}
+                    onChange={(event) => {
+                      setDob(event.target.value);
+                    }}
+                    className="ml-1 block flex-1  border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400  focus:ring-0 sm:text-sm sm:leading-6"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
+                <label
+                  htmlFor="name"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Username
+                </label>
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                    }}
+                    className="ml-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="Enter child's username"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Password
+                </label>
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#B089BE]">
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                    }}
+                    className="block w-full rounded-md border-0 py-1.5 pl-2 pr-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#B089BE] sm:text-sm sm:leading-6"
+                    placeholder="Enter password"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="mb-6 w-full pl-3 pr-10 sm:w-1/2">
+                <label
+                  htmlFor="gender"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Gender
+                </label>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="male"
+                      name="gender"
+                      value="male"
+                      onChange={(event) => {
+                        setGender(event.target.value);
+                      }}
+                      className="mr-2 h-4 w-4 border-gray-300 text-MyPurple-600 focus:ring-MyPurple-400"
+                      required
+                    />
+                    <label
+                      htmlFor="male"
+                      className="mt-1 text-gray-900 dark:text-white"
+                      onClick="changeRadioColor()"
+                    >
+                      Male
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="female"
+                      name="gender"
+                      value="female"
+                      onChange={(event) => {
+                        setGender(event.target.value);
+                      }}
+                      className="mr-2 h-4 w-4 border-gray-300 text-MyPurple-400 focus:ring-MyPurple-400"
+                    />
+                    <label
+                      htmlFor="female"
+                      className="mt-1 text-gray-900 dark:text-white"
+                      onClick="changeRadioColor()"
+                    >
+                      Female
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-3 w-full pl-3 pr-10 sm:w-1/2">
+                <label
+                  htmlFor="Time"
+                  className=" block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Set Notifications Time
+                </label>
+
+                <TaskTime
+                  tasktime={notificationTime}
+                  setTasktime={setNotificationTime}
+                />
+              </div>
+            </div>
+            <div className=" flex items-center justify-center">
+              <MilstoneTags tags={tags} setTags={setTags} />
             </div>
           </div>
-          <div className="item-center flex justify-center">
-            <MilstoneTags tags={tags} setTags={setTags} />
-          </div>
+
           <div className="mt-4 flex justify-center">
             <Button
               type="submit"
