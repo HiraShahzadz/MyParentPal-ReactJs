@@ -73,7 +73,8 @@ const ProgressReport = () => {
     const filteredTasks = tasksData.filter((task) => {
       return (
         task.childId === childProfile[0].id && // Assuming only one child profile for simplicity
-        (selectedSkill === null || task.tasktag.includes(selectedSkill))
+        (selectedSkill === null ||
+          (task.tasktag && task.tasktag.includes(selectedSkill)))
       );
     });
 

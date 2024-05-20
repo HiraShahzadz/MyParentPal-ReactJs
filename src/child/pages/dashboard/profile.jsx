@@ -7,7 +7,6 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import TaskDetailsModal from "./TaskDetailsModel";
 import { useNavigate } from "react-router-dom";
 import { GiftIcon } from "@heroicons/react/24/solid";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import bgImage from "/img/bgcover.jpeg";
 import { toast } from "react-toastify";
