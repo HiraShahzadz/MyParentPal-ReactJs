@@ -17,7 +17,11 @@ import {
 import { PageTitle, Footer } from "@/widgets/layout";
 import { FeatureCard } from "@/widgets/cards";
 import { featuresData, teamData, contactData } from "@/data";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChatBubbleBottomCenterTextIcon,
+} from "@heroicons/react/20/solid";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
@@ -30,7 +34,7 @@ export function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [query, setQuery] = useState("");
-
+  const [feedbackCount, setFeedbackCount] = useState(0);
   async function save(event) {
     event.preventDefault();
 
@@ -77,16 +81,15 @@ export function Home() {
       }
     }
   }, [hash]);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const num = contactData;
   console.log(num);
   function handlePrevious() {
-    if (step > 1) setStep(step - 1);
+    if (step > 0) setStep(step - 1);
   }
 
   function handleNext() {
-    if (step < contactData.length) setStep(step + 1);
-    console.log(step);
+    if (step < feedbackCount - 3) setStep(step + 1);
   }
   const [showMoreText, setShowMoreText] = useState(false);
 
@@ -105,6 +108,7 @@ export function Home() {
       "http://localhost:8081/api/v1/feedback/getall"
     );
     setParentFeedback(result.data);
+    setFeedbackCount(result.data.length);
     console.log(result.data);
   }
   const [parentProfile, setParentProfile] = useState([]);
@@ -245,101 +249,97 @@ export function Home() {
       </section>
       <section className="bg-blue-red-50/50 relative top-0 h-full w-full bg-cover bg-center px-4 py-1">
         <div className="container mx-auto">
-          <div className="mx-auto mb-10 mt-10 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
-            {parentFeedback
-              .filter((feedback) =>
-                parentProfile.some(
-                  (profile) =>
-                    profile.id === feedback.parentId &&
-                    profile.role === "parent"
-                )
-              )
-              .slice(step - 1, step + 2)
-              .map(({ id, name, description }) => (
-                <Card
-                  key={id}
-                  shadow={false}
-                  className="bg-[#fff] text-center text-blue-gray-900 shadow-lg shadow-gray-700/20"
-                >
-                  <div className="mx-auto mb-6 mt-6 grid h-14 w-14 place-items-center rounded-full bg-white shadow-lg shadow-gray-500/20">
-                    <img
-                      src={
-                        profile.img
-                          ? `data:image/jpeg;base64,${profile.img}`
-                          : "/img/user.png"
-                      }
-                      className="h-14 w-14 rounded-full object-cover"
-                    />
-                  </div>
-                  <Typography variant="h5" color="blue-gray" className="mb-2">
-                    {name}
-                  </Typography>
-                  <Typography className="px-8 py-4 text-justify font-normal">
-                    {description}
-                  </Typography>
-                </Card>
-              ))}
-          </div>
+          {parentFeedback.length === 0 ? (
+            <div className="mx-auto w-full text-center lg:w-6/12">
+              <Typography
+                variant="h6"
+                color="blue-gray"
+                className="text-center font-normal"
+              >
+                No feedback is given. Please Use the website and give your
+                remarks
+              </Typography>
+            </div>
+          ) : (
+            <>
+              <div className="mx-auto mb-10 mt-10 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
+                {parentFeedback
+                  .filter((feedback) =>
+                    parentProfile.some(
+                      (profile) =>
+                        profile.id === feedback.parentId &&
+                        profile.role === "parent"
+                    )
+                  )
+                  .slice(step, step + 3)
+                  .map(({ id, name, description }) => (
+                    <Card
+                      key={id}
+                      shadow={false}
+                      className="w-72 bg-[#fff] text-center text-blue-gray-900 shadow-lg shadow-gray-700/20"
+                    >
+                      <div className="mx-auto mb-4 mt-6 grid h-14 w-14 place-items-center rounded-full bg-white shadow-lg shadow-gray-500/20">
+                        {/* Assuming profile is found based on feedback's parentId */}
+                        <img
+                          src={
+                            profile.img
+                              ? `data:image/jpeg;base64,${profile.img}`
+                              : "/img/user.png"
+                          }
+                          className="h-14 w-14  rounded-full object-cover"
+                        />
+                      </div>
+                      <Typography
+                        variant="h5"
+                        color="blue-gray"
+                        className="mb-2 "
+                      >
+                        {name}
+                      </Typography>
+                      <Typography className="mb-3 max-h-16 overflow-y-auto p-4 px-8 py-4 pt-[-20px] text-justify font-normal">
+                        {description}
+                      </Typography>
+                    </Card>
+                  ))}
+              </div>
+            </>
+          )}
         </div>
 
-        <div className="mb-10 flex items-center justify-between  bg-white px-4 py-3 sm:px-6">
-          <div className="flex flex-1 justify-between sm:hidden">
+        <div className="mb-10 ml-5 mr-5 flex items-center justify-between  bg-white px-4 py-3 sm:px-6">
+          <div className="flex flex-1 justify-between lg:hidden">
             <Button
-              className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
+              className=" flex rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
               onClick={handlePrevious}
+              disabled={step === 0} // Disable button if on first feedback
             >
+              <ChevronLeftIcon className=" h-5 w-5" />
               Previous
             </Button>
             <Button
-              className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
+              className=" flex rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:bg-purple-400 hover:shadow-transparent"
               onClick={handleNext}
+              disabled={step === parentFeedback.length - 3} // Disable button if on last set of feedbacks
             >
               Next
+              <ChevronRightIcon className=" h-5 w-5" />
             </Button>
           </div>
-          <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
-            <div>
-              <nav
-                className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-                aria-label="Pagination"
-              >
-                <button
-                  onClick={handlePrevious}
-                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                >
-                  <span className="sr-only">Previous</span>
-                  <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
-                {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-
-                {num
-                  .map((numbers) => (
-                    <button
-                      href="#"
-                      aria-current="page"
-                      className={`${
-                        step === numbers.id &&
-                        "bg-[#B089BE] !text-white ring-[#B089BE] hover:bg-[#B089BE] hover:shadow-light-blue-900/95"
-                      } relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0`}
-                    >
-                      {numbers.id}
-                    </button>
-                  ))
-                  .slice(step - 1, step + 2)}
-
-                <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
-                  ...
-                </span>
-
-                <button
-                  onClick={handleNext}
-                  className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                >
-                  <span className="sr-only">Next</span>
-                  <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
-              </nav>
-            </div>
+          <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center">
+            <Button
+              className="mr-10 flex rounded-md border bg-MyPurple-400 px-2 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:border-MyPurple-400  hover:bg-white hover:text-MyPurple-400 hover:shadow-transparent"
+              onClick={handlePrevious}
+              disabled={step === 0} // Disable button if on first feedback
+            >
+              <ChevronLeftIcon className=" h-5 w-5" />
+            </Button>
+            <Button
+              className="ml-10 flex rounded-md border bg-MyPurple-400 px-2 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-transparent hover:border-MyPurple-400  hover:bg-white hover:text-MyPurple-400 hover:shadow-transparent"
+              onClick={handleNext}
+              disabled={step === parentFeedback.length - 3} // Disable button if on last set of feedbacks
+            >
+              <ChevronRightIcon className=" h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>

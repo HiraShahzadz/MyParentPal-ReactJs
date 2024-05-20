@@ -67,7 +67,7 @@ function Section({
 
           localStorage.setItem("tasks", JSON.stringify(mTasks));
 
-          toast("Task status changed", { icon: "😯" });
+          toast.success("Task status changed");
 
           return mTasks;
         });

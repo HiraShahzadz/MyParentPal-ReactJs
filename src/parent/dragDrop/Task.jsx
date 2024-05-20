@@ -27,7 +27,7 @@ function Task({ task, tasks, setTasks }) {
 
     localStorage.setItem("tasks", JSON.stringify(fTasks));
     setTasks(fTasks);
-    toast("Task removed", { icon: "💀" });
+    toast("Task removed");
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -37,7 +37,7 @@ function Task({ task, tasks, setTasks }) {
   const [taskid, setId] = useState("");
   async function DeleteTask(taskid) {
     await axios.delete("http://localhost:8081/api/v1/task/delete/" + taskid);
-    toast("Task removed", { icon: "💀" });
+    toast.success("Task removed", {});
 
     window.location.reload();
   }

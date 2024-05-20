@@ -25,7 +25,7 @@ function Feedback({ myProfile }) {
         description: description,
         parentId: myProfile.id,
       });
-      toast.success("Feedback Submitted Successfully" + myProfile.id);
+      toast.success("Feedback Submitted Successfully");
       setName("");
       setDescription("");
     } catch (err) {

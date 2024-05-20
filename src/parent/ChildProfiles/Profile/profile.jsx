@@ -126,7 +126,6 @@ export function MyProfile({ childData }) {
       } else {
         console.error("Other Error:", err.message);
       }
-      toast.error("Failed to save in information");
     }
   }
   const [tasksData, setTasksData] = useState([]);

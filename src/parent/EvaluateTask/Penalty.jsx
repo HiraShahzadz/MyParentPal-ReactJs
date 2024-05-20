@@ -10,6 +10,7 @@ function Penalty(props) {
   const handleChange = (event) => {
     setSelectedOption(event.target.value); // Update the selected option when a radio button is clicked
     props.setStatus(event.target.value);
+    props.setSelectedOption(event.target.value);
   };
   // Generate percentage options for marking task
   const percentageOptions = Array.from({ length: 11 }, (_, i) => i * 10);
@@ -33,7 +34,6 @@ function Penalty(props) {
               value="Reviewed"
               onChange={handleChange}
               checked={selectedOption === "Reviewed"}
-              required
             />
             <label
               htmlFor="push-everything"
@@ -51,7 +51,6 @@ function Penalty(props) {
               value="Rewarded"
               onChange={handleChange}
               checked={selectedOption === "Rewarded"}
-              required
             />
             <label
               htmlFor="push-email"
@@ -126,9 +125,7 @@ function Penalty(props) {
                 setTaskfiletype={props.setTaskfiletype}
               />
             </div>
-            <div>
-              <RegulateAccess />
-            </div>
+
             <div className="flex">
               <div className="mt-3">
                 <label

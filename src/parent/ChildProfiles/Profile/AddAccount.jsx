@@ -64,8 +64,27 @@ function AddAccount(props) {
   const [endTime, setEndTime] = useState("");
   async function save(event) {
     event.preventDefault();
-    if (!email || !password || !name || !dob || !gender || !tags) {
+    if (!email || !password || !name) {
       return toast.error("Please fill in all fields");
+    }
+    if (!gender) {
+      return toast.error("Please select a gender");
+    }
+    if (!dob) {
+      return toast.error("Please select date of birth");
+    }
+    if (!dob) {
+      return toast.error("Please select date of birth");
+    }
+    if (tags.length === 0) {
+      toast.error("Please add tags related to Skills e.g., Cooking");
+      return;
+    }
+    if (startTime === endTime) {
+      toast.error(
+        "Starting and ending time should not be equal. Please select another time."
+      );
+      return;
     }
     const dobDate = new Date(dob);
 
@@ -82,8 +101,8 @@ function AddAccount(props) {
     }
 
     // Check if the child's age is within the required range
-    if (age < 7 || age >= 18) {
-      return toast.error("Child's age must be between 7 and 18 years old");
+    if (age < 7) {
+      return toast.error("Child's age must be between 7 or above");
     }
 
     if (dobDate > currentDate) {
@@ -121,7 +140,7 @@ function AddAccount(props) {
         startTime: startTime,
       });
 
-      toast.success("Child Account is created Successfully");
+      toast.success("Child account is created successfully");
       setId("");
       setName("");
       setEmail("");
@@ -131,6 +150,7 @@ function AddAccount(props) {
       setTags([]);
       setImage("");
       setStartTime("");
+      window.location.reload();
     } catch (err) {
       if (err.response) {
         console.error("Server Error:", err.response.data);

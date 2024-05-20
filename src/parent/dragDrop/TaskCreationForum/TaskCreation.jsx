@@ -84,23 +84,23 @@ export function TaskCreation() {
   //for saving in database
   async function save(event) {
     event.preventDefault();
-    if (
-      !taskname ||
-      !taskdescription ||
-      !rewardname ||
-      !taskdate ||
-      !tasktime ||
-      !tasktype
-    ) {
+    if (!taskname || !taskdescription || !rewardname) {
       return toast.error("Please fill in all fields");
     }
     if (!taskassignee || !childId) {
       return toast.error("Please select task assignee");
     }
     if (!tasktag) {
-      return toast.error(
-        "Please select task tag. If no tags create in child profile"
-      );
+      return toast.error("tags create in child profile");
+    }
+    if (!tasktype) {
+      return toast.error("Select the type of task");
+    }
+    if (!taskdate) {
+      return toast.error("Please select the submission date");
+    }
+    if (!tasktime) {
+      return toast.error("Please select the submission time");
     }
     const taskDate = new Date(taskdate);
     const currentDate = new Date();
@@ -124,7 +124,35 @@ export function TaskCreation() {
     }
 
     try {
-      if (taskname.length > 3 && taskname.length < 15) {
+      if (
+        taskname.length > 3 &&
+        taskname.length < 15 &&
+        taskdescription.length > 20 &&
+        taskdescription.length < 200 &&
+        rewardname.length > 3
+      ) {
+        let url1 = "http://localhost:8081/api/v1/task/save";
+        let url2 = "http://localhost:8081/api/v1/notify/assigntaskNotification";
+
+        let promise1 = axios.post(url1, {
+          taskname: taskname,
+          taskdescription: taskdescription,
+          status: status,
+          rewardname: rewardname,
+          taskfiletype: taskfiletype,
+          taskdate: taskdate,
+          tasktime: tasktime,
+          tasktag: tasktag,
+          taskassignee: taskassignee,
+          tasktype: tasktype,
+          childId: childId,
+        });
+
+        let promise2 = axios.post(url2, {
+          taskname: taskname,
+          childId: childId,
+        });
+
         Promise.all([promise1, promise2]);
         toast.success("Task Created");
         setTaskname("");
@@ -146,8 +174,23 @@ export function TaskCreation() {
       if (taskname.length >= 15) {
         return toast.error("A task must not be more than 15 characters");
       }
+      if (taskdescription.length <= 20) {
+        return toast.error(
+          "Description should have a minimum of 20 characters"
+        );
+      }
+
+      if (taskdescription.length >= 200) {
+        return toast.error(
+          "Description should have a maximum of 200 characters"
+        );
+      }
+      if (rewardname.length <= 3) {
+        return toast.error("Reward name should contain more then 3 characters");
+      }
+      window.location.reload();
     } catch (err) {
-      return toast.error("Task creation is faild");
+      return toast.error("Task creation is faild", err);
     }
   }
   const [childProfileData, setChildProfileData] = useState([]);
@@ -287,9 +330,6 @@ export function TaskCreation() {
                       taskfiletype={taskfiletype}
                       setTaskfiletype={setTaskfiletype}
                     />
-                  </div>
-                  <div>
-                    <RegulateAccess />
                   </div>
                 </div>
               </div>

@@ -4,12 +4,12 @@ import ProfileSection from "./ProfileSection";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import TaskDetailsModal from './TaskDetailsModel';
+import TaskDetailsModal from "./TaskDetailsModel";
 import { GiftIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import bgImage from "/img/bgcover.jpeg";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export function Profile() {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
@@ -86,8 +86,6 @@ export function Profile() {
     };
     reader.readAsDataURL(selectedImage);
   };
-  
-
 
   console.log("Image File:", image);
 
@@ -121,40 +119,36 @@ export function Profile() {
       console.log("child profile:", result.data);
     } catch (error) {
       console.error("Error loading parentProfile:", error);
-      
     }
   }
   const myProfile = childProfile.find((profile) => profile);
-console.log();
+  console.log();
 
-async function update(event) {
-  event.preventDefault();
-  try {
-   const base64Image = formData.image.split(",")[1];
-    await axios.post(
-      "http://localhost:8081/api/v1/profile/save",
-      {      
+  async function update(event) {
+    event.preventDefault();
+    try {
+      const base64Image = formData.image.split(",")[1];
+      await axios.post("http://localhost:8081/api/v1/profile/save", {
         email: myProfile.email,
         password: myProfile.password,
         name: myProfile.name,
         dob: myProfile.dob,
         img: base64Image,
+      });
+
+      toast.success("Your profile will be updated after parent's approval");
+    } catch (err) {
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+      } else if (err.request) {
+        console.error("Network Error:", err.request);
+      } else {
+        console.error("Other Error:", err.message);
       }
-    );
-   
-    toast.success("Your profile will be updated after parent's approval");
-  } catch (err) {
-    if (err.response) {
-      console.error("Server Error:", err.response.data);
-    } else if (err.request) {
-      console.error("Network Error:", err.request);
-    } else {
-      console.error("Other Error:", err.message);
+      toast.error("Failed to save in information");
     }
-    toast.error("Failed to save in information");
   }
-}
-console.log("Update photo",formData.image);
+  console.log("Update photo", formData.image);
   const [tasksData, setTasksData] = useState([]);
   useEffect(() => {
     loadTasks();
@@ -213,21 +207,21 @@ console.log("Update photo",formData.image);
                   </div>
                 ) : (
                   <>
-                  {childProfile.map((childData)=> (
-                    <>
-                      <div className="relative flex items-center justify-center">
-                        <div className="relative flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 bg-gray-100">
-                          <img
-                            src={
-                              childData.img
-                                ? `data:image/jpeg;base64,${childData.img}`
-                                : "/img/user.png"
-                            }
-                            className="h-full w-full rounded-full object-cover"
-                          />
+                    {childProfile.map((childData) => (
+                      <>
+                        <div className="relative flex items-center justify-center">
+                          <div className="relative flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 bg-gray-100">
+                            <img
+                              src={
+                                childData.img
+                                  ? `data:image/jpeg;base64,${childData.img}`
+                                  : "/img/user.png"
+                              }
+                              className="h-full w-full rounded-full object-cover"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </>
+                      </>
                     ))}
                   </>
                 )}
@@ -238,12 +232,15 @@ console.log("Update photo",formData.image);
           <div className=" mt-10 flex flex-col rounded-lg bg-white md:flex-row">
             {/* Left side div */}
             <div className="mb-5 ml-5 mr-5 mt-5 rounded-lg border border-gray-200 p-3 shadow-lg md:w-1/4">
-            {childProfile.map((childData)=> (
-              <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
-                <div>
-                  <ProfileSection childData={childData} updatePhoto={formData.image}  />
+              {childProfile.map((childData) => (
+                <div className="mb-1 mt-6  w-full items-center justify-between pl-3 pr-10">
+                  <div>
+                    <ProfileSection
+                      childData={childData}
+                      updatePhoto={formData.image}
+                    />
+                  </div>
                 </div>
-              </div>
               ))}
             </div>
             {/* Right side div covering remaining space */}
@@ -259,252 +256,251 @@ console.log("Update photo",formData.image);
                   Assigned Tasks
                 </h2>
                 <div className="mb-5 max-h-96 overflow-y-auto">
-                {myProfile && (
-  <>
-                  {tasksData.filter((task) => task.childId === myProfile.id)
-                    .length === 0 ? (
-                    <div className="items-center justify-center">
-                      <p className="text-center text-sm">
-                        No task is assigned yet
-                      </p>
-                      <div className="flex items-center justify-center">
-                        <FontAwesomeIcon icon={faExclamationCircle} />
-                      </div>
-                    </div>
-                  ) : (
-                    tasksData
-                      .filter(
-                        (task) =>
-                        
-                          task.childId === myProfile.id
-                      )
-                      .map((task) => (
-                        <div
-                          key={task.id}
-                          href=""
-                          className="mb-2 flex items-center rounded-md border  p-3 text-sm hover:bg-blue-gray-50"
-                        >
-                          <div className="flex">
-                            <img
-                              className="mt-0.5 h-6 w-6 "
-                              src="/img/task.png"
-                              alt=""
-                            />
-                            <div className="ml-3">
-                              <span className="font-medium text-black">
-                                {task.taskname}
-                              </span>
-                              <br></br>
-                              <span className="mt-2 text-black">
-                                Submission date: {task.taskdate}
-                              </span>
-                              <span className="text-black"></span>
-                              <div className="mt-1.5 flex">
-                                <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-
-                                <span className="ml-1 mt-0.5 text-xs text-black ">
-                                  Reward: {task.rewardname}
-                                </span>
-                              </div>
-                              <div className="mt-1.5 flex">
-                                <img
-                                  className="mt-0.5 h-5 w-5 rounded-full object-cover"
-                                  src={
-                                    myProfile.img
-                                      ? `data:image/jpeg;base64,${myProfile.img}`
-                                      : "/img/user.png"
-                                  }
-                                  alt=""
-                                />
-                                <span className="ml-1 mt-1 text-xs text-black ">
-                                  {myProfile.name}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                            <button
-                              onClick={() => handleMoreInfoClick(task)}
-                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                            >
-                              more info
-                            </button>
+                  {myProfile && (
+                    <>
+                      {tasksData.filter((task) => task.childId === myProfile.id)
+                        .length === 0 ? (
+                        <div className="items-center justify-center">
+                          <p className="text-center text-sm">
+                            No task is assigned yet
+                          </p>
+                          <div className="flex items-center justify-center">
+                            <FontAwesomeIcon icon={faExclamationCircle} />
                           </div>
                         </div>
-                      ))
+                      ) : (
+                        tasksData
+                          .filter((task) => task.childId === myProfile.id)
+                          .map((task) => (
+                            <div
+                              key={task.id}
+                              href=""
+                              className="mb-2 flex items-center rounded-md border  p-3 text-sm hover:bg-blue-gray-50"
+                            >
+                              <div className="flex">
+                                <img
+                                  className="mt-0.5 h-6 w-6 "
+                                  src="/img/task.png"
+                                  alt=""
+                                />
+                                <div className="ml-3">
+                                  <span className="font-medium text-black">
+                                    {task.taskname}
+                                  </span>
+                                  <br></br>
+                                  <span className="mt-2 text-black">
+                                    Submission date: {task.taskdate}
+                                  </span>
+                                  <span className="text-black"></span>
+                                  <div className="mt-1.5 flex">
+                                    <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                                    <span className="ml-1 mt-0.5 text-xs text-black ">
+                                      Reward: {task.rewardname}
+                                    </span>
+                                  </div>
+                                  <div className="mt-1.5 flex">
+                                    <img
+                                      className="mt-0.5 h-5 w-5 rounded-full object-cover"
+                                      src={
+                                        myProfile.img
+                                          ? `data:image/jpeg;base64,${myProfile.img}`
+                                          : "/img/user.png"
+                                      }
+                                      alt=""
+                                    />
+                                    <span className="ml-1 mt-1 text-xs text-black ">
+                                      {myProfile.name}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                                <button
+                                  onClick={() => handleMoreInfoClick(task)}
+                                  className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                                >
+                                  more info
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                      )}
+                    </>
                   )}
-                  </>
-                )}
                 </div>
 
                 <h2 className="text-md mb-3 ml-3 mt-3 font-bold">
                   Completed Tasks
                 </h2>
                 <div className="max-h-96 overflow-y-auto">
-                {myProfile && (
-  <>
-                  {tasksData.filter(
-                    (task) =>
-                      task.status === "Completed" &&
-                      task.childId === myProfile.id
-                  ).length === 0 ? (
-                    <div className="items-center justify-center">
-                      <p className="text-center text-sm">
-                        No task is completed yet
-                      </p>
-                      <div className="flex items-center justify-center">
-                        <FontAwesomeIcon icon={faExclamationCircle} />
-                      </div>
-                    </div>
-                  ) : (
-                    tasksData
-                      .filter(
+                  {myProfile && (
+                    <>
+                      {tasksData.filter(
                         (task) =>
                           task.status === "Completed" &&
                           task.childId === myProfile.id
-                      )
-                      .map((task) => (
-                        <div
-                          key={task.id}
-                          href=""
-                          className="mb-2 flex items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50"
-                        >
-                          <div className="flex">
-                            <img
-                              className="mt-0.5 h-6 w-6 "
-                              src="/img/task.png"
-                              alt=""
-                            />
-                            <div className="ml-3">
-                              <span className="font-medium text-black">
-                                {task.taskname}
-                              </span>
-                              <br></br>
-                              <span className="mt-2 text-black">
-                                Submission date: {task.taskdate}
-                              </span>
-                              <span className="text-black"></span>
-                              <div className="mt-1.5 flex">
-                                <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-
-                                <span className="ml-1 mt-0.5 text-xs text-black ">
-                                  Reward: {task.rewardname}
-                                </span>
-                              </div>
-                              <div className="mt-1.5 flex">
-                                <img
-                                  className="mt-0.5 h-5 w-5 rounded-full object-cover"
-                                  src={
-                                    myProfile.img
-                                      ? `data:image/jpeg;base64,${myProfile.img}`
-                                      : "/img/user.png"
-                                  }
-                                  alt=""
-                                />
-                                <span className="ml-1 mt-1 text-xs text-black ">
-                                  {myProfile.name}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                            <button
-                              onClick={() => handleMoreInfoClick(task)}
-                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                            >
-                              more info
-                            </button>
+                      ).length === 0 ? (
+                        <div className="items-center justify-center">
+                          <p className="text-center text-sm">
+                            No task is completed yet
+                          </p>
+                          <div className="flex items-center justify-center">
+                            <FontAwesomeIcon icon={faExclamationCircle} />
                           </div>
                         </div>
-                      ))
+                      ) : (
+                        tasksData
+                          .filter(
+                            (task) =>
+                              task.status === "Completed" &&
+                              task.childId === myProfile.id
+                          )
+                          .map((task) => (
+                            <div
+                              key={task.id}
+                              href=""
+                              className="mb-2 flex items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50"
+                            >
+                              <div className="flex">
+                                <img
+                                  className="mt-0.5 h-6 w-6 "
+                                  src="/img/task.png"
+                                  alt=""
+                                />
+                                <div className="ml-3">
+                                  <span className="font-medium text-black">
+                                    {task.taskname}
+                                  </span>
+                                  <br></br>
+                                  <span className="mt-2 text-black">
+                                    Submission date: {task.taskdate}
+                                  </span>
+                                  <span className="text-black"></span>
+                                  <div className="mt-1.5 flex">
+                                    <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                                    <span className="ml-1 mt-0.5 text-xs text-black ">
+                                      Reward: {task.rewardname}
+                                    </span>
+                                  </div>
+                                  <div className="mt-1.5 flex">
+                                    <img
+                                      className="mt-0.5 h-5 w-5 rounded-full object-cover"
+                                      src={
+                                        myProfile.img
+                                          ? `data:image/jpeg;base64,${myProfile.img}`
+                                          : "/img/user.png"
+                                      }
+                                      alt=""
+                                    />
+                                    <span className="ml-1 mt-1 text-xs text-black ">
+                                      {myProfile.name}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                                <button
+                                  onClick={() => handleMoreInfoClick(task)}
+                                  className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                                >
+                                  more info
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                      )}
+                    </>
                   )}
-                  </>
-                )}
                 </div>
 
                 <h2 className="text-md mb-3 ml-3 mt-3 font-bold">
                   Pending Tasks
                 </h2>
                 <div className="mb-5 max-h-96 overflow-y-auto">
-                {myProfile && (
-  <>
-                  {tasksData.filter(
-                    (task) =>
-                      task.status === "Todo" && task.childId === myProfile.id
-                  ).length === 0 ? (
-                    <div className="items-center justify-center">
-                      <p className="text-center text-sm">No task is pending</p>
-                      <div className="flex items-center justify-center">
-                        <FontAwesomeIcon icon={faExclamationCircle} />
-                      </div>
-                    </div>
-                  ) : (
-                    tasksData
-                      .filter(
+                  {myProfile && (
+                    <>
+                      {tasksData.filter(
                         (task) =>
                           task.status === "Todo" &&
                           task.childId === myProfile.id
-                      )
-                      .map((task) => (
-                        <div
-                          key={task.id}
-                          href=""
-                          className="mb-2 flex items-center rounded-md border  p-3 text-sm hover:bg-blue-gray-50"
-                        >
-                          <div className="flex">
-                            <img
-                              className="mt-0.5 h-6 w-6 "
-                              src="/img/task.png"
-                              alt=""
-                            />
-                            <div className="ml-3">
-                              <span className="font-medium text-black">
-                                {task.taskname}
-                              </span>
-                              <br></br>
-                              <span className="mt-2 text-black">
-                                Submission date: {task.taskdate}
-                              </span>
-                              <span className="text-black"></span>
-                              <div className="mt-1.5 flex">
-                                <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-
-                                <span className="ml-1 mt-0.5 text-xs text-black ">
-                                  Reward: {task.rewardname}
-                                </span>
-                              </div>
-                              <div className="mt-1.5 flex">
-                                <img
-                                  className="mt-0.5 h-5 w-5 rounded-full object-cover"
-                                  src={
-                                    myProfile.img
-                                      ? `data:image/jpeg;base64,${myProfile.img}`
-                                      : "/img/user.png"
-                                  }
-                                  alt=""
-                                />
-                                <span className="ml-1 mt-1 text-xs text-black ">
-                                  {myProfile.name}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                            <button
-                              onClick={() => handleMoreInfoClick(task)}
-                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                            >
-                              more info
-                            </button>
+                      ).length === 0 ? (
+                        <div className="items-center justify-center">
+                          <p className="text-center text-sm">
+                            No task is pending
+                          </p>
+                          <div className="flex items-center justify-center">
+                            <FontAwesomeIcon icon={faExclamationCircle} />
                           </div>
                         </div>
-                      ))
+                      ) : (
+                        tasksData
+                          .filter(
+                            (task) =>
+                              task.status === "Todo" &&
+                              task.childId === myProfile.id
+                          )
+                          .map((task) => (
+                            <div
+                              key={task.id}
+                              href=""
+                              className="mb-2 flex items-center rounded-md border  p-3 text-sm hover:bg-blue-gray-50"
+                            >
+                              <div className="flex">
+                                <img
+                                  className="mt-0.5 h-6 w-6 "
+                                  src="/img/task.png"
+                                  alt=""
+                                />
+                                <div className="ml-3">
+                                  <span className="font-medium text-black">
+                                    {task.taskname}
+                                  </span>
+                                  <br></br>
+                                  <span className="mt-2 text-black">
+                                    Submission date: {task.taskdate}
+                                  </span>
+                                  <span className="text-black"></span>
+                                  <div className="mt-1.5 flex">
+                                    <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+
+                                    <span className="ml-1 mt-0.5 text-xs text-black ">
+                                      Reward: {task.rewardname}
+                                    </span>
+                                  </div>
+                                  <div className="mt-1.5 flex">
+                                    <img
+                                      className="mt-0.5 h-5 w-5 rounded-full object-cover"
+                                      src={
+                                        myProfile.img
+                                          ? `data:image/jpeg;base64,${myProfile.img}`
+                                          : "/img/user.png"
+                                      }
+                                      alt=""
+                                    />
+                                    <span className="ml-1 mt-1 text-xs text-black ">
+                                      {myProfile.name}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                                <button
+                                  onClick={() => handleMoreInfoClick(task)}
+                                  className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                                >
+                                  more info
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                      )}
+                    </>
                   )}
-                  </>
-                )}
                 </div>
 
                 {taskDetailsToShow && (
@@ -519,7 +515,6 @@ console.log("Update photo",formData.image);
             </div>
           </div>
         </CardBody>
-        
       </Card>
     </>
   );
