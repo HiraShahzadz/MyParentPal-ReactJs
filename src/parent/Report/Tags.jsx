@@ -11,14 +11,10 @@ function Tags({ setTasktag, childProfileData, selectedChildId }) {
   const [selectedTag, setSelectedTag] = useState(null);
 
   useEffect(() => {
-    if (
-      childProfileData &&
-      childProfileData.length > 0 &&
-      childProfileData[0]?.tags?.length > 0 // Ensure childProfileData[0].tags is defined and has length
-    ) {
-      setSelectedTag(childProfileData[0].tags[0]);
+    if (!selectedChildId) {
+      setSelectedTag(null);
     }
-  }, [childProfileData]);
+  }, [selectedChildId]);
 
   const handleTagClick = (tag) => {
     if (tag === selectedTag) {
@@ -29,6 +25,10 @@ function Tags({ setTasktag, childProfileData, selectedChildId }) {
       setTasktag(tag);
     }
   };
+
+  const selectedChild = childProfileData.find(
+    (child) => child.id === selectedChildId
+  );
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -53,32 +53,36 @@ function Tags({ setTasktag, childProfileData, selectedChildId }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {childProfileData
-            .filter((child) => child.id === selectedChildId)
-            .map(
-              (child) =>
-                child.tags &&
-                child.tags.map((tag) => (
-                  <div className="py-1" key={tag}>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          onClick={() => handleTagClick(tag)}
-                          className={classNames(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
-                            "flex px-4 py-2 text-sm "
-                          )}
-                        >
-                          <TagIcon className="h-4 w-4 text-MyPurple-400" />
-                          <span className="ml-2">{tag}</span>
-                        </a>
+          {selectedChild &&
+          selectedChild.tags &&
+          selectedChild.tags.length > 0 ? (
+            selectedChild.tags.map((tag) => (
+              <div className="py-1" key={tag}>
+                <Menu.Item>
+                  {({ active }) => (
+                    <a
+                      onClick={() => handleTagClick(tag)}
+                      className={classNames(
+                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                        "flex px-4 py-2 text-sm "
                       )}
-                    </Menu.Item>
-                  </div>
-                ))
-            )}
+                    >
+                      <TagIcon className="h-4 w-4 text-MyPurple-400" />
+                      <span className="ml-2">{tag}</span>
+                    </a>
+                  )}
+                </Menu.Item>
+              </div>
+            ))
+          ) : (
+            <div className="py-1">
+              <Menu.Item>
+                <a className="flex px-4 py-2 text-sm text-gray-700">
+                  No tags available
+                </a>
+              </Menu.Item>
+            </div>
+          )}
         </Menu.Items>
       </Transition>
     </Menu>

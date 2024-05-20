@@ -6,12 +6,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const mystatus = [
-  { label: "Todo", image: "/img/purple.png" },
-  { label: "Completed", image: "/img/green.png" },
-  { label: "Reviewed", image: "/img/orange.png" },
-  { label: "Rewarded", image: "/img/blue.png" },
-];
+const mystatus = [{ label: "Todo", image: "/img/purple.png" }];
 
 function TaskStatus({ setStatus }) {
   const [selectedStatus, setSelectedStatus] = useState(mystatus[0]); // Initial selected status

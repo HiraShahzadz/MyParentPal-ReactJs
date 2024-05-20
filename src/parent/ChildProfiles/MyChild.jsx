@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ApproveChanges from "./ApproveChanges";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 
 function MyChild() {
   const [showProfiles, setShowProfiles] = useState(true);
@@ -49,7 +51,7 @@ function MyChild() {
   async function LoadProfileRequestData() {
     try {
       const result = await axios.get(
-        "http://localhost:8081/api/v1/profile/get-all"
+        "http://localhost:8081/api/v1/profile/getall"
       );
       setProfileRequest(result.data);
       console.log("Profile Requests:", result.data);
@@ -120,6 +122,21 @@ function MyChild() {
             </button>
             {showModal && <AddAccount onClose={setShowModal} />}
           </div>
+          {filteredChildProfiles.length === 0 && (
+            <div className="m-10 items-center justify-center">
+              <img
+                className="mx-auto my-auto h-32 w-32 object-cover"
+                src="/img/basketball.png"
+                alt=""
+              />
+              <p className="mt-6 text-center text-sm">
+                Create your child account
+              </p>
+              <div className="flex items-center justify-center">
+                <FontAwesomeIcon icon={faExclamationCircle} />
+              </div>
+            </div>
+          )}
           <div className="mb-12 grid gap-16 gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-4">
             {filteredChildProfiles.map(
               (

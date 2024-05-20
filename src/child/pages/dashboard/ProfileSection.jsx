@@ -9,6 +9,7 @@ import {
   faLockOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -19,6 +20,8 @@ function ProfileSection({ childData, updatePhoto }) {
   const [isUsernameFocused, setIsUsernameFocused] = useState(false);
   const [isPasswordFocused, setPasswordFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+ 
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -63,12 +66,33 @@ function ProfileSection({ childData, updatePhoto }) {
     setGender(childData.gender);
   }, [childData]);
   
+  
+  const [ischildProfile, setIschildProfile] = useState([]);
+  useEffect(() => {
+    loadParentProfile();
+  }, []);
+  async function loadParentProfile() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/profile/getall"
+      );
+      setIschildProfile(result.data);
+      console.log("child profile:", result.data);
+    } catch (error) {
+      console.error("Error loading parentProfile:", error);
+      
+    }
+  }
+  const myProfile = ischildProfile.find((profile) => profile);
+  
+
   async function save(event) {
     event.preventDefault();
 
     if (!email || !password || !name || !dob || !gender) {
       return toast.error("Please fill in all fields");
     }
+    
     // Validate Date of Birth
     const currentDate = new Date();
     const dobDate = new Date(dob);
@@ -103,38 +127,36 @@ function ProfileSection({ childData, updatePhoto }) {
     let url1 = "http://localhost:8081/api/v1/profile/save";
     let url2 = "http://localhost:8081/api/v1/notify/profileNotification";
   
+    const base64Image = updatePhoto.split(",")[1];
     let promise1 = axios.post(url1, {
-      name: name,
+        name: name,
         email: email,
         password: password,
         dob: dob,
-        img: childData.image,
+        img: base64Image,
     });
   
     let promise2 = axios.post(url2, {
     });
    
     try {  
-      Promise.all([promise1, promise2]);
+      await Promise.all([promise1, promise2]);
       toast.success("Your profile will be updated after parent's approval");
     }
     catch (err) {
-      if (err.response) {
+      if (err.response && err.response.status === 403) {
+        toast.error("You have already a pending request ");
+      } else if (err.response) {
         console.error("Server Error:", err.response.data);
       } else if (err.request) {
         console.error("Network Error:", err.request);
       } else {
         console.error("Other Error:", err.message);
       }
-
-      toast.error("Failed to send request");
+     //  toast.error("Failed to send request");
     }
+    
   }
-
-
-
-
-
 
   const handleCancel = () => {
     setEmail(childData.email);

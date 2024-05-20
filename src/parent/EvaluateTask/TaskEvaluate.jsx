@@ -10,6 +10,8 @@ import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Tags from "../Report/Tags";
 import ChildSelection from "../Report/ChildSelection";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 
 export function TaskEvaluate() {
   const navigate = useNavigate();
@@ -136,6 +138,17 @@ export function TaskEvaluate() {
                 Completed Tasks
               </h2>
               <div className="max-h-96">
+                {filteredTasks.filter((task) => task.status === "Completed")
+                  .length === 0 && (
+                  <div className="items-center justify-center">
+                    <p className="text-center text-sm">
+                      No task is completed yet
+                    </p>
+                    <div className="flex items-center justify-center">
+                      <FontAwesomeIcon icon={faExclamationCircle} />
+                    </div>
+                  </div>
+                )}
                 {filteredTasks
                   .filter((task) => task.status === "Completed")
                   .map((task) => (

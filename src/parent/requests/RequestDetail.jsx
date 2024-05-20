@@ -1,40 +1,38 @@
-import React, { useState } from "react";
-import { Button } from "@material-tailwind/react";
+import React from "react";
 import { GiftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-function RequestDetails(props) {
+function RequestDetails({ onClose, childProfileData, selectedNotification }) {
   const handleClose = () => {
-    props.onClose(false);
+    onClose(false);
   };
 
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center overflow-y-auto bg-gray-900 bg-opacity-20">
+      <DndProvider backend={HTML5Backend}>
+        <Toaster />
+      </DndProvider>
       <div className="rounded-lg bg-white p-3 shadow-lg md:w-9/12 lg:w-8/12">
-        <div class="pt-22 relative flex items-center justify-end">
+        <div className="pt-22 relative flex items-center justify-end">
           <XMarkIcon
             className="h-7 w-7 hover:bg-gray-300"
-            onClick={() => props.onClose(false)}
+            onClick={() => onClose(false)}
           />
         </div>
-        <div className="grid grid-cols-1 xl:grid-cols-3  ">
-          <div className=" relative flex max-h-[45vh] flex-col overflow-hidden overflow-y-auto rounded-xl bg-white bg-clip-border text-gray-700 lg:max-h-[60vh] xl:col-span-2">
-            <form className="m-2 ">
-              <DndProvider backend={HTML5Backend}>
-                <Toaster />
-              </DndProvider>
-
+        <div className="grid grid-cols-1 xl:grid-cols-3">
+          <div className="relative flex max-h-[45vh] flex-col overflow-hidden overflow-y-auto rounded-xl bg-white bg-clip-border text-gray-700 lg:max-h-[60vh] xl:col-span-2">
+            <form className="m-2">
               <div className="pb-6">
                 <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                   <div className="sm:col-span-full">
                     <label
                       htmlFor="username"
-                      className=" flex text-lg font-medium leading-6 text-gray-900"
+                      className="flex text-lg font-medium leading-6 text-gray-900"
                     >
-                      <GiftIcon className=" mr-2 h-5 w-5 rounded-sm text-MyPurple-400 " />
+                      <GiftIcon className="mr-2 h-5 w-5 rounded-sm text-MyPurple-400" />
                       Reward Request
                     </label>
                   </div>
@@ -49,7 +47,7 @@ function RequestDetails(props) {
                       htmlFor="name"
                       className="block rounded-md border border-gray-300 bg-gray-100 p-2 text-gray-900 dark:text-white"
                     >
-                      Room Cleaning
+                      {selectedNotification.taskname}
                     </label>
                   </div>
                   <div className="col-span-full">
@@ -63,9 +61,7 @@ function RequestDetails(props) {
                       htmlFor="name"
                       className="block rounded-md border border-gray-300 bg-gray-100 p-2 text-gray-900 dark:text-white"
                     >
-                      I will keep my room neat and organized by putting away
-                      toys, clothes, and books in their designated places
-                      ........
+                      {selectedNotification.taskdescription}
                     </label>
                   </div>
                   <div className="col-span-full">
@@ -73,13 +69,13 @@ function RequestDetails(props) {
                       htmlFor="about"
                       className="block font-medium leading-6 text-gray-900"
                     >
-                      Desirder Reward
+                      Desired Reward
                     </label>
                     <label
                       htmlFor="name"
                       className="block rounded-md border border-gray-300 bg-gray-100 p-2 text-gray-900 dark:text-white"
                     >
-                      Play station
+                      {selectedNotification.desiredreward}
                     </label>
                   </div>
                 </div>
@@ -87,10 +83,10 @@ function RequestDetails(props) {
             </form>
           </div>
           <div className="m-2 flex w-auto flex-col rounded-md border border-gray-400 bg-white bg-clip-border p-2 text-gray-700">
-            <div className=" -m-2 rounded-t-sm bg-MyPurple-400 p-2 ">
+            <div className="-m-2 rounded-t-sm bg-MyPurple-400 p-2">
               <label
                 htmlFor="photo"
-                className=" block text-base font-medium leading-6 text-white"
+                className="block text-base font-medium leading-6 text-white"
               >
                 Details
               </label>
@@ -109,24 +105,35 @@ function RequestDetails(props) {
                   htmlFor="photo"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Request Date
+                  Request at
                 </label>
               </div>
-
               <div className="flex flex-col">
-                <div className="mb-9 inline-flex w-auto gap-x-1.5 rounded-md bg-white p-2 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                  <img
-                    className="h-6 w-6 rounded-full"
-                    src="/img/userc.png"
-                    alt=""
-                  />
-                  <span className="mt-1 font-normal text-black">
-                    hira shahzad
-                  </span>
+                <div className="mb-8 inline-flex w-auto gap-x-1.5 rounded-md bg-white p-2 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  {childProfileData.map(
+                    (child) =>
+                      child.id === selectedNotification.childId && (
+                        <>
+                          <img
+                            className="h-6 w-6 rounded-full object-cover"
+                            src={
+                              child.img
+                                ? `data:image/jpeg;base64,${child.img}`
+                                : "/img/user.png"
+                            }
+                            alt=""
+                          />
+                          <span className="mt-1 font-normal text-black">
+                            {child.name}
+                          </span>
+                        </>
+                      )
+                  )}
                 </div>
-
-                <div className="mb-7">
-                  <span className=" text-black">2-8-2023</span>
+                <div className="mb-2">
+                  <span className="text-sm font-normal text-black">
+                    {selectedNotification.time}
+                  </span>
                 </div>
               </div>
             </div>

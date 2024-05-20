@@ -442,5 +442,21 @@
     margin: 0; 
   }
 }
+@keyframes blink {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #e2cdea; /* Your desired color */
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.blinking {
+  animation: blink 1s infinite; /* Adjust duration as needed */
+}
+
 
 

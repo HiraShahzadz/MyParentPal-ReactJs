@@ -71,9 +71,24 @@ function AboutSection({ profile, updatePhoto }) {
   }, [profile]);
   async function update(event) {
     event.preventDefault();
-    if (!firstName || !lastName || !phoneNo || !cnic) {
+    if (!phoneNo || !cnic) {
       return toast.error("Please fill in all fields");
     } // Validate phone number format
+    const namePattern = /^[A-Za-z]+$/;
+    if (!firstName) {
+      return toast.error("Please enter first name");
+    }
+    if (!namePattern.test(firstName)) {
+      return toast.error(
+        "First name should contain only letters and no spaces"
+      );
+    }
+    if (!lastName) {
+      return toast.error("Please enter last name");
+    }
+    if (!namePattern.test(lastName)) {
+      return toast.error("Last name should contain only letters and no spaces");
+    }
     const phoneRegex = /^\+92\d{10}$/;
     if (!phoneRegex.test(phoneNo)) {
       return toast.error(

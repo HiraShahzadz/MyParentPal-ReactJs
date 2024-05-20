@@ -33,35 +33,22 @@ function PaneltyTask({ onClose, task, childProfileData }) {
   const [childId, setChildId] = useState("");
   const [taskRemarks, setTaskRemarks] = useState("");
   const [percentage, setPercentage] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
   //for saving in database
   async function save(event) {
     event.preventDefault();
-    if (!taskname || !taskdescription || !taskdate || !cheatTags) {
-      return toast.error("Please fill in all fields");
-    }
-    const taskDate = new Date(taskdate);
-    const currentDate = new Date();
 
-    // Extract the date part without considering the time
-    const taskDateWithoutTime = new Date(taskDate.toDateString());
-    const currentDateWithoutTime = new Date(currentDate.toDateString());
-
-    if (taskDateWithoutTime < currentDateWithoutTime) {
-      return toast.error("Task submission date cannot be in the past ");
-    }
-    const selectedTime = new Date(taskdate + " " + tasktime);
-
-    // Compare with the current time
-    const currentTime = new Date();
-
-    if (selectedTime <= currentTime) {
-      return toast.error(
-        "Task submission time cannot be in the past or present (1-24)"
-      );
+    if (!taskRemarks) {
+      return toast.error("Please Add remarks");
     }
 
     try {
-      if (taskname.length > 3 && taskname.length < 15) {
+      if (
+        taskname.length > 3 &&
+        taskname.length < 15 &&
+        taskdescription.length > 20 &&
+        taskdescription.length < 200
+      ) {
         await axios.post("http://localhost:8081/api/v1/task/save_penalty", {
           taskname,
           taskdescription,
@@ -78,9 +65,8 @@ function PaneltyTask({ onClose, task, childProfileData }) {
           taskId: task._id,
           cheatTags,
           taskRemarks: taskRemarks,
-          percentage: percentage,
         });
-        toast.success("Task Created");
+
         setTaskname("");
         setTaskdescription("");
         setStatus("");
@@ -92,15 +78,8 @@ function PaneltyTask({ onClose, task, childProfileData }) {
         setTaskId("");
         setCheatTags([]);
       }
-      if (taskname.length <= 3) {
-        return toast.error("A task must have more than 3 characters");
-      }
-
-      if (taskname.length >= 15) {
-        return toast.error("A task must not be more than 15 characters");
-      }
     } catch (err) {
-      return toast.error("Task creation is faild" + err);
+      return console.log("Penalty Task not created", err);
     }
   }
 
@@ -109,21 +88,19 @@ function PaneltyTask({ onClose, task, childProfileData }) {
       await axios.put(`http://localhost:8081/api/v1/task/edit/${task._id}`, {
         status: status,
       });
-
       // If the update is successful, display a success message
-      toast.success("Task details edited");
-      // Reload the page
-      window.location.reload();
     } catch (error) {
       // If the update fails, display an error message
-      toast.error("Failed to update task details");
-      console.error("Error updating task details:", error);
+      console.error("Error in updating status:", error);
     }
   }
 
   async function updateTask(event) {
     if (!taskRemarks) {
       return toast.error("Please Add remarks");
+    }
+    if (!percentage) {
+      return toast.error("Please select percentage");
     }
     try {
       await axios.put(
@@ -143,15 +120,98 @@ function PaneltyTask({ onClose, task, childProfileData }) {
       );
 
       // If the update is successful, display a success message
-      toast.success("Task details edited");
+
       setTaskRemarks("");
       setPercentage("");
     } catch (error) {
       // If the update fails, display an error message
-      toast.error("Failed to update task details");
-      console.error("Error updating task details:", error);
+      console.error(
+        "Error in editing status,taskRemarks and percentage",
+        error
+      );
     }
   }
+  const handleSave = (event) => {
+    if (selectedOption === "Reviewed") {
+      if (
+        !taskname ||
+        !taskdescription ||
+        !taskdate ||
+        !tasktime ||
+        !taskRemarks ||
+        !cheatTags
+      ) {
+        toast.error("Please fill all required fields for the Penalty Task.");
+        return;
+      }
+      if (!taskRemarks) {
+        toast.error("Please add your remarks for the Reward.");
+        return;
+      }
+      if (!percentage) {
+        return toast.error("Please select percentage");
+      }
+      if (taskname.length <= 3) {
+        return toast.error("A task must have more than 3 characters");
+      }
+
+      if (taskname.length >= 15) {
+        return toast.error("A task must not be more than 15 characters");
+      }
+      if (taskdescription.length <= 20) {
+        return toast.error(
+          "Description should have a minimum of 20 characters"
+        );
+      }
+
+      if (taskdescription.length >= 200) {
+        return toast.error(
+          "Description should have a maximum of 200 characters"
+        );
+      }
+      const taskDate = new Date(taskdate);
+      const currentDate = new Date();
+
+      // Extract the date part without considering the time
+      const taskDateWithoutTime = new Date(taskDate.toDateString());
+      const currentDateWithoutTime = new Date(currentDate.toDateString());
+
+      if (taskDateWithoutTime < currentDateWithoutTime) {
+        return toast.error("Task submission date cannot be in the past ");
+      }
+      const selectedTime = new Date(taskdate + " " + tasktime);
+
+      // Compare with the current time
+      const currentTime = new Date();
+
+      if (selectedTime <= currentTime) {
+        return toast.error(
+          "Task submission time cannot be in the past or present (1-24)"
+        );
+      }
+      save(event);
+      update(event);
+      updateTask(event);
+      toast.success("Task appraised successfully");
+      window.location.reload();
+    } else if (selectedOption === "Rewarded") {
+      if (!taskRemarks) {
+        toast.error("Please add your remarks for the Reward.");
+        return;
+      }
+      if (!percentage) {
+        return toast.error("Please select percentage");
+      }
+      save(event);
+      update(event);
+      updateTask(event);
+      toast.success("Penalty task is created successfully");
+      window.location.reload();
+    } else {
+      toast.error("Please select either Penalty Task or Give Rewards.");
+      return;
+    }
+  };
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center overflow-y-auto bg-gray-900 bg-opacity-20">
       <div className="rounded-lg bg-white p-3 shadow-lg md:w-9/12 lg:w-9/12">
@@ -246,6 +306,8 @@ function PaneltyTask({ onClose, task, childProfileData }) {
                   setTaskRemarks={setTaskRemarks}
                   percentage={percentage}
                   setPercentage={setPercentage}
+                  selectedOption={selectedOption}
+                  setSelectedOption={setSelectedOption}
                 />
               </div>
             </form>
@@ -355,11 +417,7 @@ function PaneltyTask({ onClose, task, childProfileData }) {
         <div className=" ml-64 mt-2 flex justify-start">
           <button
             type="submit"
-            onClick={(event) => {
-              save(event);
-              update(event);
-              updateTask(event);
-            }}
+            onClick={handleSave}
             className="mr-2 rounded-md bg-MyPurple-400 px-4 py-2 text-sm font-semibold normal-case text-white shadow-sm shadow-white hover:bg-purple-400 hover:shadow-white"
           >
             Save

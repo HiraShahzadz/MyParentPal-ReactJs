@@ -12,7 +12,6 @@ import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import bgImage from "/img/bgcover.jpeg";
-import tasksData from "@/parent/data/tasksData";
 import ProfileTags from "@/parent/ChildProfiles/Profile/ProfileTags";
 export function MyProfile({ childData }) {
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
@@ -31,12 +30,7 @@ export function MyProfile({ childData }) {
     dob: "",
     name: "",
   });
-  const [hiddenImages, setHiddenImages] = useState([]);
 
-  const handleImageClick = (index) => {
-    // Set the index of the clicked image to the hiddenImages state
-    setHiddenImages([...hiddenImages, index]);
-  };
   function DiscardChangesModal({ show, setShow }) {
     // Function to handle confirmation of discarding changes
     const handleDiscardChanges = (confirmDiscard) => {
@@ -132,7 +126,6 @@ export function MyProfile({ childData }) {
       } else {
         console.error("Other Error:", err.message);
       }
-      toast.error("Failed to save in information");
     }
   }
   const [tasksData, setTasksData] = useState([]);

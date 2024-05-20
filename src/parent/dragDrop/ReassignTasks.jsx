@@ -41,13 +41,16 @@ function ReassignTasks({ task, selectedTaskDetails, handleCloseTaskDetails }) {
     if (
       !editedDetails.title ||
       !editedDetails.details ||
-      !editedDetails.reward ||
-      !taskdate ||
-      !tasktime
+      !editedDetails.reward
     ) {
       return toast.error("Please fill in all fields");
     }
-
+    if (!taskdate) {
+      return toast.error("Please select the submission date");
+    }
+    if (!tasktime) {
+      return toast.error("Please select the submission time");
+    }
     const taskDate = new Date(taskdate);
     const currentDate = new Date();
 
@@ -70,7 +73,13 @@ function ReassignTasks({ task, selectedTaskDetails, handleCloseTaskDetails }) {
     }
 
     try {
-      if (editedDetails.title.length > 3 && editedDetails.title.length < 15) {
+      if (
+        editedDetails.title.length > 3 &&
+        editedDetails.title.length < 15 &&
+        editedDetails.details.length > 20 &&
+        editedDetails.details.length < 200 &&
+        editedDetails.reward.length > 3
+      ) {
         let url1 = "http://localhost:8081/api/v1/task/reassign";
         let url2 = "http://localhost:8081/api/v1/notify/assigntaskNotification";
 
@@ -92,7 +101,7 @@ function ReassignTasks({ task, selectedTaskDetails, handleCloseTaskDetails }) {
           taskname: editedDetails.title,
         });
         Promise.all([promise1, promise2]);
-        toast.success("Task Reassigned");
+        toast.success("Task is re-assign successfully");
         // Update the saved details state with the edited details
         setSavedDetails({
           taskname: editedDetails.title,
@@ -109,15 +118,28 @@ function ReassignTasks({ task, selectedTaskDetails, handleCloseTaskDetails }) {
         });
         // Switch back to non-editable mode after saving
         setIsEditing(false);
-        // Reload the page
-        window.location.reload();
       } else if (editedDetails.title.length <= 3) {
         return toast.error("A task must have more than 3 characters");
       } else if (editedDetails.title.length >= 15) {
         return toast.error("A task must not be more than 15 characters");
       }
+      if (editedDetails.details.length <= 20) {
+        return toast.error(
+          "Description should have a minimum of 20 characters"
+        );
+      }
+
+      if (editedDetails.details >= 200) {
+        return toast.error(
+          "Description should have a maximum of 200 characters"
+        );
+      }
+      if (editedDetails.reward.length <= 3) {
+        return toast.error("Reward name should contain more then 3 characters");
+      }
+      window.location.reload();
     } catch (err) {
-      return toast.error("Task creation is failed", err);
+      return toast.error("Task is not reassign", err);
     }
   }
 

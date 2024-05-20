@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/ChildHome.css"; // Reference your CSS file here
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from 'axios';
+import axios from "axios";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { tasksData } from "@/child/data";
+import { useNavigate } from "react-router-dom";
 import { GiftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import TaskDetailsModal from "./TaskDetailsModel";
 import { isSameDay } from "date-fns";
-import { useNavigate } from "react-router-dom";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -34,11 +34,11 @@ const icon = {
   className: "w-5 h-5 text-inherit",
 };
 export function Home() {
-  const navigate = useNavigate();
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); //taskdetailmodel
   const handleMoreInfoClick = (task) => {
     setTaskDetailsToShow(task);
   };
+  const navigate = useNavigate();
   useEffect(() => {
     const email = localStorage.getItem("email");
     const password = localStorage.getItem("password");
@@ -58,8 +58,8 @@ export function Home() {
   const handleCloseCompletedTaskDetails = () => {
     setCompletedTaskDetailsToShow(null);
   };
-  const [Details, setDetails] = useState(null);//submit task
-  const [DetailsToShow, setDetailsToShow] = useState(null);//taskdetailmodel
+  const [Details, setDetails] = useState(null); //submit task
+  const [DetailsToShow, setDetailsToShow] = useState(null); //taskdetailmodel
   const MoreInfoClick = (task) => {
     setTaskDetailsToShow(task);
   };
@@ -80,22 +80,6 @@ export function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const [tasksToShow, setTasksToShow] = useState([]);
 
-  const loadMore = () => {
-    setVisibleTasks((visibleTasks) => visibleTasks + 3);
-  };
-  const loadLess = () => {
-    if (visibleTasks > 3) {
-      setVisibleTasks((VisibleTasks) => VisibleTasks - 3);
-    }
-  };
-  const More = () => {
-    setPresentTasks((PresentTasks) => PresentTasks + 2);
-  };
-  const Less = () => {
-    if (PresentTasks > 2) {
-      setPresentTasks((PresentTasks) => PresentTasks - 2);
-    }
-  };
   useEffect(() => {
     const today = new Date();
     const filteredTasks = tasksData.filter((task) =>
@@ -217,7 +201,9 @@ export function Home() {
   }, []);
 
   async function Load() {
-    const result = await axios.get("http://localhost:8081/api/v1/task/getTasks");
+    const result = await axios.get(
+      "http://localhost:8081/api/v1/task/getTasks"
+    );
     settaskss(result.data);
     console.log(result.data);
   }
@@ -240,11 +226,12 @@ export function Home() {
     const minutes = parseInt(minutesStr, 10);
 
     // Validate AM/PM part
-    if (!["am", "pm"].includes(ampm.toLowerCase())) return "Invalid time format";
+    if (!["am", "pm"].includes(ampm.toLowerCase()))
+      return "Invalid time format";
 
     // Adjust hours for PM time
     if (ampm.toLowerCase() === "pm" && taskHours !== 12) {
-        taskHours += 12;
+      taskHours += 12;
     }
 
     submissionDate.setHours(taskHours);
@@ -254,18 +241,47 @@ export function Home() {
     const timeDifference = submissionDate - currentTime;
 
     if (timeDifference < 0) {
-        const absoluteTimeDifference = Math.abs(timeDifference);
-        const days = Math.floor(absoluteTimeDifference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((absoluteTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        return `${days} days and ${hours} hours passed`;
+      const absoluteTimeDifference = Math.abs(timeDifference);
+      const days = Math.floor(absoluteTimeDifference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (absoluteTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      return `${days} days and ${hours} hours passed`;
     } else {
-        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        return `${days} days and ${hours} hours`;
+      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      return `${days} days and ${hours} hours`;
     }
-};
+  };
 
+  const loadMore = () => {
+    setVisibleTasks(taskss.length); // Show all tasks
+  };
+  const loadLess = () => {
+    if (visibleTasks > 3) {
+      setVisibleTasks(3);
+    }
+  };
+  const More = () => {
+    setPresentTasks((PresentTasks) => PresentTasks + 2);
+  };
+  const Less = () => {
+    if (PresentTasks > 2) {
+      setPresentTasks((PresentTasks) => PresentTasks - 2);
+    }
+  };
 
+  const [isBlinking, setIsBlinking] = useState(false);
+
+  const handleClick = (task) => {
+    setIsBlinking(true);
+    handleMoreInfoClick(task);
+    setTimeout(() => {
+      setIsBlinking(false);
+    }, 3000); // Blinking duration (3 seconds)
+  };
   return (
     <div>
       <div className="mt-3 flex flex-col lg:flex-row">
@@ -281,59 +297,90 @@ export function Home() {
               </p>
 
               {taskss
-               .filter(task => isToday(new Date(task.taskdate)))
+                .filter((task) => isToday(new Date(task.taskdate)))
                 .slice(0, PresentTasks)
-                .map(({ id, _id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag, taskfiletype }) => (
-                  <div
-                  onClick={() => handleMoreInfoClick({
+                .map(
+                  ({
+                    id,
                     _id,
-                    taskname,
                     childId,
+                    taskname,
                     taskdescription,
-                    taskdate,
                     rewardname,
-                    tasktag,
+                    taskdate,
                     tasktime,
-                    taskfiletype
-                  })}
-                  key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
-
-                  <div className="flex">
-                    <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
-                    <div className="ml-3">
-                      <span className="font-medium text-black">{taskname}</span>
-                      <br></br>
-                      <div className="mt-2"></div>
-                      <span className="mt-2 mb-3  text-black">Submission date: {taskdate}</span><br></br>
-                       <span className="text-black">Time left: {calculateTimeRemaining(taskdate, tasktime)}</span>
-                       <span className="text-black">
-                       </span>
-                      <div className="mt-1.5 flex">
-                        <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-                        <span className="ml-1 text-xs text-black ">
-                          Reward: {rewardname}
-                        </span>
-                        <br></br>
+                    tasktag,
+                    taskfiletype,
+                  }) => (
+                    <div
+                      onClick={() =>
+                        handleMoreInfoClick({
+                          _id,
+                          taskname,
+                          childId,
+                          taskdescription,
+                          taskdate,
+                          rewardname,
+                          tasktag,
+                          taskTypeIs,
+                          tasktime,
+                          taskfiletype,
+                        })
+                      }
+                      key={id}
+                      href=""
+                      className="blinking mb-2 ml-4 mr-4 flex items-center rounded-md border p-3 text-sm hover:bg-blue-gray-50"
+                    >
+                      <div className="flex">
+                        <img
+                          className="mt-2 h-6 w-6 "
+                          src="/img/task.png"
+                          alt=""
+                        />
+                        <div className="ml-3">
+                          <span className="font-medium text-black">
+                            {taskname}
+                          </span>
+                          <br></br>
+                          <div className="mt-2"></div>
+                          <span className="mb-3 mt-2  text-black">
+                            Submission date: {taskdate}
+                          </span>
+                          <br></br>
+                          <span className="text-black">
+                            Time left:{" "}
+                            {calculateTimeRemaining(taskdate, tasktime)}
+                          </span>
+                          <span className="text-black"></span>
+                          <div className="mt-1.5 flex">
+                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                            <span className="ml-1 text-xs text-black ">
+                              Reward: {rewardname}
+                            </span>
+                            <br></br>
+                          </div>
+                          {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                          <button
+                            onClick={() => handleMoreInfoClick(task)}
+                            className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                          >
+                            more info
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    className="ml-auto flex items-end  hover:border-MyPurple-400"
-                  >
-
-                    <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                      <button
-                        onClick={() => handleMoreInfoClick(task)}
-                        className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                      >
-                        more info
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-              
-              ))}
+                  )
+                )}
 
               <div className="mt-5 flex justify-center">
                 <a
@@ -382,6 +429,24 @@ export function Home() {
             Completed
           </div>
           &nbsp; &nbsp;
+          <div
+            className={`task-nav-item ${
+              selectedTask === "Reviewed" ? "active" : ""
+            }`}
+            onClick={() => setSelectedTask("Reviewed")}
+          >
+            Reviewed
+          </div>
+          &nbsp; &nbsp;
+          <div
+            className={`task-nav-item ${
+              selectedTask === "Rewarded" ? "active" : ""
+            }`}
+            onClick={() => setSelectedTask("Rewarded")}
+          >
+            Rewarded
+          </div>
+          &nbsp; &nbsp;
           {showNextArrow && (
             <div className="next-arrow" onClick={showNext}>
               Next ▶
@@ -393,14 +458,9 @@ export function Home() {
             <br></br>
             <br></br>
 
-
-
-            {taskss
-              .filter((task) => task.status === "Todo").length === 0 ? (
+            {taskss.filter((task) => task.status === "Todo").length === 0 ? (
               <div className="items-center justify-center">
-                <p className="text-center text-sm">
-                  No task is completed yet
-                </p>
+                <p className="text-center text-sm">No task is Assigned yet</p>
                 <div className="flex items-center justify-center">
                   <FontAwesomeIcon icon={faExclamationCircle} />
                 </div>
@@ -409,87 +469,101 @@ export function Home() {
               taskss
                 .sort((a, b) => a.description - b.description)
                 .slice(0, visibleTasks)
-                .map(({ id, _id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag, taskfiletype }) => (
-
-                  <div
-                    onClick={() => handleMoreInfoClick({
-                      _id,
-                      taskname,
-                      childId,
-                      taskdescription,
-                      taskdate,
-                      rewardname,
-                      tasktag,
-                      tasktime,
-                      taskfiletype
-                    })}
-                    key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
-
-                    <div className="flex">
-                      <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
-                      <div className="ml-3">
-                        <span className="font-medium text-black">{taskname}</span>
-                        <br></br>
-                        <div className="mt-2"></div>
-                        <span className="mt-2 mb-3  text-black">Submission date: {taskdate}</span><br></br>
-                         <span className="text-black">Time left: {calculateTimeRemaining(taskdate, tasktime)}</span>
-                         <span className="text-black">
-                         </span>
-                        <div className="mt-1.5 flex">
-                          <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-                          <span className="ml-1 text-xs text-black ">
-                            Reward: {rewardname}
+                .map(
+                  ({
+                    id,
+                    _id,
+                    childId,
+                    taskname,
+                    taskTypeIs,
+                    taskdescription,
+                    rewardname,
+                    taskdate,
+                    tasktime,
+                    tasktag,
+                    taskfiletype,
+                  }) => (
+                    <div
+                      onClick={() =>
+                        handleMoreInfoClick({
+                          _id,
+                          taskname,
+                          childId,
+                          taskdescription,
+                          taskdate,
+                          taskTypeIs,
+                          rewardname,
+                          tasktag,
+                          tasktime,
+                          taskfiletype,
+                        })
+                      }
+                      key={id}
+                      href=""
+                      className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                    >
+                      <div className="flex">
+                        <img
+                          className="mt-2 h-6 w-6 "
+                          src="/img/task.png"
+                          alt=""
+                        />
+                        <div className="ml-3">
+                          <span className="font-medium text-black">
+                            {taskname}
                           </span>
                           <br></br>
+                          <div className="mt-2"></div>
+                          <span className="mb-3 mt-2  text-black">
+                            Submission date: {taskdate}
+                          </span>
+                          <br></br>
+                          <span className="text-black">
+                            Time left:{" "}
+                            {calculateTimeRemaining(taskdate, tasktime)}
+                          </span>
+                          <span className="text-black"></span>
+                          <div className="mt-1.5 flex">
+                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                            <span className="ml-1 text-xs text-black ">
+                              Reward: {rewardname}
+                            </span>
+                            <br></br>
+                          </div>
+                          {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                          <button
+                            onClick={() => handleMoreInfoClick(task)}
+                            className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                          >
+                            more info
+                          </button>
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="ml-auto flex items-end  hover:border-MyPurple-400"
-                    >
-
-                      <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                        <button
-                          onClick={() => handleMoreInfoClick(task)}
-                          className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                        >
-                          more info
-                        </button>
-                      </div>
-
-                    </div>
-
-                  </div>
+                  )
                 )
-                ))}
-
-            <div className="mt-5 flex justify-center">
-              <a
-                className="flex items-center text-purple-500 hover:underline"
-                onClick={visibleTasks === 3 ? loadMore : loadLess}
-              >
-                <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
-                {visibleTasks === 3 && (
-                  <ChevronDownIcon className="ml-1 h-4 w-4" />
-                )}
-              </a>
-            </div>
+            )}
           </div>
         )}
 
         {selectedTask === "Pending" && (
-          <div className="ml-4 mr-4 mb-2">
+          <div className="mb-2 ml-4 mr-4">
             <br></br>
             <br></br>
 
-
-
-            {taskss
-              .filter((task) => task.status === "Todo").length === 0 ? (
+            {taskss.filter((task) => task.status === "Todo").length === 0 ? (
               <div className="items-center justify-center">
-                <p className="text-center text-sm">
-                  No task is assigned yet
-                </p>
+                <p className="text-center text-sm">No task is assigned yet</p>
                 <div className="flex items-center justify-center">
                   <FontAwesomeIcon icon={faExclamationCircle} />
                 </div>
@@ -498,72 +572,88 @@ export function Home() {
               taskss
                 .sort((a, b) => a.description - b.description)
                 .slice(0, visibleTasks)
-                .map(({ id, _id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag, taskfiletype }) => (
-
-                  <div
-                    onClick={() => handleMoreInfoClick({
-                      _id,
-                      taskname,
-                      childId,
-                      taskdescription,
-                      taskdate,
-                      rewardname,
-                      tasktag,
-                      tasktime,
-                      taskfiletype
-                    })}
-                    key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
-
-                    <div className="flex">
-                      <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
-                      <div className="ml-3">
-                        <span className="font-medium text-black">{taskname}</span>
-                        <br></br>
-                        <div className="mt-2"></div>
-                        <span className="mt-2 mb-3  text-black">Submission date: {taskdate}</span><br></br>
-                        <span className="text-black">{calculateTimeRemaining(taskdate, tasktime)}</span>
-                        <span className="text-black">
-
-                        </span>
-                        <div className="mt-1.5 flex">
-                          <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-                          <span className="ml-1 text-xs text-black ">
-                            Reward: {rewardname}
+                .map(
+                  ({
+                    id,
+                    _id,
+                    childId,
+                    taskname,
+                    taskdescription,
+                    rewardname,
+                    taskdate,
+                    taskTypeIs,
+                    tasktime,
+                    tasktag,
+                    taskfiletype,
+                  }) => (
+                    <div
+                      onClick={() =>
+                        handleMoreInfoClick({
+                          _id,
+                          taskname,
+                          childId,
+                          taskdescription,
+                          taskdate,
+                          rewardname,
+                          tasktag,
+                          tasktime,
+                          taskfiletype,
+                        })
+                      }
+                      key={id}
+                      href=""
+                      className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                    >
+                      <div className="flex">
+                        <img
+                          className="mt-2 h-6 w-6 "
+                          src="/img/task.png"
+                          alt=""
+                        />
+                        <div className="ml-3">
+                          <span className="font-medium text-black">
+                            {taskname}
                           </span>
                           <br></br>
+                          <div className="mt-2"></div>
+                          <span className="mb-3 mt-2  text-black">
+                            Submission date: {taskdate}
+                          </span>
+                          <br></br>
+                          <span className="text-black">
+                            {calculateTimeRemaining(taskdate, tasktime)}
+                          </span>
+                          <span className="text-black"></span>
+                          <div className="mt-1.5 flex">
+                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                            <span className="ml-1 text-xs text-black ">
+                              Reward: {rewardname}
+                            </span>
+                            <br></br>
+                          </div>
+                          {taskTypeIs === "Penalty" && (
+                            <div className="w-20 rounded-full bg-[#f2d3ff]">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                {taskTypeIs}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                          <button
+                            onClick={() => handleMoreInfoClick(task)}
+                            className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                          >
+                            more info
+                          </button>
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="ml-auto flex items-end  hover:border-MyPurple-400"
-                    >
-
-                      <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                        <button
-                          onClick={() => handleMoreInfoClick(task)}
-                          className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                        >
-                          more info
-                        </button>
-                      </div>
-
-                    </div>
-
-                  </div>
+                  )
                 )
-                ))}
-
-            <div className="mt-5 flex justify-center">
-              <a
-                className="flex items-center text-purple-500 hover:underline"
-                onClick={visibleTasks === 3 ? loadMore : loadLess}
-              >
-                <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
-                {visibleTasks === 3 && (
-                  <ChevronDownIcon className="ml-1 h-4 w-4" />
-                )}
-              </a>
-            </div>
+            )}
           </div>
         )}
 
@@ -573,9 +663,8 @@ export function Home() {
             <br></br>
 
             <div>
-
-              {taskss
-                .filter((task) => task.status === "Completed").length === 0 ? (
+              {taskss.filter((task) => task.status === "Completed").length ===
+              0 ? (
                 <div className="items-center justify-center">
                   <p className="text-center text-sm">
                     No task is completed yet
@@ -589,76 +678,310 @@ export function Home() {
                   .filter((task) => task.status === "Completed")
                   .sort((a, b) => a.description - b.description)
                   .slice(0, visibleTasks)
-                  .map(({ id, _id, childId, taskname, taskdescription, rewardname, taskdate, tasktime, tasktag, taskfiletype }) => (
-
-                    <div
-                      onClick={() => handleMoreInfoClick({
-                        _id,
-                        taskname,
-                        childId,
-                        taskdescription,
-                        taskdate,
-                        rewardname,
-                        tasktag,
-                        tasktime,
-                        taskfiletype
-                      })}
-                      key={id} href="" className="ml-4 mr-4 mb-2 flex items-center border p-1 rounded-md p-3 text-sm hover:bg-blue-gray-50">
-
-                      <div className="flex">
-                        <img className="mt-2 h-6 w-6 " src="/img/task.png" alt="" />
-                        <div className="ml-3">
-                          <span className="font-medium text-black">{taskname}</span>
-                          <br></br>
-                          <div className="mt-2"></div>
-                          <span className="mt-2 mb-3  text-black">Submission date: {taskdate}</span><br></br>
-                          <span className="text-black">{calculateTimeRemaining(taskdate, tasktime)}</span>
-                          <span className="text-black">
-
-                          </span>
-                          <div className="mt-1.5 flex">
-                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-                            <span className="ml-1 text-xs text-black ">
-                              Reward: {rewardname}
+                  .map(
+                    ({
+                      id,
+                      _id,
+                      childId,
+                      taskname,
+                      taskdescription,
+                      rewardname,
+                      taskdate,
+                      taskTypeIs,
+                      tasktime,
+                      tasktag,
+                      taskfiletype,
+                    }) => (
+                      <div
+                        onClick={() =>
+                          handleMoreInfoClick({
+                            _id,
+                            taskname,
+                            childId,
+                            taskdescription,
+                            taskdate,
+                            rewardname,
+                            tasktag,
+                            tasktime,
+                            taskfiletype,
+                          })
+                        }
+                        key={id}
+                        href=""
+                        className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                      >
+                        <div className="flex">
+                          <img
+                            className="mt-2 h-6 w-6 "
+                            src="/img/task.png"
+                            alt=""
+                          />
+                          <div className="ml-3">
+                            <span className="font-medium text-black">
+                              {taskname}
                             </span>
                             <br></br>
+                            <div className="mt-2"></div>
+                            <span className="mb-3 mt-2  text-black">
+                              Submission date: {taskdate}
+                            </span>
+                            <br></br>
+                            <span className="text-black">
+                              {calculateTimeRemaining(taskdate, tasktime)}
+                            </span>
+                            <span className="text-black"></span>
+                            <div className="mt-1.5 flex">
+                              <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                              <span className="ml-1 text-xs text-black ">
+                                Reward: {rewardname}
+                              </span>
+                              <br></br>
+                            </div>
+                            {taskTypeIs === "Penalty" && (
+                              <div className="w-20 rounded-full bg-[#f2d3ff]">
+                                <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                  {taskTypeIs}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                            <button
+                              onClick={() => handleMoreInfoClick(task)}
+                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                            >
+                              more info
+                            </button>
                           </div>
                         </div>
                       </div>
-                      <div
-                        className="ml-auto flex items-end  hover:border-MyPurple-400"
-                      >
-
-                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                          <button
-                            onClick={() => handleMoreInfoClick(task)}
-                            className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                          >
-                            more info
-                          </button>
-                        </div>
-
-                      </div>
-
-                    </div>
+                    )
                   )
-                  ))}
-
-              <div className="mt-5 flex justify-center">
-                <a
-                  className="flex items-center text-purple-500 hover:underline"
-                  onClick={visibleTasks === 3 ? loadMore : loadLess}
-                >
-                  <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
-                  {visibleTasks === 3 && (
-                    <ChevronDownIcon className="ml-1 h-4 w-4" />
-                  )}
-                </a>
-              </div>
+              )}
             </div>
           </div>
         )}
 
+        {selectedTask === "Reviewed" && (
+          <div>
+            <br></br>
+            <br></br>
+
+            <div>
+              {taskss.filter((task) => task.status === "Reviewed").length ===
+              0 ? (
+                <div className="items-center justify-center">
+                  <p className="text-center text-sm">No task is reviewed yet</p>
+                  <div className="flex items-center justify-center">
+                    <FontAwesomeIcon icon={faExclamationCircle} />
+                  </div>
+                </div>
+              ) : (
+                taskss
+                  .filter((task) => task.status === "Reviewed")
+                  .sort((a, b) => a.description - b.description)
+                  .slice(0, visibleTasks)
+                  .map(
+                    ({
+                      id,
+                      _id,
+                      childId,
+                      taskname,
+                      taskdescription,
+                      rewardname,
+                      taskTypeIs,
+                      taskdate,
+                      tasktime,
+                      tasktag,
+                      taskfiletype,
+                    }) => (
+                      <div
+                        onClick={() =>
+                          handleMoreInfoClick({
+                            _id,
+                            taskname,
+                            childId,
+                            taskdescription,
+                            taskdate,
+                            rewardname,
+                            tasktag,
+                            tasktime,
+                            taskfiletype,
+                          })
+                        }
+                        key={id}
+                        href=""
+                        className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                      >
+                        <div className="flex">
+                          <img
+                            className="mt-2 h-6 w-6 "
+                            src="/img/task.png"
+                            alt=""
+                          />
+                          <div className="ml-3">
+                            <span className="font-medium text-black">
+                              {taskname}
+                            </span>
+                            <br></br>
+                            <div className="mt-2"></div>
+                            <span className="mb-3 mt-2  text-black">
+                              Submission date: {taskdate}
+                            </span>
+                            <br></br>
+                            <span className="text-black">
+                              {calculateTimeRemaining(taskdate, tasktime)}
+                            </span>
+                            <span className="text-black"></span>
+                            <div className="mt-1.5 flex">
+                              <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                              <span className="ml-1 text-xs text-black ">
+                                Reward: {rewardname}
+                              </span>
+                              <br></br>
+                            </div>
+                            {taskTypeIs === "Penalty" && (
+                              <div className="w-20 rounded-full bg-[#f2d3ff]">
+                                <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                  {taskTypeIs}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                            <button
+                              onClick={() => handleMoreInfoClick(task)}
+                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                            >
+                              more info
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )
+              )}
+            </div>
+          </div>
+        )}
+
+        {selectedTask === "Rewarded" && (
+          <div>
+            <br></br>
+            <br></br>
+
+            <div>
+              {taskss.filter((task) => task.status === "Rewarded").length ===
+              0 ? (
+                <div className="items-center justify-center">
+                  <p className="text-center text-sm">No task is rewarded yet</p>
+                  <div className="flex items-center justify-center">
+                    <FontAwesomeIcon icon={faExclamationCircle} />
+                  </div>
+                </div>
+              ) : (
+                taskss
+                  .filter((task) => task.status === "Rewarded")
+                  .sort((a, b) => a.description - b.description)
+                  .slice(0, visibleTasks)
+                  .map(
+                    ({
+                      id,
+                      _id,
+                      childId,
+                      taskname,
+                      taskTypeIs,
+                      taskdescription,
+                      rewardname,
+                      taskdate,
+                      tasktime,
+                      tasktag,
+                      taskfiletype,
+                    }) => (
+                      <div
+                        onClick={() =>
+                          handleMoreInfoClick({
+                            _id,
+                            taskname,
+                            childId,
+                            taskdescription,
+                            taskdate,
+                            rewardname,
+                            tasktag,
+                            tasktime,
+                            taskfiletype,
+                          })
+                        }
+                        key={id}
+                        href=""
+                        className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
+                      >
+                        <div className="flex">
+                          <img
+                            className="mt-2 h-6 w-6 "
+                            src="/img/task.png"
+                            alt=""
+                          />
+                          <div className="ml-3">
+                            <span className="font-medium text-black">
+                              {taskname}
+                            </span>
+                            <br></br>
+                            <div className="mt-2"></div>
+                            <span className="mb-3 mt-2  text-black">
+                              Submission date: {taskdate}
+                            </span>
+                            <br></br>
+                            <span className="text-black">
+                              {calculateTimeRemaining(taskdate, tasktime)}
+                            </span>
+                            <span className="text-black"></span>
+                            <div className="mt-1.5 flex">
+                              <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
+                              <span className="ml-1 text-xs text-black ">
+                                Reward: {rewardname}
+                              </span>
+                              <br></br>
+                            </div>
+                            {taskTypeIs === "Penalty" && (
+                              <div className="w-20 rounded-full bg-[#f2d3ff]">
+                                <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                                  {taskTypeIs}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                          <div className="ml-auto flex items-end  hover:border-MyPurple-400">
+                            <button
+                              onClick={() => handleMoreInfoClick(task)}
+                              className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                            >
+                              more info
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )
+              )}
+            </div>
+          </div>
+        )}
+        <div className="mt-5 flex justify-center">
+          <a
+            className="flex items-center text-purple-500 hover:underline"
+            onClick={visibleTasks === 3 ? loadMore : loadLess}
+          >
+            <span>{visibleTasks === 3 ? "View more" : "View less"}</span>
+            {visibleTasks === 3 && <ChevronDownIcon className="ml-1 h-4 w-4" />}
+          </a>
+        </div>
         {selectedTask === "Penality" && (
           <div>
             <br></br>
@@ -671,7 +994,8 @@ export function Home() {
           <SubmitTask
             Details={Details}
             selectedTaskDetails={DetailsToShow}
-            handleCloseTaskDetails={handleCloseDetails} />
+            handleCloseTaskDetails={handleCloseDetails}
+          />
         )}
 
         {taskDetailsToShow && (
@@ -681,7 +1005,6 @@ export function Home() {
             // handleSubmitTask={/* Pass your handleSubmitTask function here */}
           />
         )}
-
 
         {CompletedtaskDetailsToShow && (
           <CompletedTaskDetailsModal

@@ -2,15 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import {
-  Typography,
-  Card,
-  CardHeader,
-  CardBody,
-} from "@material-tailwind/react";
-
-import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { Card, CardBody } from "@material-tailwind/react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { useNavigate } from "react-router-dom";
@@ -27,12 +19,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const mystatus = [
-  { label: "Todo", image: "/img/purple.png" },
-  { label: "Completed", image: "/img/green.png" },
-  { label: "Reviewed", image: "/img/orange.png" },
-  { label: "Rewarded", image: "/img/blue.png" },
-];
+const mystatus = [{ label: "Todo", image: "/img/purple.png" }];
 export function TaskCreation() {
   const navigate = useNavigate();
 
@@ -108,23 +95,23 @@ export function TaskCreation() {
   //for saving in database
   async function save(event) {
     event.preventDefault();
-    if (
-      !taskname ||
-      !taskdescription ||
-      !rewardname ||
-      !taskdate ||
-      !tasktime ||
-      !tasktype
-    ) {
+    if (!taskname || !taskdescription || !rewardname) {
       return toast.error("Please fill in all fields");
     }
     if (!taskassignee || !childId) {
       return toast.error("Please select task assignee");
     }
     if (!tasktag) {
-      return toast.error(
-        "Please select task tag. If no tags create in child profile"
-      );
+      return toast.error("tags create in child profile");
+    }
+    if (!tasktype) {
+      return toast.error("Select the type of task");
+    }
+    if (!taskdate) {
+      return toast.error("Please select the submission date");
+    }
+    if (!tasktime) {
+      return toast.error("Please select the submission time");
     }
     const taskDate = new Date(taskdate);
     const currentDate = new Date();
@@ -147,30 +134,14 @@ export function TaskCreation() {
       );
     }
 
-    let url1 = "http://localhost:8081/api/v1/task/save";
-    let url2 = "http://localhost:8081/api/v1/notify/assigntaskNotification";
-
-    let promise1 = axios.post(url1, {
-      taskname: taskname,
-      taskdescription: taskdescription,
-      status: status,
-      rewardname: rewardname,
-      taskfiletype: taskfiletype,
-      taskdate: taskdate,
-      tasktime: tasktime,
-      tasktag: tasktag,
-      taskassignee: taskassignee,
-      tasktype: tasktype,
-      childId: childId,
-    });
-
-    let promise2 = axios.post(url2, {
-      taskname: taskname,
-      childId: childId,
-    });
-
     try {
-      if (taskname.length > 3 && taskname.length < 15) {
+      if (
+        taskname.length > 3 &&
+        taskname.length < 15 &&
+        taskdescription.length > 20 &&
+        taskdescription.length < 200 &&
+        rewardname.length > 3
+      ) {
         let url1 = "http://localhost:8081/api/v1/task/save";
         let url2 = "http://localhost:8081/api/v1/notify/assigntaskNotification";
 
@@ -190,7 +161,9 @@ export function TaskCreation() {
 
         let promise2 = axios.post(url2, {
           taskname: taskname,
+          childId: childId,
         });
+
         Promise.all([promise1, promise2]);
         toast.success("Task Created");
         setTaskname("");
@@ -212,8 +185,23 @@ export function TaskCreation() {
       if (taskname.length >= 15) {
         return toast.error("A task must not be more than 15 characters");
       }
+      if (taskdescription.length <= 20) {
+        return toast.error(
+          "Description should have a minimum of 20 characters"
+        );
+      }
+
+      if (taskdescription.length >= 200) {
+        return toast.error(
+          "Description should have a maximum of 200 characters"
+        );
+      }
+      if (rewardname.length <= 3) {
+        return toast.error("Reward name should contain more then 3 characters");
+      }
+      window.location.reload();
     } catch (err) {
-      return toast.error("Task creation is faild");
+      return toast.error("Task creation is faild", err);
     }
   }
   const [childProfileData, setChildProfileData] = useState([]);
@@ -280,7 +268,7 @@ export function TaskCreation() {
           <Toaster />
         </DndProvider>
 
-        <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3 ">
+        <div className="mb-4 grid grid-cols-1 gap-3 xl:grid-cols-3 ">
           <Card className="overflow-hidden xl:col-span-2">
             <CardBody className="overflow-x-scroll px-0 pb-3 pt-0">
               <div className=" pb-2 pl-6 pt-6 text-left text-lg font-bold text-black">
@@ -354,9 +342,6 @@ export function TaskCreation() {
                       setTaskfiletype={setTaskfiletype}
                     />
                   </div>
-                  <div>
-                    <RegulateAccess />
-                  </div>
                 </div>
               </div>
             </CardBody>
@@ -366,7 +351,7 @@ export function TaskCreation() {
               Details
             </div>
 
-            <CardBody className="pt-0">
+            <CardBody className="overflow-hidden overflow-x-scroll pt-0">
               <div className="flex">
                 <div className="mr-4 mt-2">
                   <div className="mb-10">

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { GiftIcon } from "@heroicons/react/24/solid";
 import TaskDetailsAndReport from "./TaskDetailsAndReport";
-
 export function SkillTasks({ tasksData, childProfileData }) {
   const [childName, setChildName] = useState(null);
   const [taskDetailsToShow, setTaskDetailsToShow] = useState(null); // task detail model
@@ -181,7 +180,6 @@ export function SkillTasks({ tasksData, childProfileData }) {
             ))
           )}
         </div>
-
         {taskDetailsToShow && (
           <TaskDetailsAndReport
             childData={childName}

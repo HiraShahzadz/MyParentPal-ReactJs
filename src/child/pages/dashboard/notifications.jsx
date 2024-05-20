@@ -4,14 +4,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Typography,
-  Alert,
   Card,
   CardHeader,
   CardBody,
-  Button,
 } from "@material-tailwind/react";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import NotificationData from "@/data/NotificationData";
 
 export function Notifications() {
   const navigate = useNavigate();
@@ -19,25 +15,9 @@ export function Notifications() {
   const [hiddenImages, setHiddenImages] = useState([]);
 
   const handleImageClick = (index) => {
-    // Set the index of the clicked image to the hiddenImages state
     setHiddenImages([...hiddenImages, index]);
   };
 
-  const [showAlerts, setShowAlerts] = React.useState({
-    blue: true,
-    green: true,
-    orange: true,
-    red: true,
-    MyPurple: true,
-  });
-  const [showAlertsWithIcon, setShowAlertsWithIcon] = React.useState({
-    blue: true,
-    green: true,
-    orange: true,
-    red: true,
-    MyPurple: true,
-  });
-  const alerts = ["blue", "green", "orange", "red", "MyPurple"];
   const [requestrs, setrequestrs] = useState([]);
 
   useEffect(() => {
@@ -50,7 +30,7 @@ export function Notifications() {
     Load(); // Load data initially
     const interval = setInterval(() => {
       Load(); // Fetch new notifications periodically
-    }, 30000); // Fetch data every minute (adjust interval as needed)
+    }, 10000); // Fetch data every 30 seconds (adjust interval as needed)
     return () => clearInterval(interval); // Cleanup function to clear interval on component unmount
   }, []);
 
@@ -62,27 +42,39 @@ export function Notifications() {
       }
       const allrequests = await axios.get(url);
 
-      // Filter notifications based on date and local time
       const currentDate = new Date();
+      const currentTime = new Date(currentDate);
       const startTime = new Date(currentDate);
       const endTime = new Date(currentDate);
-      startTime.setHours(13, 23, 0); // 10:00 AM
-      endTime.setHours(17, 0, 0); // 5:00 PM
+      startTime.setHours(17, 34, 0); // Start time
+      endTime.setHours(19, 0, 0); // End time
 
       const filteredRequests = allrequests.data
         .filter((request) => {
-          // Check if request.localtime is defined and not null
-          if (!request.localtime) return false;
+          if (!request.localtime || !request.date) return false;
 
-          // Extract hours and minutes from localtime
+          const requestDate = new Date(request.date);
           const [hours, minutes] = request.localtime.split(":").map(Number);
+          const localTime = new Date(requestDate);
+          localTime.setHours(hours, minutes, 0);
 
-          // Create a new Date object for the localtime
-          const localTime = new Date(currentDate);
-          localTime.setHours(hours, minutes, 0); // Set seconds to 0 for accurate comparison
-
-          // Check if localtime falls within the specified range
-          return localTime <= endTime || localTime >= startTime;
+          if (requestDate.toDateString() !== currentDate.toDateString()) {
+            // Always show notifications from previous dates
+            return true;
+          } else {
+            if (currentTime == startTime) {
+              // If current time is less than the start time, don't show notifications
+              return true;
+            }
+            // If current time is equal to or greater than the start time, show appropriate notifications
+            if (
+              currentTime >= startTime ||
+              (currentTime >= startTime && currentTime <= endTime)
+            ) {
+              return true;
+            }
+            return false;
+          }
         })
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -96,6 +88,7 @@ export function Notifications() {
   useEffect(() => {
     loadParentProfile();
   }, []);
+
   async function loadParentProfile() {
     try {
       const result = await axios.get(
@@ -107,6 +100,7 @@ export function Notifications() {
       console.error("Error loading parentProfile:", error);
     }
   }
+
   const myProfile = childProfile.find((profile) => profile);
   console.log(myProfile);
 
@@ -129,12 +123,11 @@ export function Notifications() {
           {myProfile && (
             <>
               {requestrs
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
                 .filter((Notification) => Notification.childId === myProfile.id)
                 .filter(({ message }) => message.startsWith("Your parent"))
-
                 .map(({ ChildName, message, taskname, time }, index) => (
                   <div
-                    href=""
                     className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
                     key={index}
                   >

@@ -38,9 +38,7 @@ const EditTask = ({ task, selectedTaskDetails, handleCloseTaskDetails }) => {
     if (
       !editedDetails.title ||
       !editedDetails.details ||
-      !editedDetails.reward ||
-      !taskdate ||
-      !tasktime
+      !editedDetails.reward
     ) {
       toast.error("Please fill in all required fields");
       return;
@@ -69,35 +67,61 @@ const EditTask = ({ task, selectedTaskDetails, handleCloseTaskDetails }) => {
     }
 
     try {
-      await axios.put(
-        `http://localhost:8081/api/v1/task/edit_task/${task._id}`,
-        {
+      if (
+        editedDetails.title.length > 3 &&
+        editedDetails.title.length < 15 &&
+        editedDetails.details.length > 20 &&
+        editedDetails.details.length < 200 &&
+        editedDetails.reward.length > 3
+      ) {
+        await axios.put(
+          `http://localhost:8081/api/v1/task/edit_task/${task._id}`,
+          {
+            taskname: editedDetails.title,
+            taskdescription: editedDetails.details,
+            rewardname: editedDetails.reward,
+            status: editedDetails.taststatus,
+            taskdate: taskdate,
+            tasktime: tasktime,
+            tasktag: editedDetails.tags,
+            taskfiletype: fileTypes,
+          }
+        );
+
+        // If the update is successful, display a success message
+        toast.success("Task details edited");
+
+        // Update the saved details state with the edited details
+        setSavedDetails({
           taskname: editedDetails.title,
           taskdescription: editedDetails.details,
           rewardname: editedDetails.reward,
-          status: editedDetails.taststatus,
           taskdate: taskdate,
           tasktime: tasktime,
-          tasktag: editedDetails.tags,
-          taskfiletype: fileTypes,
-        }
-      );
-      // If the update is successful, display a success message
-      toast.success("Task details edited");
+          taskfiletype: fileTypes.join(", "),
+        });
+        // Switch back to non-editable mode after saving
+        setIsEditing(false);
+        // Reload the page
+      } else if (editedDetails.title.length <= 3) {
+        return toast.error("A task must have more than 3 characters");
+      } else if (editedDetails.title.length >= 15) {
+        return toast.error("A task must not be more than 15 characters");
+      }
+      if (editedDetails.details.length <= 20) {
+        return toast.error(
+          "Description should have a minimum of 20 characters"
+        );
+      }
 
-      // Update the saved details state with the edited details
-      setSavedDetails({
-        taskname: editedDetails.title,
-        taskdescription: editedDetails.details,
-        rewardname: editedDetails.reward,
-        taskdate: taskdate,
-        tasktime: tasktime,
-        taskfiletype: fileTypes.join(", "),
-      });
-
-      // Switch back to non-editable mode after saving
-      setIsEditing(false);
-      // Reload the page
+      if (editedDetails.details >= 200) {
+        return toast.error(
+          "Description should have a maximum of 200 characters"
+        );
+      }
+      if (editedDetails.reward.length <= 3) {
+        return toast.error("Reward name should contain more then 3 characters");
+      }
       window.location.reload();
     } catch (error) {
       // If the update fails, display an error message
