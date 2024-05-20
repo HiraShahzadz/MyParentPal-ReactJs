@@ -36,7 +36,7 @@ export function SkillTasks({ tasksData, childProfileData }) {
       <div className="max-h-96">
         <h2 className="text-md mb-3 ml-3 mt-3 font-bold">Rewarded Tasks</h2>
         <div className="max-h-96 overflow-y-auto">
-          {filterTasks("Completed").length === 0 ? (
+          {filterTasks("Rewarded").length === 0 ? (
             <div className="items-center justify-center">
               <p className="text-center text-sm">No task is rewarded yet</p>
               <div className="flex items-center justify-center">
@@ -110,7 +110,7 @@ export function SkillTasks({ tasksData, childProfileData }) {
 
         <h2 className="text-md mb-3 ml-3 mt-3 font-bold">Reviewed Tasks</h2>
         <div className="mb-5 max-h-96 overflow-y-auto">
-          {filterTasks("Todo").length === 0 ? (
+          {filterTasks("Reviewed").length === 0 ? (
             <div className="items-center justify-center">
               <p className="text-center text-sm">No task is reviewed yet</p>
               <div className="flex items-center justify-center">

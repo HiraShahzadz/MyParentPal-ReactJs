@@ -8,6 +8,7 @@ const ProgressGraph = ({
   reviewedTasks,
   rewardedTasks,
   taskPercentages,
+  penaltyTasks,
 }) => {
   const chartRef = useRef(null);
 
@@ -163,7 +164,7 @@ const ProgressGraph = ({
             </dl>
             <dl className="flex h-[78px] flex-col items-center justify-center rounded-lg bg-[#f53e57] dark:bg-gray-600">
               <dt className="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-medium text-[#f53e57] dark:bg-gray-500 dark:text-white">
-                {reviewedTasks}
+                {penaltyTasks}
               </dt>
               <dd className="text-sm font-medium text-white dark:text-white">
                 Penalized
