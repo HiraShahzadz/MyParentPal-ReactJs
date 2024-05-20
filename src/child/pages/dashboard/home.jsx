@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { tasksData } from "@/child/data";
-
+import { useNavigate } from "react-router-dom";
 import { GiftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import TaskDetailsModal from "./TaskDetailsModel";
 import { isSameDay } from "date-fns";
@@ -38,6 +38,7 @@ export function Home() {
   const handleMoreInfoClick = (task) => {
     setTaskDetailsToShow(task);
   };
+  const navigate = useNavigate();
   useEffect(() => {
     const email = localStorage.getItem("email");
     const password = localStorage.getItem("password");

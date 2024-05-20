@@ -19,8 +19,6 @@ function RespondNotifications({
   const [requestStatus, setRequestStatus] = useState("");
 
   const handleAccept = async () => {
-    setRequestStatus("Accept");
-
     if (!taskdate || !tasktime) {
       return toast.error("Please fill in all fields");
     }
@@ -41,7 +39,7 @@ function RespondNotifications({
         "Task submission time cannot be in the past or present (1-24)"
       );
     }
-
+    setRequestStatus("Accept");
     try {
       const taskAssignee = childProfileData.find(
         (child) => child.id === selectedNotification.childId
@@ -73,23 +71,22 @@ function RespondNotifications({
       ]);
 
       if (saveTaskResponse.status === 200 && notifyResponse.status === 200) {
-        toast.success("Task Created");
+        toast.success("Request Accepted and Task Created");
         setTaskfiletype([]);
         setTaskdate("");
         setTasktime("");
         onClose(false);
       } else {
-        throw new Error("Task creation failed");
+        throw new Error("Reward task creation failed");
       }
     } catch (err) {
-      toast.error("Task creation failed");
+      toast.error("Reward task creation failed");
     }
   };
 
   const handleDecline = () => {
     setRequestStatus("Reject");
     toast.error("Request Declined");
-    onClose(false);
   };
 
   const handleCheckboxChange = (event) => {
@@ -113,21 +110,19 @@ function RespondNotifications({
   const updateRequestStatus = async () => {
     try {
       await axios.put(
-        `http://localhost:8081/api/v1/Reward_Request/edit-reward-req/${selectedNotification.id}`,
+        `http://localhost:8081/api/v1/Reward_Request/edit-reward-req/${selectedNotification._id}`,
         {
           status: requestStatus,
         }
       );
-
-      toast.success("Task Request status updated");
-      // Optionally you can remove the window reload if it's not necessary
-      // window.location.reload();
+      onClose(false);
+      window.location.reload();
     } catch (error) {
       toast.error("Failed to update request details");
       console.error("Error updating request details:", error);
     }
   };
-  console.log("wahhh", selectedNotification.id, selectedNotification.taskname);
+
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center overflow-y-auto bg-gray-900 bg-opacity-20">
       <DndProvider backend={HTML5Backend}>
@@ -326,7 +321,7 @@ function RespondNotifications({
                 </div>
                 <div className="mb-2">
                   <span className="text-sm font-normal text-black">
-                    {selectedNotification.time}
+                    {selectedNotification.date}
                   </span>
                 </div>
               </div>

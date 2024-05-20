@@ -39,8 +39,12 @@ export function DashboardNavbar() {
   useEffect(() => {
     loadNotifications();
     loadChildProfileData();
-    const storedHiddenNotifications = JSON.parse(localStorage.getItem("hiddenNotifications"));
-    const storedReadNotifications = JSON.parse(localStorage.getItem("readNotifications"));
+    const storedHiddenNotifications = JSON.parse(
+      localStorage.getItem("hiddenNotifications")
+    );
+    const storedReadNotifications = JSON.parse(
+      localStorage.getItem("readNotifications")
+    );
     if (storedHiddenNotifications) {
       setHiddenNotifications(storedHiddenNotifications);
     }
@@ -52,15 +56,25 @@ export function DashboardNavbar() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("hiddenNotifications", JSON.stringify(hiddenNotifications));
-    localStorage.setItem("readNotifications", JSON.stringify(readNotifications));
+    localStorage.setItem(
+      "hiddenNotifications",
+      JSON.stringify(hiddenNotifications)
+    );
+    localStorage.setItem(
+      "readNotifications",
+      JSON.stringify(readNotifications)
+    );
   }, [hiddenNotifications, readNotifications]);
 
- useEffect(() => {
-  // Calculate clickCount based on the number of unread notifications (excluding those that start with "Your parent")
-  const unreadCount = requests.filter(notification => !notification.message.startsWith("Your parent") && !readNotifications.includes(notification.id)).length;
-  setClickCount(unreadCount);
-}, [requests, readNotifications]);
+  useEffect(() => {
+    // Calculate clickCount based on the number of unread notifications (excluding those that start with "Your parent")
+    const unreadCount = requests.filter(
+      (notification) =>
+        !notification.message.startsWith("Your parent") &&
+        !readNotifications.includes(notification.id)
+    ).length;
+    setClickCount(unreadCount);
+  }, [requests, readNotifications]);
 
   const loadNotifications = async () => {
     try {
@@ -68,7 +82,7 @@ export function DashboardNavbar() {
       const allRequests = await axios.get(url);
 
       // Merge the newly fetched notifications with existing read statuses
-      const updatedRequests = allRequests.data.map(notification => {
+      const updatedRequests = allRequests.data.map((notification) => {
         if (readNotifications.includes(notification.id)) {
           notification.read = true;
         }
@@ -76,8 +90,8 @@ export function DashboardNavbar() {
       });
 
       // Filter out the hidden notifications
-      const filteredNotifications = updatedRequests.filter(notification => 
-        !hiddenNotifications.includes(notification.id)
+      const filteredNotifications = updatedRequests.filter(
+        (notification) => !hiddenNotifications.includes(notification.id)
       );
       setRequests(filteredNotifications);
     } catch (error) {
@@ -87,7 +101,9 @@ export function DashboardNavbar() {
 
   const loadChildProfileData = async () => {
     try {
-      const result = await axios.get("http://localhost:8081/api/v1/user/get-child");
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/user/get-child"
+      );
       setChildProfileData(result.data);
     } catch (error) {
       console.error("Error fetching child profile data:", error);
@@ -106,17 +122,21 @@ export function DashboardNavbar() {
     setClickCount(0);
   };
 
-
   const handleImageClick = (index) => {
     const notificationId = requests[index].id;
     const updatedReadNotifications = [...readNotifications, notificationId];
     setReadNotifications(updatedReadNotifications);
-    localStorage.setItem("readNotifications", JSON.stringify(updatedReadNotifications));
+    localStorage.setItem(
+      "readNotifications",
+      JSON.stringify(updatedReadNotifications)
+    );
 
     const updatedVisibleNotifications = requests.filter((_, i) => i !== index);
     setRequests(updatedVisibleNotifications);
 
-    const remainingNotificationsCount = updatedVisibleNotifications.filter(notification => !readNotifications.includes(notification.id)).length;
+    const remainingNotificationsCount = updatedVisibleNotifications.filter(
+      (notification) => !readNotifications.includes(notification.id)
+    ).length;
     setClickCount(remainingNotificationsCount);
   };
 
@@ -126,7 +146,6 @@ export function DashboardNavbar() {
     } else if (request.childId !== undefined && request.childId !== null) {
       return childProfileData.some((child) => child.id === request.childId);
     } else {
-      console.log("ChildId or childId is undefined or null for request:", request);
       return false;
     }
   });
@@ -134,13 +153,21 @@ export function DashboardNavbar() {
   return (
     <Navbar
       color={fixedNavbar ? "white" : "transparent"}
-      className={`rounded-xl transition-all ${fixedNavbar ? "sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5" : "px-0 py-1"}`}
+      className={`rounded-xl transition-all ${
+        fixedNavbar
+          ? "sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5"
+          : "px-0 py-1"
+      }`}
       fullWidth
       blurred={fixedNavbar}
     >
       <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
         <div className="capitalize">
-          <Breadcrumbs className={`bg-transparent p-0 transition-all ${fixedNavbar ? "mt-1" : ""}`}>
+          <Breadcrumbs
+            className={`bg-transparent p-0 transition-all ${
+              fixedNavbar ? "mt-1" : ""
+            }`}
+          >
             <Link to={`/${layout}`}>
               <Typography
                 variant="small"
@@ -150,7 +177,11 @@ export function DashboardNavbar() {
                 {layout}
               </Typography>
             </Link>
-            <Typography variant="small" color="blue-gray" className="font-normal">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
               {page}
             </Typography>
           </Breadcrumbs>
@@ -185,7 +216,11 @@ export function DashboardNavbar() {
               <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
             </IconButton>
           </Link>
-          <IconButton variant="text" color="blue-gray" onClick={() => setOpenConfigurator(dispatch, true)}>
+          <IconButton
+            variant="text"
+            color="blue-gray"
+            onClick={() => setOpenConfigurator(dispatch, true)}
+          >
             <Cog6ToothIcon className="h-5 w-5 text-blue-gray-500" alt="" />
           </IconButton>
           <Menu>
@@ -199,51 +234,83 @@ export function DashboardNavbar() {
                 <BellIcon className="h-5 w-5 text-blue-gray-500" alt="" />
                 {clickCount > 0 && (
                   <>
-                {filteredNotifications.filter(notification => !notification.message.startsWith("Your parent")).length > 0 && (
-  <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-block bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-    {clickCount}
-  </span>
-)}
-
-                </>
-              )}
+                    {filteredNotifications.filter(
+                      (notification) =>
+                        !notification.message.startsWith("Your parent")
+                    ).length > 0 && (
+                      <span className="absolute right-0 top-0 inline-block flex h-4 w-4 -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                        {clickCount}
+                      </span>
+                    )}
+                  </>
+                )}
               </IconButton>
             </MenuHandler>
-            <MenuList className="w-max border-0" style={{ maxHeight: "300px", overflowY: "auto", paddingRight: "10px" }}>
-              <CardHeader color="transparent" floated={false} shadow={false}></CardHeader>
+            <MenuList
+              className="w-max border-0"
+              style={{
+                maxHeight: "300px",
+                overflowY: "auto",
+                paddingRight: "10px",
+              }}
+            >
+              <CardHeader
+                color="transparent"
+                floated={false}
+                shadow={false}
+              ></CardHeader>
               <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
                 <Link to="/parentDashboard/parent/notifications">
                   {filteredNotifications
                     .sort((a, b) => new Date(b.date) - new Date(a.date))
-                    .map(({ ChildName, message, image, taskname, id }, index) => (
-                      <>
-                        {!message.startsWith("Your parent") && (
-                          <div className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50" key={id}>
-                            <div className="flex">
-                              <img className="h-10 w-10 rounded-full" src="/img/userc.png" alt="" />
-                              <div className="ml-3">
-                                <span className="font-medium text-black">{ChildName}</span>
-                                <span className="text-black">{message}</span>
-                                <div className="mt-1.5 flex">
-                                  <img className="h-3 w-3" src="/img/task.png" alt="" />
-                                  <span className="ml-1 text-xs text-black hover:underline">
-                                    {taskname ? taskname : "Edit Profile"}
+                    .map(
+                      ({ ChildName, message, image, taskname, id }, index) => (
+                        <>
+                          {!message.startsWith("Your parent") && (
+                            <div
+                              className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
+                              key={id}
+                            >
+                              <div className="flex">
+                                <img
+                                  className="h-10 w-10 rounded-full"
+                                  src="/img/userc.png"
+                                  alt=""
+                                />
+                                <div className="ml-3">
+                                  <span className="font-medium text-black">
+                                    {ChildName}
                                   </span>
+                                  <span className="text-black">{message}</span>
+                                  <div className="mt-1.5 flex">
+                                    <img
+                                      className="h-3 w-3"
+                                      src="/img/task.png"
+                                      alt=""
+                                    />
+                                    <span className="ml-1 text-xs text-black hover:underline">
+                                      {taskname ? taskname : "Edit Profile"}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
+                              {!readNotifications.includes(id) && (
+                                <div
+                                  className="ml-auto flex items-end rounded-full border p-1 hover:border-MyPurple-400"
+                                  onClick={() => handleImageClick(index)}
+                                >
+                                  <img
+                                    className="h-1.5 w-1.5 rounded-full"
+                                    src="/img/purple.png"
+                                    alt=""
+                                  />
+                                </div>
+                              )}
                             </div>
-                            {!readNotifications.includes(id) && (
-                              <div
-                                className="ml-auto flex items-end rounded-full border p-1 hover:border-MyPurple-400"
-                                onClick={() => handleImageClick(index)}
-                              >
-                                <img className="h-1.5 w-1.5 rounded-full" src="/img/purple.png" alt="" />
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </>
-                    ))}
+                          )}
+                        </>
+                      )
+                    )}
                 </Link>
               </CardBody>
             </MenuList>

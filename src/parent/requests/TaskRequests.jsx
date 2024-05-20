@@ -8,6 +8,8 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { Toaster } from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import RequestDetails from "./RequestDetail";
@@ -58,10 +60,6 @@ export function TaskRequests() {
     } else if (request.childId !== undefined && request.childId !== null) {
       return childProfileData.some((child) => child.id === request.childId);
     } else {
-      console.log(
-        "ChildId or childId is undefined or null for request:",
-        request
-      );
       return false;
     }
   });
@@ -102,6 +100,14 @@ export function TaskRequests() {
           </Typography>
         </CardHeader>
         <CardBody className="flex flex-col gap-4 p-3">
+          {filteredNotifications.length === 0 && (
+            <div className="items-center justify-center">
+              <p className="text-center text-sm">No more requests pending</p>
+              <div className="m-3 flex items-center justify-center">
+                <FontAwesomeIcon icon={faExclamationCircle} />
+              </div>
+            </div>
+          )}
           {filteredNotifications
             .filter((request) => request.taskdescription)
             .map((data, index) => {

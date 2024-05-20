@@ -7,6 +7,8 @@ import {
   CardBody,
   Button,
 } from "@material-tailwind/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import RespondNotifications from "@/parent/pages/dashboard/RespondNotifications";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
@@ -26,6 +28,7 @@ export function Notifications() {
     loadRespondNotifications();
     const interval = setInterval(() => {
       loadNotifications();
+      loadRespondNotifications();
     }, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -54,16 +57,33 @@ export function Notifications() {
     }
   }
 
+  async function loadRespondNotifications() {
+    try {
+      const result = await axios.get(
+        "http://localhost:8081/api/v1/Reward_Request/get_requests"
+      );
+      setRespondNotifications(result.data);
+    } catch (error) {
+      console.error("Error fetching reward requests:", error);
+    }
+  }
+
   const filteredNotifications = requestrs.filter((request) => {
     if (request.ChildId !== undefined && request.ChildId !== null) {
       return childProfileData.some((child) => child.id === request.ChildId);
     } else if (request.childId !== undefined && request.childId !== null) {
       return childProfileData.some((child) => child.id === request.childId);
     } else {
-      console.log(
-        "ChildId or childId is undefined or null for request:",
-        request
-      );
+      return false;
+    }
+  });
+
+  const filteredRespond = respondNotifications.filter((request) => {
+    if (request.ChildId !== undefined && request.ChildId !== null) {
+      return childProfileData.some((child) => child.id === request.ChildId);
+    } else if (request.childId !== undefined && request.childId !== null) {
+      return childProfileData.some((child) => child.id === request.childId);
+    } else {
       return false;
     }
   });
@@ -76,16 +96,15 @@ export function Notifications() {
     );
   };
 
-  async function loadRespondNotifications() {
-    try {
-      const result = await axios.get(
-        "http://localhost:8081/api/v1/Reward_Request/get_requests"
-      );
-      setRespondNotifications(result.data);
-    } catch (error) {
-      console.error("Error fetching reward requests:", error);
-    }
-  }
+  const handleViewRequestClick = (data) => {
+    const filteredRespondNotifications = respondNotifications.filter(
+      (notification) => notification.childId === data.childId
+    );
+    setSelectedNotification({
+      ...data,
+      respondNotifications: filteredRespondNotifications,
+    });
+  };
 
   return (
     <div className="mx-auto my-10 flex max-w-screen-lg flex-col gap-8">
@@ -104,6 +123,16 @@ export function Notifications() {
           </Typography>
         </CardHeader>
         <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
+          {filteredNotifications.length === 0 && (
+            <div className="items-center justify-center">
+              <p className="text-center text-sm">
+                You haven't recieved any notifications yet
+              </p>
+              <div className="m-3 flex items-center justify-center">
+                <FontAwesomeIcon icon={faExclamationCircle} />
+              </div>
+            </div>
+          )}
           {filteredNotifications
             .sort((a, b) => new Date(b.date) - new Date(a.date))
             .map((data, index) => (
@@ -128,10 +157,25 @@ export function Notifications() {
                             />
                           )
                       )}
+                      <div className="flex">
+                        {childProfileData.map(
+                          (child) =>
+                            child.id === data.childId && (
+                              <>
+                                <img
+                                  className="h-10 w-10 rounded-full object-cover"
+                                  src={
+                                    child.img
+                                      ? `data:image/jpeg;base64,${child.img}`
+                                      : "/img/user.png"
+                                  }
+                                  alt=""
+                                />
+                              </>
+                            )
+                        )}
+                      </div>
                       <div className="ml-3">
-                        <span className="mr-1 font-medium text-black">
-                          {data.ChildName}
-                        </span>
                         <span className="text-black">{data.message}</span>
                         <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
                           {data.time}
@@ -174,13 +218,17 @@ export function Notifications() {
           </Typography>
         </CardHeader>
         <CardBody className="flex max-h-64 flex-col gap-4 overflow-y-auto p-3">
-          {filteredNotifications
-            .filter((request) => request.taskdescription)
-            .map((data, index) => {
-              const filteredRespondNotifications = respondNotifications.filter(
-                (notification) => notification.childId === data.childId
-              );
-
+          {filteredRespond.filter((data) => data.status === "Pending")
+            .length === 0 && (
+            <div className="items-center justify-center">
+              <p className="text-center text-sm">No more requests pending</p>
+              <div className="m-3 flex items-center justify-center">
+                <FontAwesomeIcon icon={faExclamationCircle} />
+              </div>
+            </div>
+          )}
+          {filteredRespond.map((data, index) => {
+            if (data.status === "Pending") {
               return (
                 <div
                   className="items-center rounded-md p-3 text-sm hover:bg-blue-gray-50 sm:flex"
@@ -190,36 +238,48 @@ export function Notifications() {
                     {childProfileData.map(
                       (child) =>
                         child.id === data.childId && (
-                          <img
-                            className="h-10 w-10 rounded-full object-cover"
-                            src={
-                              child.img
-                                ? `data:image/jpeg;base64,${child.img}`
-                                : "/img/user.png"
-                            }
-                            alt=""
-                          />
+                          <>
+                            <img
+                              className="h-10 w-10 rounded-full object-cover"
+                              src={
+                                child.img
+                                  ? `data:image/jpeg;base64,${child.img}`
+                                  : "/img/user.png"
+                              }
+                              alt=""
+                            />
+                            <div className="ml-3">
+                              <span className="mr-1 font-medium text-black">
+                                {child.name}
+                              </span>
+                              <span className="mr-1 text-black">
+                                Requested for a reward
+                              </span>
+                              <span className=" mt-2 font-bold text-MyPurple-400">
+                                {data.desiredreward}
+                              </span>
+                              <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
+                                {data.date}
+                              </span>
+
+                              <div className="mt-1.5 flex">
+                                <img
+                                  className="h-3 w-3"
+                                  src="/img/task.png"
+                                  alt=""
+                                />
+                                <span className="ml-1 text-xs text-black hover:underline">
+                                  {data.taskname}
+                                </span>
+                              </div>
+                            </div>
+                          </>
                         )
                     )}
-                    <div className="ml-3">
-                      <span className="mr-1 font-medium text-black">
-                        {data.ChildName}
-                      </span>
-                      <span className="text-black">{data.message}</span>
-                      <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
-                        {data.time}
-                      </span>
-                      <div className="mt-1.5 flex">
-                        <img className="h-3 w-3" src="/img/task.png" alt="" />
-                        <span className="ml-1 text-xs text-black hover:underline">
-                          {data.taskname}
-                        </span>
-                      </div>
-                    </div>
                   </div>
                   <div className="ml-12 mt-3 flex items-end sm:ml-auto">
                     <Button
-                      onClick={() => setSelectedNotification(data)}
+                      onClick={() => handleViewRequestClick(data)}
                       className="mb-2 border border-MyPurple-400 bg-white px-3 py-2 text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent hover:bg-MyPurple-400 hover:text-white hover:shadow-white md:rounded-md"
                     >
                       View Request
@@ -227,7 +287,10 @@ export function Notifications() {
                   </div>
                 </div>
               );
-            })}
+            } else {
+              return null; // Handle other statuses if needed
+            }
+          })}
         </CardBody>
       </Card>
       {selectedNotification && (

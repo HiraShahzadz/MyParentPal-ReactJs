@@ -5,6 +5,9 @@ import Task from "@/parent/dragDrop/Task";
 import Header from "@/parent/dragDrop/Header";
 import { StatisticsCard } from "@/parent/widgets/cards";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+
 import {
   Card,
   CardHeader,
@@ -83,7 +86,7 @@ function Section({
   return (
     <Card
       ref={drop}
-      className={`rounded-md p-2 ${isOver ? "bg-blue-gray-200" : ""}`}
+      className={`mt-4 rounded-md p-2 ${isOver ? "bg-blue-gray-200" : ""}`}
     >
       <div className=" pl-4 pr-4 pt-4 ">
         <Header
@@ -92,7 +95,15 @@ function Section({
           count={tasksToMap?.length}
         />
       </div>
-      <CardBody className=" max-h-96 overflow-y-auto p-4 pt-[-20px]">
+      <CardBody className="max-h-96 overflow-y-auto p-4 pt-[-20px]">
+        {tasksToMap.length === 0 && (
+          <div className="mt-5 items-center justify-center">
+            <p className="text-center text-sm">No task in this section</p>
+            <div className="flex items-center justify-center">
+              <FontAwesomeIcon icon={faExclamationCircle} />
+            </div>
+          </div>
+        )}
         {tasksToMap?.length > 0 &&
           tasksToMap.map((task) => (
             <Task
