@@ -4,9 +4,11 @@ import Tags from "@/parent/Report/Tags";
 import { SkillTasks } from "@/parent/Report/SkillTasks";
 import ChildSelection from "@/parent/Report/ChildSelection";
 import ProgressGraph from "@/parent/Report/ProgressGraph";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export function ChildReport() {
+  const navigate = useNavigate();
   const [childProfileData, setChildProfileData] = useState([]);
   const [tasksData, setTasksData] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState(null);
@@ -29,6 +31,12 @@ export function ChildReport() {
   });
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     loadChildProfileData();
     loadTasks();
   }, []);

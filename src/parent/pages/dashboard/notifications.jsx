@@ -10,6 +10,7 @@ import {
 } from "@material-tailwind/react";
 import NotificationData from "@/parent/data/NotificationData";
 import RespondNotificationsData from "@/parent/data/RespondNotificationsData";
+import { useNavigate } from "react-router-dom";
 import RespondNotifications from "@/parent/pages/dashboard/RespondNotifications";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
@@ -19,8 +20,15 @@ export function Notifications() {
   const [hiddenImages, setHiddenImages] = useState([]);
   const [requestrs, setrequestrs] = useState([]);
   const [childProfileData, setChildProfileData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     loadNotifications();
     loadChildProfileData();
     const interval = setInterval(() => {

@@ -5,12 +5,14 @@ import { GiftIcon } from "@heroicons/react/24/solid";
 import PenaltyTask from "./PenaltyTask";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Tags from "../Report/Tags";
 import ChildSelection from "../Report/ChildSelection";
 
 export function TaskEvaluate() {
+  const navigate = useNavigate();
   const [childProfileData, setChildProfileData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [tasksData, setTasksData] = useState([]);
@@ -20,6 +22,12 @@ export function TaskEvaluate() {
   const [filteredTasks, setFilteredTasks] = useState([]);
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     loadChildProfileData();
     loadTasks();
   }, []);

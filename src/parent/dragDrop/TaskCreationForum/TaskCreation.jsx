@@ -13,6 +13,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
+import { useNavigate } from "react-router-dom";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Assignee from "../../attributes/Assignee";
 import CalenderInput from "../../attributes/CalenderInput";
@@ -33,6 +34,8 @@ const mystatus = [
   { label: "Rewarded", image: "/img/blue.png" },
 ];
 export function TaskCreation() {
+  const navigate = useNavigate();
+
   const [selectedStatus, setSelectedStatus] = useState(mystatus[0]); // Initial selected status
 
   const [tasks, setTasks] = useState(mystatus[0]);
@@ -40,6 +43,12 @@ export function TaskCreation() {
   console.log("tasks", tasks);
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     setTasks(JSON.parse(localStorage.getItem("tasks")));
   }, []);
   //***********************************

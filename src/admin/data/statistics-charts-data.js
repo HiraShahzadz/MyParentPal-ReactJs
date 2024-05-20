@@ -54,7 +54,7 @@ export const dailySalesChart = {
       ...chartsConfig.xaxis,
       categories: [
         "1-10",
-        "12-20",
+        "11-20",
         "21-30",
         "31-40",
         "41-50",

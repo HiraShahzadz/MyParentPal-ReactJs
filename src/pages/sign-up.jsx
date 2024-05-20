@@ -274,35 +274,6 @@ export function SignUp() {
             >
               Sign Up
             </Button>
-            <br />
-            <GoogleLogin
-              clientId="904580528046-i6c9hteemvckth4pulvv77pu65vd0n4p.apps.googleusercontent.com"
-              render={(renderProps) => (
-                <Button
-                  fullWidth
-                  className="shadow-transparent hover:shadow-transparent"
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    color: "#B089BE",
-                    border: "1px solid rgba(128, 128, 128, 0.5)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <img
-                    src="/src/widgets/layout/google.svg"
-                    alt="Google Icon"
-                    style={{
-                      height: "20px",
-                      width: "20px",
-                      marginRight: "12px",
-                    }}
-                  />
-                  Sign In with Google
-                </Button>
-              )}
-            />
 
             <Typography variant="small" className="mt-6 flex justify-center">
               Already have an account?

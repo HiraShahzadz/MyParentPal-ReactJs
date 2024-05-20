@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +13,15 @@ function AboutSection({ profile, updatePhoto }) {
   const [isLastNameFocused, setIsLastNameFocused] = useState(false);
   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
   const [isCnicFocused, setIsCnicFocused] = useState(false);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
+  }, []);
   const handleFirstNameFocus = () => {
     setIsFirstNameFocused(true);
   };

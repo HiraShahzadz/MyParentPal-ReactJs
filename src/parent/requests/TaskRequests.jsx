@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Alert,
@@ -12,9 +12,20 @@ import RespondNotificationsData from "@/parent/data/RespondNotificationsData";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import RequestDetails from "./RequestDetail";
 export function TaskRequests() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
+  }, []);
   const [hiddenImages, setHiddenImages] = useState([]);
 
   const handleImageClick = (index) => {

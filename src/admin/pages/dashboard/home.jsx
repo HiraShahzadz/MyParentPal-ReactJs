@@ -26,7 +26,6 @@ export function Home() {
       // Redirect to sign-in page if email or password is missing
       navigate("/sign-in");
     }
-    (async () => await Load())();
   }, []);
   useEffect(() => {
     fetchUserCounts();

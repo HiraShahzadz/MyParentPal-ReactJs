@@ -3,6 +3,7 @@ import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import ChildProfileData from "../data/child-profile-data";
 import { MyProfile } from "./Profile/profile";
 import AddAccount from "./Profile/AddAccount";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ApproveChanges from "./ApproveChanges";
 import axios from "axios";
@@ -16,8 +17,15 @@ function MyChild() {
   const [selectedChild, setSelectedChild] = useState(null); // State to hold selected child's data
   const [profileRequest, setProfileRequest] = useState([]); // State to hold profile request data
   const [showApproveChanges, setShowApproveChanges] = useState(false); // Flag to indicate whether to show ApproveChanges component
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     if (childProfileData) {
       (async () => {
         await LoadChildData();

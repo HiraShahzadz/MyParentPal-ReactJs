@@ -9,14 +9,29 @@ import {
 } from "@material-tailwind/react";
 import { Toaster } from "react-hot-toast";
 import { DndProvider } from "react-dnd";
+import { useNavigate } from "react-router-dom";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
 export function Tables() {
+  const navigate = useNavigate();
+  const [hoveredFile, setHoveredFile] = useState(null);
   const [queries, setQueries] = useState([]);
+  const handleMouseEnter = (query) => {
+    setHoveredFile(query);
+  };
 
+  const handleMouseLeave = () => {
+    setHoveredFile(null);
+  };
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     fetchQueries();
   }, []);
 
@@ -109,7 +124,7 @@ export function Tables() {
           className="mb-8 p-6"
         >
           <Typography variant="h6" style={{ color: "#B089BE" }}>
-            Feedback and Queries
+            Queries
           </Typography>
         </CardHeader>
 
@@ -184,11 +199,23 @@ export function Tables() {
                         {email}
                       </Typography>
                     </td>
-                    <td className="border-b border-blue-gray-50 px-5 py-3">
-                      <Typography className="text-xs font-medium text-blue-gray-600">
+                    <td
+                      className="group relative mb-3 w-52 max-w-full border-b "
+                      onMouseEnter={() => handleMouseEnter(query)}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <Typography className="mb-2  mr-2 block h-4 w-40 overflow-hidden pt-0.5 text-xs font-medium text-blue-gray-600 dark:text-white">
                         {query}
                       </Typography>
+                      {hoveredFile === query && (
+                        <div className="max-w-240 border-tl-none border-tr-none border-br-none border-bl-none absolute left-0 top-full z-20 ml-0 mt-0 box-border cursor-default break-all rounded-md bg-gray-800 p-2 pb-0 pl-0 pr-0 pt-0 text-xs leading-5 text-white shadow-md">
+                          <p className="p-1 text-sm text-white dark:text-white">
+                            {query}
+                          </p>
+                        </div>
+                      )}
                     </td>
+
                     <td className="border-b border-blue-gray-50 px-5 py-3">
                       <Typography className="text-xs font-medium text-blue-gray-600">
                         {date}
