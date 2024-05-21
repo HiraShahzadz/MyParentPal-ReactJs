@@ -257,7 +257,7 @@ export function Home() {
   };
 
   const loadMore = () => {
-    setVisibleTasks(taskss.length); // Show all tasks
+    setVisibleTasks(30); // Show all tasks
   };
   const loadLess = () => {
     if (visibleTasks > 3) {
@@ -305,9 +305,11 @@ export function Home() {
                     _id,
                     childId,
                     taskname,
+                    taskTypeIs,
                     taskdescription,
                     rewardname,
                     taskdate,
+                    taskRemarks,
                     tasktime,
                     tasktag,
                     taskfiletype,
@@ -322,6 +324,7 @@ export function Home() {
                           taskdate,
                           rewardname,
                           tasktag,
+                          taskRemarks,
                           taskTypeIs,
                           tasktime,
                           taskfiletype,
@@ -458,7 +461,7 @@ export function Home() {
             <br></br>
             <br></br>
 
-            {taskss.filter((task) => task.status === "Todo").length === 0 ? (
+            {taskss.length === 0 ? (
               <div className="items-center justify-center">
                 <p className="text-center text-sm">No task is Assigned yet</p>
                 <div className="flex items-center justify-center">
@@ -478,6 +481,7 @@ export function Home() {
                     taskTypeIs,
                     taskdescription,
                     rewardname,
+                    taskRemarks,
                     taskdate,
                     tasktime,
                     tasktag,
@@ -493,18 +497,18 @@ export function Home() {
                           taskdate,
                           taskTypeIs,
                           rewardname,
+                          taskRemarks,
                           tasktag,
                           tasktime,
                           taskfiletype,
                         })
                       }
                       key={id}
-                      href=""
                       className="mb-2 ml-4 mr-4 flex items-center rounded-md border p-1 p-3 text-sm hover:bg-blue-gray-50"
                     >
                       <div className="flex">
                         <img
-                          className="mt-2 h-6 w-6 "
+                          className="mt-2 h-6 w-6"
                           src="/img/task.png"
                           alt=""
                         />
@@ -514,7 +518,7 @@ export function Home() {
                           </span>
                           <br></br>
                           <div className="mt-2"></div>
-                          <span className="mb-3 mt-2  text-black">
+                          <span className="mb-3 mt-2 text-black">
                             Submission date: {taskdate}
                           </span>
                           <br></br>
@@ -522,32 +526,29 @@ export function Home() {
                             Time left:{" "}
                             {calculateTimeRemaining(taskdate, tasktime)}
                           </span>
-                          <span className="text-black"></span>
                           <div className="mt-1.5 flex">
-                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400 " />
-                            <span className="ml-1 text-xs text-black ">
+                            <GiftIcon className="h-4 w-4 rounded-sm text-MyPurple-400" />
+                            <span className="ml-1 text-xs text-black">
                               Reward: {rewardname}
                             </span>
                             <br></br>
                           </div>
                           {taskTypeIs === "Penalty" && (
                             <div className="w-20 rounded-full bg-[#f2d3ff]">
-                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm  text-black ">
+                              <p className="mt-3 w-20 overflow-hidden pl-3 text-sm text-black">
                                 {taskTypeIs}
                               </p>
                             </div>
                           )}
                         </div>
                       </div>
-                      <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                        <div className="ml-auto flex items-end  hover:border-MyPurple-400">
-                          <button
-                            onClick={() => handleMoreInfoClick(task)}
-                            className=" mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
-                          >
-                            more info
-                          </button>
-                        </div>
+                      <div className="ml-auto flex items-end hover:border-MyPurple-400">
+                        <button
+                          onClick={() => handleMoreInfoClick(task)}
+                          className="mb-2 ml-8 mt-3 select-none rounded-lg border border-MyPurple-400 bg-white px-3 py-2 text-center align-middle font-sans text-sm font-semibold normal-case text-MyPurple-400 shadow-sm shadow-transparent transition-all hover:bg-MyPurple-400 hover:text-white hover:shadow-lg hover:shadow-white focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none md:rounded-md"
+                        >
+                          more info
+                        </button>
                       </div>
                     </div>
                   )
@@ -563,13 +564,14 @@ export function Home() {
 
             {taskss.filter((task) => task.status === "Todo").length === 0 ? (
               <div className="items-center justify-center">
-                <p className="text-center text-sm">No task is assigned yet</p>
+                <p className="text-center text-sm">No task is pending</p>
                 <div className="flex items-center justify-center">
                   <FontAwesomeIcon icon={faExclamationCircle} />
                 </div>
               </div>
             ) : (
               taskss
+                .filter((task) => task.status == "Todo")
                 .sort((a, b) => a.description - b.description)
                 .slice(0, visibleTasks)
                 .map(
@@ -582,6 +584,7 @@ export function Home() {
                     rewardname,
                     taskdate,
                     taskTypeIs,
+                    taskRemarks,
                     tasktime,
                     tasktag,
                     taskfiletype,
@@ -595,6 +598,7 @@ export function Home() {
                           taskdescription,
                           taskdate,
                           rewardname,
+                          taskRemarks,
                           tasktag,
                           tasktime,
                           taskfiletype,
@@ -687,6 +691,7 @@ export function Home() {
                       taskdescription,
                       rewardname,
                       taskdate,
+                      taskRemarks,
                       taskTypeIs,
                       tasktime,
                       tasktag,
@@ -702,6 +707,7 @@ export function Home() {
                             taskdate,
                             rewardname,
                             tasktag,
+                            taskRemarks,
                             tasktime,
                             taskfiletype,
                           })
@@ -792,6 +798,7 @@ export function Home() {
                       taskdescription,
                       rewardname,
                       taskTypeIs,
+                      taskRemarks,
                       taskdate,
                       tasktime,
                       tasktag,
@@ -806,6 +813,7 @@ export function Home() {
                             taskdescription,
                             taskdate,
                             rewardname,
+                            taskRemarks,
                             tasktag,
                             tasktime,
                             taskfiletype,
@@ -897,6 +905,7 @@ export function Home() {
                       taskTypeIs,
                       taskdescription,
                       rewardname,
+                      taskRemarks,
                       taskdate,
                       tasktime,
                       tasktag,
@@ -912,6 +921,7 @@ export function Home() {
                             taskdate,
                             rewardname,
                             tasktag,
+                            taskRemarks,
                             tasktime,
                             taskfiletype,
                           })

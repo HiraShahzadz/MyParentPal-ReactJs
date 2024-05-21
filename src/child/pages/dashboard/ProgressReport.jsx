@@ -3,8 +3,9 @@ import ProgressGraph from "./ProgressGraph";
 import { Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { SkillTasks } from "@/child/pages/dashboard/SkillTasks";
-
+import { useNavigate } from "react-router-dom";
 const ProgressReport = () => {
+  const navigate = useNavigate();
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [childProfile, setChildProfile] = useState([]);
   const [tasksData, setTasksData] = useState([]);
@@ -22,6 +23,12 @@ const ProgressReport = () => {
   };
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     loadProfile();
   }, []);
 
@@ -38,6 +45,12 @@ const ProgressReport = () => {
   }
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     if (childProfile.length > 0) {
       loadTasks();
     }

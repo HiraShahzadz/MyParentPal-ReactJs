@@ -122,30 +122,32 @@ const FileUploader = ({ taskId }) => {
             </div>
           )}
 
-          <div
-            className="group relative mb-3 flex max-h-full w-52 max-w-full rounded-b-lg bg-white p-2 shadow-md"
-            onMouseEnter={() => handleMouseEnter(submission.files)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <p className="mb-2 mr-2 block w-40 overflow-hidden pt-0.5 text-sm text-gray-900 dark:text-white">
-              {submission.fileName}
-            </p>
-            <ArrowDownTrayIcon
-              className="ml-auto h-5 w-5 flex-shrink-0 cursor-pointer rounded-sm text-MyPurple-400 shadow-sm hover:bg-gray-200 hover:shadow-md"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              onClick={() =>
-                downloadFile(submission.files, submission.fileName)
-              }
-            />
-            {hoveredFile === submission.files && (
-              <div className="max-w-240 border-tl-none border-tr-none border-br-none border-bl-none absolute left-0 top-full ml-0 mt-0 box-border cursor-default break-all rounded-md bg-gray-800 p-2 pb-0 pl-0 pr-0 pt-0 text-xs leading-5 text-white shadow-md">
-                <p className="p-1 text-sm text-white dark:text-white">
-                  {submission.fileName}
-                </p>
-              </div>
-            )}
-          </div>
+          {submission.files && (
+            <div
+              className="group relative mb-3 flex max-h-full w-52 max-w-full rounded-b-lg bg-white p-2 shadow-md"
+              onMouseEnter={() => handleMouseEnter(submission.files)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <p className="mb-2 mr-2 block w-40 overflow-hidden pt-0.5 text-sm text-gray-900 dark:text-white">
+                {submission.fileName}
+              </p>
+              <ArrowDownTrayIcon
+                className="ml-auto h-5 w-5 flex-shrink-0 cursor-pointer rounded-sm text-MyPurple-400 shadow-sm hover:bg-gray-200 hover:shadow-md"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                onClick={() =>
+                  downloadFile(submission.files, submission.fileName)
+                }
+              />
+              {hoveredFile === submission.files && (
+                <div className="max-w-240 border-tl-none border-tr-none border-br-none border-bl-none absolute left-0 top-full ml-0 mt-0 box-border cursor-default break-all rounded-md bg-gray-800 p-2 pb-0 pl-0 pr-0 pt-0 text-xs leading-5 text-white shadow-md">
+                  <p className="p-1 text-sm text-white dark:text-white">
+                    {submission.fileName}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
 

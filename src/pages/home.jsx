@@ -128,7 +128,12 @@ export function Home() {
     }
   }
   const profile = parentProfile.find((profile) => profile.img);
-
+  const getProfileImage = (parentId) => {
+    const profile = parentProfile.find((profile) => profile.id === parentId);
+    return profile && profile.img
+      ? `data:image/jpeg;base64,${profile.img}`
+      : "/img/user.png";
+  };
   return (
     <>
       <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16 ">
@@ -272,7 +277,7 @@ export function Home() {
                     )
                   )
                   .slice(step, step + 3)
-                  .map(({ id, name, description }) => (
+                  .map(({ id, name, description, parentId }) => (
                     <Card
                       key={id}
                       shadow={false}
@@ -281,11 +286,7 @@ export function Home() {
                       <div className="mx-auto mb-4 mt-6 grid h-14 w-14 place-items-center rounded-full bg-white shadow-lg shadow-gray-500/20">
                         {/* Assuming profile is found based on feedback's parentId */}
                         <img
-                          src={
-                            profile.img
-                              ? `data:image/jpeg;base64,${profile.img}`
-                              : "/img/user.png"
-                          }
+                          src={getProfileImage(parentId)}
                           className="h-14 w-14  rounded-full object-cover"
                         />
                       </div>

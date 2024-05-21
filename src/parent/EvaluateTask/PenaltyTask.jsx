@@ -102,25 +102,30 @@ function PaneltyTask({ onClose, task, childProfileData }) {
     if (!percentage) {
       return toast.error("Please select percentage");
     }
+
+    let url1 = `http://localhost:8081/api/v1/task/edit_task/${task._id}`;
+    let url2 = "http://localhost:8081/api/v1/notify/TaskRewardedNotification";
+
+    let promise1 = axios.put(url1, {
+      taskname: task.taskname,
+      taskdescription: task.taskdescription,
+      rewardname: task.rewardname,
+      taskdate: task.taskdate,
+      tasktime: task.tasktime,
+      tasktag: task.tasktag,
+      taskfiletype: task.taskfiletype,
+      status: status,
+      taskRemarks: taskRemarks,
+      percentage: percentage,
+    });
+
+    let promise2 = axios.post(url2, {
+      taskname: task.taskname,
+      childId: task.childId,
+    });
     try {
-      await axios.put(
-        `http://localhost:8081/api/v1/task/edit_task/${task._id}`,
-        {
-          taskname: task.taskname,
-          taskdescription: task.taskdescription,
-          rewardname: task.rewardname,
-          taskdate: task.taskdate,
-          tasktime: task.tasktime,
-          tasktag: task.tasktag,
-          taskfiletype: task.taskfiletype,
-          status: status,
-          taskRemarks: taskRemarks,
-          percentage: percentage,
-        }
-      );
-
+      Promise.all([promise1, promise2]);
       // If the update is successful, display a success message
-
       setTaskRemarks("");
       setPercentage("");
     } catch (error) {

@@ -12,8 +12,6 @@ import {
 } from "@heroicons/react/24/solid";
 
 const FileUploader = ({ taskId, filetype }) => {
-
-
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -59,16 +57,15 @@ const FileUploader = ({ taskId, filetype }) => {
   }, [filetype]);
 
   const handleSubmit = async () => {
+    const totalSize = files.reduce((acc, file) => acc + file.size, 0); // Calculate total size of all files
+    const totalSizeInMB = totalSize / (1024 * 1024); // Convert total size to MB
+    if (totalSizeInMB > 1000) {
+      toast.error("file size cannot exceed 1000 MB");
+      setFiles([]);
+      return;
+    }
 
-  const totalSize = files.reduce((acc, file) => acc + file.size, 0); // Calculate total size of all files
-  const totalSizeInMB = totalSize / (1024 * 1024); // Convert total size to MB
-  if (totalSizeInMB > 1000) {
-     toast.error("file size cannot exceed 1000 MB");
-     setFiles([]);
-     return;
-  }
-
-  const formData = new FormData();
+    const formData = new FormData();
     files.forEach((file) => {
       formData.append("file", file);
     });
@@ -80,9 +77,10 @@ const FileUploader = ({ taskId, filetype }) => {
     let isFileTypeValid = files.some((file) => {
       return allowedTypes.some((type) => {
         if (
-          (type === "Picture" && (file.type === "image/jpeg" || file.type === "image/png")) ||
-          (type === "Audio" && (file.type === "audio/mpeg" || file.type === "audio/mp3")) ||
-          (type === "Video" && (file.type === "video/mp4" || file.type === "video/quicktime")) // Include .mov files
+          (type === "Picture" &&
+            (file.type === "image/jpeg" || file.type === "image/png")) ||
+          (type === "Audio" && file.type.startsWith("audio/")) ||
+          (type === "Video" && file.type.startsWith("video/")) // Include .mov files
         ) {
           return true;
         }
@@ -91,27 +89,24 @@ const FileUploader = ({ taskId, filetype }) => {
     });
 
     if (!isFileTypeValid) {
-      toast.error("You have to upload "+ filetype + " to complete the task");
+      toast.error("You have to upload " + filetype + " to complete the task");
       setFiles([]);
       return;
     }
-    let url1 =  `http://localhost:8081/api/v1/task_submission/save?taskid=${taskId}`;
+    let url1 = `http://localhost:8081/api/v1/task_submission/save?taskid=${taskId}`;
     let url2 = `http://localhost:8081/api/v1/notify/messageNotify?taskid=${taskId}`;
-  
+
     let promise1 = axios.post(url1, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    
-  
-    let promise2 = axios.post(url2, {
-     
-    });
+
+    let promise2 = axios.post(url2, {});
     setIsSaving(true);
     try {
       // Send both requests simultaneously using Promise.all()
-       Promise.all([promise1, promise2]);
+      Promise.all([promise1, promise2]);
       toast.success("Submission done successfully ");
       setFiles([]);
     } catch (error) {
@@ -120,7 +115,7 @@ const FileUploader = ({ taskId, filetype }) => {
       setIsSaving(false);
       setIsVisible(false);
     }
-  update();
+    update();
   };
   async function update(event) {
     try {
@@ -138,8 +133,6 @@ const FileUploader = ({ taskId, filetype }) => {
       console.error("Error updating task details:", error);
     }
   }
-
-
 
   const renderFile = (file) => {
     const isImage = file.type.startsWith("image/");
@@ -208,7 +201,6 @@ const FileUploader = ({ taskId, filetype }) => {
             </div>
           )}
         </div>
-
       </div>
     );
   };
@@ -228,7 +220,7 @@ const FileUploader = ({ taskId, filetype }) => {
   const handleCancel = () => {
     // Set visibility to false when cancel button is clicked
     setIsVisible(false);
-    toast.error("Submission Cancelled!")
+    toast.error("Submission Cancelled!");
   };
 
   return (
@@ -236,21 +228,19 @@ const FileUploader = ({ taskId, filetype }) => {
       <div className="">
         {isVisible && (
           <div>
-            <Typography variant="h5" color="black" className=" ml-5 mb-3">
+            <Typography variant="h5" color="black" className=" mb-3 ml-5">
               Attach file here
             </Typography>
             <div
               {...getRootProps()}
-              className="p-2  mb-3 w-full h-60 border-dashed border-4 border-gray-400 rounded-lg flex justify-center items-center cursor-pointer mt-5"
+              className="mb-3  mt-5 flex h-60 w-full cursor-pointer items-center justify-center rounded-lg border-4 border-dashed border-gray-400 p-2"
             >
-
               <input {...getInputProps()} />
               {isDragActive ? (
                 <p>Drop the files here...</p>
               ) : (
                 <p>Drag 'n' drop some files here, or click to select files</p>
               )}
-
             </div>
           </div>
         )}
@@ -260,15 +250,15 @@ const FileUploader = ({ taskId, filetype }) => {
           </div>
         )}
         {!isSaving && isVisible && (
-          <div className="flex justify-center items-center mt-2">
+          <div className="mt-2 flex items-center justify-center">
             <button
-              className="mt-5 ml-5 text-white bg-[#b089be] hover:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 mb-2 sm:mb-0"
+              className="mb-2 ml-5 mt-5 rounded-lg bg-[#b089be] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-400 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:mx-2 sm:mb-0"
               onClick={handleSubmit}
             >
               Save Changes
             </button>
             <button
-              className="mt-5 ml-2 text-white bg-gray-500 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-red-900 sm:mx-2 mb-2 sm:mb-0"
+              className="mb-2 ml-2 mt-5 rounded-lg bg-gray-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-red-900 sm:mx-2 sm:mb-0"
               onClick={handleCancel}
             >
               Cancel
@@ -276,7 +266,7 @@ const FileUploader = ({ taskId, filetype }) => {
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 };
 

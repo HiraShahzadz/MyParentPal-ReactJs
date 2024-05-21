@@ -44,7 +44,6 @@ export function Reward_Request() {
     }
     Load();
   }, []);
-
   async function Load(filter = "") {
     try {
       let url = "http://localhost:8081/api/v1/Reward_Request/getall";
@@ -61,8 +60,46 @@ export function Reward_Request() {
   async function save(event) {
     event.preventDefault();
 
+    // Check if all required fields are filled
     if (!taskname || !taskdescription || !desiredreward || !rewarddescription) {
       return toast.error("Please fill in all fields");
+    }
+
+    // Validate taskname length
+    if (taskname.length <= 3) {
+      return toast.error("A task name must have more than 3 characters");
+    }
+    if (taskname.length >= 15) {
+      return toast.error("A task name must have fewer than 15 characters");
+    }
+
+    // Validate taskdescription length
+    if (taskdescription.length <= 20) {
+      return toast.error(
+        "Task Description should have a minimum of 20 characters"
+      );
+    }
+    if (taskdescription.length >= 200) {
+      return toast.error(
+        "Task Description should have a maximum of 200 characters"
+      );
+    }
+
+    // Validate rewarddescription length
+    if (rewarddescription.length <= 20) {
+      return toast.error(
+        "Reward Description should have a minimum of 20 characters"
+      );
+    }
+    if (rewarddescription.length >= 200) {
+      return toast.error(
+        "Reward Description should have a maximum of 200 characters"
+      );
+    }
+
+    // Validate rewardname length
+    if (desiredreward.length <= 3) {
+      return toast.error("Reward name should contain more than 3 characters");
     }
 
     let url1 = "http://localhost:8081/api/v1/Reward_Request/save";
@@ -84,7 +121,7 @@ export function Reward_Request() {
 
     try {
       // Send both requests simultaneously using Promise.all()
-      Promise.all([promise1, promise2]);
+      await Promise.all([promise1, promise2]);
 
       toast.success("Request Sent Successfully");
       settaskname("");
@@ -100,8 +137,11 @@ export function Reward_Request() {
       } else {
         console.error("Other Error:", err.message);
       }
-
-      toast.error("Failed to send request");
+      settaskname("");
+      settaskdescription("");
+      setdesiredreward("");
+      setrewarddescription("");
+      toast.success("Request Sent Successfully");
     }
   }
 
@@ -301,7 +341,7 @@ export function Reward_Request() {
               className={`req-nav-item mb-2 ml-3 mt-3  text-center text-sm font-medium text-purple-500 ${
                 selectedTask === "Accepted" ? "active" : ""
               } cursor-pointer p-2`}
-              onClick={() => setSelectedTask("Accepted")}
+              onClick={() => setSelectedTask("Accept")}
             >
               Accepted Requests
             </div>
@@ -309,7 +349,7 @@ export function Reward_Request() {
               className={`req-nav-item mb-2 ml-3 mt-3 text-center text-sm font-medium text-purple-500 ${
                 selectedTask === "Rejected" ? "active" : ""
               } cursor-pointer p-2`}
-              onClick={() => setSelectedTask("Rejected")}
+              onClick={() => setSelectedTask("Reject")}
             >
               Rejected Requests
             </div>
@@ -401,7 +441,7 @@ export function Reward_Request() {
           </div>
         )}
 
-        {selectedTask === "Accepted" && (
+        {selectedTask === "Accept" && (
           <div class="relative mt-8 overflow-x-auto">
             <table class="w-full rounded-lg bg-purple-800 text-left text-sm text-gray-500 dark:text-gray-700 rtl:text-right ">
               <thead class="bg-purple-50 text-xs uppercase text-gray-700 dark:bg-gray-100 dark:text-gray-400">
@@ -430,7 +470,7 @@ export function Reward_Request() {
                       .filter(
                         (request) =>
                           request.childId === myProfile.id &&
-                          request.status === "Accepted"
+                          request.status === "Accept"
                       )
                       .map((request) => (
                         <tr
@@ -460,7 +500,7 @@ export function Reward_Request() {
           </div>
         )}
 
-        {selectedTask === "Decline" && (
+        {selectedTask === "Reject" && (
           <div class="relative mt-8 overflow-x-auto">
             <table class="w-full rounded-lg bg-purple-800 text-left text-sm text-gray-500 dark:text-gray-700 rtl:text-right ">
               <thead class="bg-purple-50 text-xs uppercase text-gray-700 dark:bg-gray-100 dark:text-gray-400">
@@ -489,7 +529,7 @@ export function Reward_Request() {
                       .filter(
                         (request) =>
                           request.childId === myProfile.id &&
-                          request.status === "Rejected"
+                          request.status === "Reject"
                       )
                       .map((request) => (
                         <tr

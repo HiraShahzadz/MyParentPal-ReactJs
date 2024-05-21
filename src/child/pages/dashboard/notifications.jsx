@@ -11,7 +11,6 @@ import {
 
 export function Notifications() {
   const navigate = useNavigate();
-
   const [hiddenImages, setHiddenImages] = useState([]);
 
   const handleImageClick = (index) => {
@@ -19,72 +18,15 @@ export function Notifications() {
   };
 
   const [requestrs, setrequestrs] = useState([]);
-
+  const [childProfile, setChildProfile] = useState([]);
   useEffect(() => {
-    const email = localStorage.getItem("email");
-    const password = localStorage.getItem("password");
-    if (!email && !password) {
-      // Redirect to sign-in page if email or password is missing
-      navigate("/sign-in");
-    }
     Load(); // Load data initially
     const interval = setInterval(() => {
       Load(); // Fetch new notifications periodically
     }, 10000); // Fetch data every 30 seconds (adjust interval as needed)
     return () => clearInterval(interval); // Cleanup function to clear interval on component unmount
-  }, []);
+  }, [childProfile]);
 
-  async function Load(filter = "") {
-    try {
-      let url = "http://localhost:8081/api/v1/notify/getall";
-      if (filter === "latest") {
-        url += "?filter=latest";
-      }
-      const allrequests = await axios.get(url);
-
-      const currentDate = new Date();
-      const currentTime = new Date(currentDate);
-      const startTime = new Date(currentDate);
-      const endTime = new Date(currentDate);
-      startTime.setHours(17, 34, 0); // Start time
-      endTime.setHours(19, 0, 0); // End time
-
-      const filteredRequests = allrequests.data
-        .filter((request) => {
-          if (!request.localtime || !request.date) return false;
-
-          const requestDate = new Date(request.date);
-          const [hours, minutes] = request.localtime.split(":").map(Number);
-          const localTime = new Date(requestDate);
-          localTime.setHours(hours, minutes, 0);
-
-          if (requestDate.toDateString() !== currentDate.toDateString()) {
-            // Always show notifications from previous dates
-            return true;
-          } else {
-            if (currentTime == startTime) {
-              // If current time is less than the start time, don't show notifications
-              return true;
-            }
-            // If current time is equal to or greater than the start time, show appropriate notifications
-            if (
-              currentTime >= startTime ||
-              (currentTime >= startTime && currentTime <= endTime)
-            ) {
-              return true;
-            }
-            return false;
-          }
-        })
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      setrequestrs(filteredRequests);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-
-  const [childProfile, setChildProfile] = useState([]);
   useEffect(() => {
     loadParentProfile();
   }, []);
@@ -103,6 +45,83 @@ export function Notifications() {
 
   const myProfile = childProfile.find((profile) => profile);
   console.log(myProfile);
+
+  async function Load(filter = "") {
+    try {
+      let url = "http://localhost:8081/api/v1/notify/getall";
+      if (filter === "latest") {
+        url += "?filter=latest";
+      }
+      const allrequests = await axios.get(url);
+
+      const currentDate = new Date();
+      const currentHours = currentDate.getHours();
+      const currentMinutes = currentDate.getMinutes();
+
+      console.log("Current time:", currentHours, currentMinutes);
+
+      // Assuming myProfile is fetched elsewhere in your code
+
+      // Check if myProfile is valid and contains startTime and endTime
+      if (myProfile && myProfile.startTime && myProfile.endTime) {
+        // Parse start and end time from myProfile
+        const parseTime = (timeString) => {
+          const [time, meridiem] = timeString.split(" ");
+          let [hours, minutes] = time.split(":").map(Number);
+          if (meridiem === "PM" && hours !== 12) {
+            hours += 12;
+          }
+          if (meridiem === "AM" && hours === 12) {
+            hours = 0;
+          }
+          return { hours, minutes };
+        };
+
+        console.log("Start time:", myProfile.startTime);
+        const { hours: startHours, minutes: startMinutes } = parseTime(
+          myProfile.startTime
+        );
+        const { hours: endHours, minutes: endMinutes } = parseTime(
+          myProfile.endTime
+        );
+
+        console.log("Parsed start time:", startHours, startMinutes);
+        console.log("Parsed end time:", endHours, endMinutes);
+
+        const filteredRequests = allrequests.data
+          .filter((request) => {
+            if (!request.localtime || !request.date) return false;
+
+            const requestDate = new Date(request.date);
+            const [reqHours, reqMinutes] = request.localtime
+              .split(":")
+              .map(Number);
+
+            // Only compare times, ignore the date
+            if (
+              currentHours > startHours ||
+              (currentHours === startHours && currentMinutes >= startMinutes)
+            ) {
+              if (
+                currentHours < endHours ||
+                (currentHours === endHours && currentMinutes <= endMinutes)
+              ) {
+                return true;
+              }
+            }
+
+            return false;
+          })
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        setrequestrs(filteredRequests);
+      } else {
+        console.error("Invalid myProfile data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   return (
     <div className="mx-auto my-10 flex max-w-screen-lg flex-col gap-8">

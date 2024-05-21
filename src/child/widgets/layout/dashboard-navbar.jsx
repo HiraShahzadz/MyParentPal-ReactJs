@@ -53,7 +53,7 @@ export function DashboardNavbar() {
     }
     const interval = setInterval(loadNotifications, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [childProfile]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -75,64 +75,13 @@ export function DashboardNavbar() {
   useEffect(() => {
     // Calculate clickCount based on the number of unread notifications
     const unreadCount = requests.filter(
-      (notification) => !readNotifications.includes(notification.id)
+      (notification) =>
+        !readNotifications.includes(notification.id) &&
+        notification.message.startsWith("Your parent") &&
+        notification.childId === myProfile?.id
     ).length;
     setClickCount(unreadCount);
   }, [requests, readNotifications]);
-
-  async function loadNotifications(filter = "") {
-    try {
-      let url = "http://localhost:8081/api/v1/notify/getall";
-      if (filter === "latest") {
-        url += "?filter=latest";
-      }
-      const allRequests = await axios.get(url);
-
-      // Filter notifications based on date and local time
-      const currentDate = new Date();
-      const currentTime = new Date(currentDate);
-      const startTime = new Date(currentDate);
-      const endTime = new Date(currentDate);
-      startTime.setHours(17, 34, 0); // Start time
-      endTime.setHours(19, 0, 0); // End time
-
-      const filteredRequests = allRequests.data
-        .filter((request) => {
-          if (!request.localtime || !request.date) return false;
-
-          const requestDate = new Date(request.date);
-          const [hours, minutes] = request.localtime.split(":").map(Number);
-
-          if (requestDate.toDateString() !== currentDate.toDateString()) {
-            // Always show notifications from previous dates
-            return true;
-          } else {
-            if (currentDate.getTime() === startTime.getTime()) {
-              // If current time is equal to the start time, show notifications
-              return true;
-            }
-            if (
-              currentTime >= startTime ||
-              (currentTime >= startTime && currentTime <= endTime)
-            ) {
-              // If current time is within the start and end time, show notifications
-              return true;
-            }
-            return false;
-          }
-        })
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      // Filter out read notifications
-      const unreadRequests = filteredRequests.filter(
-        (request) => !readNotifications.includes(request.id)
-      );
-
-      setRequests(unreadRequests);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
 
   const loadParentProfile = async () => {
     try {
@@ -148,6 +97,86 @@ export function DashboardNavbar() {
   const myProfile = childProfile
     ? childProfile.find((profile) => profile)
     : null;
+
+  async function loadNotifications(filter = "") {
+    try {
+      let url = "http://localhost:8081/api/v1/notify/getall";
+      if (filter === "latest") {
+        url += "?filter=latest";
+      }
+      const allrequests = await axios.get(url);
+
+      const currentDate = new Date();
+      const currentHours = currentDate.getHours();
+      const currentMinutes = currentDate.getMinutes();
+
+      console.log("Current time:", currentHours, currentMinutes);
+
+      // Assuming myProfile is fetched elsewhere in your code
+
+      // Check if myProfile is valid and contains startTime and endTime
+      if (myProfile && myProfile.startTime && myProfile.endTime) {
+        // Parse start and end time from myProfile
+        const parseTime = (timeString) => {
+          const [time, meridiem] = timeString.split(" ");
+          let [hours, minutes] = time.split(":").map(Number);
+          if (meridiem === "PM" && hours !== 12) {
+            hours += 12;
+          }
+          if (meridiem === "AM" && hours === 12) {
+            hours = 0;
+          }
+          return { hours, minutes };
+        };
+
+        const { hours: startHours, minutes: startMinutes } = parseTime(
+          myProfile.startTime
+        );
+        const { hours: endHours, minutes: endMinutes } = parseTime(
+          myProfile.endTime
+        );
+
+        console.log("Parsed start time:", startHours, startMinutes);
+        console.log("Parsed end time:", endHours, endMinutes);
+
+        const filteredRequests = allrequests.data
+          .filter((request) => {
+            if (!request.localtime || !request.date) return false;
+
+            const [reqHours, reqMinutes] = request.localtime
+              .split(":")
+              .map(Number);
+
+            // Only compare times, ignore the date
+            if (
+              currentHours > startHours ||
+              (currentHours === startHours && currentMinutes >= startMinutes)
+            ) {
+              if (
+                currentHours < endHours ||
+                (currentHours === endHours && currentMinutes <= endMinutes)
+              ) {
+                return true;
+              }
+            }
+
+            return false;
+          })
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        // Filter out read notifications
+        const unreadRequests = filteredRequests.filter(
+          (request) => !readNotifications.includes(request.id)
+        );
+
+        setRequests(unreadRequests);
+      } else {
+        console.error("Invalid myProfile data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   const handleBellClick = () => {
     // Clear all notifications
@@ -234,7 +263,15 @@ export function DashboardNavbar() {
               className="hidden items-center gap-1 px-4 xl:flex"
               title="Profile"
             >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
+              {myProfile && myProfile.img ? (
+                <img
+                  className="h-7 w-7 rounded-full object-cover"
+                  src={`data:image/jpeg;base64,${myProfile.img}`}
+                  alt="Profile"
+                />
+              ) : (
+                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
+              )}
             </Button>
             <IconButton
               variant="text"
@@ -242,7 +279,15 @@ export function DashboardNavbar() {
               className="grid xl:hidden"
               title="Profile"
             >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
+              {myProfile && myProfile.img ? (
+                <img
+                  className="h-10 w-10 rounded-full object-cover"
+                  src={`data:image/jpeg;base64,${myProfile.img}`}
+                  alt="Profile"
+                />
+              ) : (
+                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
+              )}
             </IconButton>
           </Link>
 
@@ -287,6 +332,7 @@ export function DashboardNavbar() {
                   {myProfile && (
                     <>
                       {requests
+                        .filter((task) => task.childId === myProfile.id)
                         .sort((a, b) => new Date(b.date) - new Date(a.date))
                         .map(
                           (
