@@ -1,22 +1,21 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Typography,
   Card,
   CardHeader,
   CardBody,
 } from "@material-tailwind/react";
-
+import MyChild from "@/parent/ChildProfiles/MyChild";
+import { useNavigate } from "react-router-dom";
 export function Notifications() {
-  const navigate = useNavigate();
   const [hiddenImages, setHiddenImages] = useState([]);
 
   const handleImageClick = (index) => {
     setHiddenImages([...hiddenImages, index]);
   };
-
+  const navigate = useNavigate();
   const [requestrs, setrequestrs] = useState([]);
   const [childProfile, setChildProfile] = useState([]);
   useEffect(() => {
@@ -28,6 +27,12 @@ export function Notifications() {
   }, [childProfile]);
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+    if (!email && !password) {
+      // Redirect to sign-in page if email or password is missing
+      navigate("/sign-in");
+    }
     loadParentProfile();
   }, []);
 
@@ -139,51 +144,64 @@ export function Notifications() {
           </div>
         </CardHeader>
         <CardBody className="flex flex-col gap-4 p-4">
-          {requestrs.length > 0
-            ? requestrs.map(({ ChildName, message, taskname, time }, index) => (
-                <div
-                  className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
-                  key={index}
-                >
-                  <div className="flex">
-                    <img
-                      className="h-10 w-10 rounded-full"
-                      src="/img/userc.png"
-                      alt=""
-                    />
-                    <div className="ml-3">
-                      <span className="text-black">{message}</span>
-                      <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
-                        {time}
-                      </span>
-                      <div className="mt-1.5 flex">
-                        <img className="h-3 w-3" src="/img/task.png" alt="" />
-                        <span className="ml-1 text-xs text-black hover:underline">
-                          {taskname}
-                        </span>
+          {myProfile && (
+            <>
+              {requestrs.length > 0
+                ? requestrs
+                    .filter(
+                      (Notification) => Notification.childId === myProfile.id
+                    )
+                    .filter(({ message }) => message.startsWith("Your parent"))
+                    .map(({ ChildName, message, taskname, time }, index) => (
+                      <div
+                        className="flex items-center rounded-md p-3 text-sm hover:bg-blue-gray-50"
+                        key={index}
+                      >
+                        <div className="flex">
+                          <img
+                            className="h-10 w-10 rounded-full"
+                            src="/img/userc.png"
+                            alt=""
+                          />
+                          <div className="ml-3">
+                            <span className="text-black">{message}</span>
+                            <span className="text-neutral-400 ml-2 mt-2 text-gray-400">
+                              {time}
+                            </span>
+                            <div className="mt-1.5 flex">
+                              <img
+                                className="h-3 w-3"
+                                src="/img/task.png"
+                                alt=""
+                              />
+                              <span className="ml-1 text-xs text-black hover:underline">
+                                {taskname}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        {!hiddenImages.includes(index) && (
+                          <div
+                            className="ml-auto flex items-end rounded-full border p-1 hover:border-MyPurple-400"
+                            onClick={() => handleImageClick(index)}
+                          >
+                            <img
+                              className="h-1.5 w-1.5 rounded-full"
+                              src="/img/purple.png"
+                              alt=""
+                            />
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </div>
-                  {!hiddenImages.includes(index) && (
-                    <div
-                      className="ml-auto flex items-end rounded-full border p-1 hover:border-MyPurple-400"
-                      onClick={() => handleImageClick(index)}
-                    >
-                      <img
-                        className="h-1.5 w-1.5 rounded-full"
-                        src="/img/purple.png"
-                        alt=""
-                      />
-                    </div>
+                    ))
+                : myProfile && (
+                    <Typography color="gray">
+                      Your notifications are scheduled between{" "}
+                      {myProfile.startTime} and {myProfile.endTime}.
+                    </Typography>
                   )}
-                </div>
-              ))
-            : myProfile && (
-                <Typography color="gray">
-                  Your notifications are scheduled between {myProfile.startTime}{" "}
-                  and {myProfile.endTime}.
-                </Typography>
-              )}
+            </>
+          )}
         </CardBody>
       </Card>
     </div>

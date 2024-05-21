@@ -263,15 +263,7 @@ export function DashboardNavbar() {
               className="hidden items-center gap-1 px-4 xl:flex"
               title="Profile"
             >
-              {myProfile && myProfile.img ? (
-                <img
-                  className="h-7 w-7 rounded-full object-cover"
-                  src={`data:image/jpeg;base64,${myProfile.img}`}
-                  alt="Profile"
-                />
-              ) : (
-                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
-              )}
+              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
             </Button>
             <IconButton
               variant="text"
@@ -279,15 +271,7 @@ export function DashboardNavbar() {
               className="grid xl:hidden"
               title="Profile"
             >
-              {myProfile && myProfile.img ? (
-                <img
-                  className="h-10 w-10 rounded-full object-cover"
-                  src={`data:image/jpeg;base64,${myProfile.img}`}
-                  alt="Profile"
-                />
-              ) : (
-                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
-              )}
+              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" alt="" />
             </IconButton>
           </Link>
 

@@ -99,6 +99,7 @@ function ReassignTasks({ task, selectedTaskDetails, handleCloseTaskDetails }) {
 
         let promise2 = axios.post(url2, {
           taskname: editedDetails.title,
+          childId: editedDetails.myChildId,
         });
         Promise.all([promise1, promise2]);
         toast.success("Task is re-assign successfully");
