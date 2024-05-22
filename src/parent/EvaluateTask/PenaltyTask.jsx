@@ -41,7 +41,31 @@ function PaneltyTask({ onClose, task, childProfileData }) {
     if (!taskRemarks) {
       return toast.error("Please Add remarks");
     }
+    let url1 = "http://localhost:8081/api/v1/task/save_penalty";
+    let url2 = "http://localhost:8081/api/v1/notify/assigntaskNotification";
 
+    let promise1 = axios.post(url1, {
+      taskname,
+      taskdescription,
+      status: "Todo",
+      taskfiletype,
+      taskdate,
+      tasktime,
+      rewardname: task.rewardname,
+      taskassignee: task.taskassignee,
+      childId: task.childId,
+      taskTypeIs,
+      tasktag: task.tasktag,
+      tasktype: task.tasktype,
+      taskId: task._id,
+      cheatTags,
+      taskRemarks: taskRemarks,
+    });
+
+    let promise2 = axios.post(url2, {
+      taskname: taskname,
+      childId: task.childId,
+    });
     try {
       if (
         taskname.length > 3 &&
@@ -49,23 +73,7 @@ function PaneltyTask({ onClose, task, childProfileData }) {
         taskdescription.length > 20 &&
         taskdescription.length < 200
       ) {
-        await axios.post("http://localhost:8081/api/v1/task/save_penalty", {
-          taskname,
-          taskdescription,
-          status: "Todo",
-          taskfiletype,
-          taskdate,
-          tasktime,
-          rewardname: task.rewardname,
-          taskassignee: task.taskassignee,
-          childId: task.childId,
-          taskTypeIs,
-          tasktag: task.tasktag,
-          tasktype: task.tasktype,
-          taskId: task._id,
-          cheatTags,
-          taskRemarks: taskRemarks,
-        });
+        Promise.all([promise1, promise2]);
 
         setTaskname("");
         setTaskdescription("");

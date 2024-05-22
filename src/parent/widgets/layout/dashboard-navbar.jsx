@@ -71,7 +71,10 @@ export function DashboardNavbar() {
     const unreadCount = requests.filter(
       (notification) =>
         !notification.message.startsWith("Your parent") &&
-        !readNotifications.includes(notification.id)
+        !readNotifications.includes(notification.id) &&
+        readNotifications.includes(
+          childProfileData.some((child) => child.id === notification.childId)
+        )
     ).length;
     setClickCount(unreadCount);
   }, [requests, readNotifications]);
