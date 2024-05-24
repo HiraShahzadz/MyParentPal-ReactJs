@@ -339,7 +339,7 @@ export function Reward_Request() {
             </div>
             <div
               className={`req-nav-item mb-2 ml-3 mt-3  text-center text-sm font-medium text-purple-500 ${
-                selectedTask === "Accepted" ? "active" : ""
+                selectedTask === "Accept" ? "active" : ""
               } cursor-pointer p-2`}
               onClick={() => setSelectedTask("Accept")}
             >
@@ -347,7 +347,7 @@ export function Reward_Request() {
             </div>
             <div
               className={`req-nav-item mb-2 ml-3 mt-3 text-center text-sm font-medium text-purple-500 ${
-                selectedTask === "Rejected" ? "active" : ""
+                selectedTask === "Reject" ? "active" : ""
               } cursor-pointer p-2`}
               onClick={() => setSelectedTask("Reject")}
             >
