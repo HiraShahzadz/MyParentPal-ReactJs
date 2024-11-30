@@ -5,7 +5,10 @@
 </p>
 <h1 align="center" style="color:#b089be;">MyParentPal</h1>
 <h3 align="center">Your Digital Co-Parent In Child Upbringing</h3>
-
+<p  align="center"><a  href="https://myparentpal.netlify.app/home">
+    <img src="https://img.shields.io/badge/-Clich%20Here%20to%20See%20Website-<COLOR>?style=flat-square&logo=appveyor&logoColor=white" alt="Website link">
+</a>
+</p>
 <h5 align="left">MyParentPal is designed to solve parenting issues and give these sloutions:</h5>
 
 * Facilitate parents to instill responsibility in children
